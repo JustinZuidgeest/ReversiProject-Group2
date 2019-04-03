@@ -18,7 +18,7 @@ public class ServerCommunicator implements Runnable {
 
     public ServerCommunicator(){
         Properties properties = new Properties();
-        String fileName = "settings.conf";
+        String fileName = "D:\\Vincent\\School\\Jaar 2\\Project bordspel AI\\ReversiProject-Group2\\src\\server_communication\\settings.conf";
         InputStream is = null;
         try {
             is = new FileInputStream(fileName);

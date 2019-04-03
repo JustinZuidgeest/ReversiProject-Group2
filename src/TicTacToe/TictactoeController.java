@@ -1,13 +1,15 @@
 package TicTacToe;
 
-import java.awt.*;
+import TicTacToe.AI_Models.AbstractModel;
+
+import java.awt.Point;
 
 public class TictactoeController {
 
     private CommandlineView view;
-    private TictactoeModel model;
+    private AbstractModel model;
 
-    public TictactoeController(CommandlineView view, TictactoeModel model) {
+    public TictactoeController(CommandlineView view, AbstractModel model) {
         this.view = view;
         this.model = model;
     }
@@ -19,9 +21,11 @@ public class TictactoeController {
     public boolean playerMove(int x, int y){
         try {
             if(model.checkLegalMove(x, y)){
-                model.move(x, y, Symbol.X);
-                view.printBoard(model.getBoard());
-                checkWin(x, y, Symbol.X);
+                // Execute the move, and execute hasWin() function if this was a winning move
+                if(model.move(x, y, Symbol.X)){
+                    view.printBoard(model.getBoard());
+                    hasWin();
+                }else view.printBoard(model.getBoard());
                 return true;
             }else{
                 throw new IllegalArgumentException();
@@ -33,19 +37,17 @@ public class TictactoeController {
     }
 
     public void aiMove(){
+        // Generate a move made by the computer
         Point aiMove = model.computerMove();
-        model.move(aiMove.x, aiMove.y, Symbol.O);
-        view.printBoard(model.getBoard());
-        checkWin(aiMove.x, aiMove.y, Symbol.O);
+        // Execute the move, and execute hasWin() function if this was a winning move
+        if(model.move(aiMove.x, aiMove.y, Symbol.O)){
+            view.printBoard(model.getBoard());
+            hasWin();
+        }else view.printBoard(model.getBoard());
     }
 
-    public void checkWin(int x, int y, Symbol symbol){
-        if(model.getLegalMoves().size() < 7) {
-            Symbol winner = model.checkWin(x, y, symbol);
-            if (winner != null) {
-                view.printWinner(winner);
-                view.setGameOver(true);
-            }
-        }
+    public void hasWin(){
+        view.printWinner(model.getBoardWinner());
+        view.setGameOver(true);
     }
 }

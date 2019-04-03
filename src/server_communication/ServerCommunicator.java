@@ -57,6 +57,7 @@ public class ServerCommunicator implements Runnable {
                             break;
                         case "ERR":
                             //TODO last command failed, try again
+                            System.out.println(line);
                             break;
                         case "SVR":
                             handleSRVMessage(splitString);
@@ -87,27 +88,33 @@ public class ServerCommunicator implements Runnable {
         switch (line[2]){
             case "MATCH":
                 //TODO read map {gametype, playertomove, opponent}
+                for(String s : line){System.out.print(s);}
                 break;
             case "YOURTURN":
                 //TODO read map {turnmessage}
+                for(String s : line){System.out.print(s);}
                 break;
             case "MOVE":
                 //TODO read map {player, details, move}
+                for(String s : line){System.out.print(s);}
                 break;
             case "WIN":
                 //TODO read map {playeronescore, playertwoscore, comment}
                 //if comment.equals("Player forfeited match") opponent forfeited
                 //else if comment.equals("Client disconnected") opponent disconnected
+                for(String s : line){System.out.print(s);}
                 break;
             case "LOSS":
                 //TODO read map {playeronescore, playertwoscore, comment}
                 //if comment.equals("Player forfeited match") opponent forfeited
                 //else if comment.equals("Client disconnected") opponent disconnected
+                for(String s : line){System.out.print(s);}
                 break;
             case "DRAW":
                 //TODO read map {playeronescore, playertwoscore, comment}
                 //if comment.equals("Player forfeited match") opponent forfeited
                 //else if comment.equals("Client disconnected") opponent disconnected
+                for(String s : line){System.out.print(s);}
                 break;
             case "CHALLENGE":
                 handleCHALLENGEMessage(line);
@@ -119,15 +126,17 @@ public class ServerCommunicator implements Runnable {
     public void handleCHALLENGEMessage(String[] line){
         if(!line[3].equals("CANCELLED")){
             //TODO read map {challenger, gametype, challengenumber} and add to challengers
+            for(String s : line){System.out.print(s);}
         }
         else{
             //TODO read map {challengenumber} and remove from challengers
+            for(String s : line){System.out.print(s);}
         }
     }
 
     public void sendToServer(String command){
         try{
-            toServer.writeBytes(command);
+            toServer.writeBytes(command + "\n");
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -136,6 +145,7 @@ public class ServerCommunicator implements Runnable {
     public void login(){
         //TODO team name
         sendToServer("login group_2");
+        System.out.println("logged in");
     }
 
     public void logout(){
@@ -170,8 +180,8 @@ public class ServerCommunicator implements Runnable {
         sendToServer("get playerlist");
     }
 
-    public void challenge(String player){
-        sendToServer("challenge " + player);
+    public void challenge(String player, String game){
+        sendToServer("challenge " + player + " " + game);
     }
 
     public void acceptChallenge(int challengeID){

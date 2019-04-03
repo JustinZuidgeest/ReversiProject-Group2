@@ -3,11 +3,11 @@ package server_communication;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Properties;
 
 public class ServerCommunicator implements Runnable {
-    //TODO get host and port from config file
-    private final String host = "localhost";
-    private final int port = 8000;
+    private String host;
+    private int port;
 
     private DataOutputStream toServer;
     private BufferedReader fromServer;
@@ -15,6 +15,24 @@ public class ServerCommunicator implements Runnable {
 
     private boolean shouldRun = true;
 
+
+    public ServerCommunicator(){
+        Properties properties = new Properties();
+        String fileName = "settings.conf";
+        InputStream is = null;
+        try {
+            is = new FileInputStream(fileName);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            properties.load(is);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        host = properties.getProperty("host");
+        port = Integer.valueOf(properties.getProperty("port"));
+    }
 
     public void connectToServer(){
         try {

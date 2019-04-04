@@ -62,8 +62,11 @@ public class ServerCommunicator implements Runnable {
                             //command goed uitgevoerd
                             break;
                         case "ERR":
-                            //TODO last command failed, try again
-                            System.out.println(line);
+                            try {
+                                throw new ERRExeption(line);
+                            }catch (ERRExeption e){
+                                e.printStackTrace();
+                            }
                             break;
                         case "SVR":
                             handleSRVMessage(line);

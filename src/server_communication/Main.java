@@ -13,7 +13,7 @@ public class Main {
         communicator.getGameList();
         communicator.getPlayerList();
 
-        //communicator.challenge("test", "Reversi");
+        communicator.challenge("test", "Reversi");
 
 
         Scanner scanner = new Scanner(System.in);

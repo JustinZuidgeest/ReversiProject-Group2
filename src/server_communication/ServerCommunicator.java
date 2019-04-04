@@ -3,17 +3,23 @@ package server_communication;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public class ServerCommunicator implements Runnable {
     private String host;
     private int port;
+    private String name;
 
     private DataOutputStream toServer;
     private BufferedReader fromServer;
     private Socket socket;
 
     private boolean shouldRun = true;
+
+    ArrayList<String> gameList = new ArrayList<>();
+    ArrayList<String> playerList = new ArrayList<>();
 
 
     public ServerCommunicator(){
@@ -32,6 +38,7 @@ public class ServerCommunicator implements Runnable {
         }
         host = properties.getProperty("host");
         port = Integer.valueOf(properties.getProperty("port"));
+        name = properties.getProperty("name");
     }
 
     public void connectToServer(){
@@ -60,7 +67,7 @@ public class ServerCommunicator implements Runnable {
                             System.out.println(line);
                             break;
                         case "SVR":
-                            handleSRVMessage(splitString);
+                            handleSRVMessage(line);
                             break;
                     }
                 }
@@ -70,13 +77,26 @@ public class ServerCommunicator implements Runnable {
         }
     }
 
-    public void handleSRVMessage(String[] line){
-        switch (line[1]){
+    public void handleSRVMessage(String line){
+        String[] splitString = line.split("\\s+");
+        switch (splitString[1]){
             case "GAMELIST":
-                System.out.println(line[2] + line[3]);
+                String games = line.split("GAMELIST ")[1];
+                games = games.replace("[", "");
+                games = games.replace("]", "");
+                games = games.replace("\"", "");
+                String[] game = games.split(", ");
+                for(String s: game){gameList.add(s);}
+                System.out.println("Available games: " + gameList);
                 break;
             case "PLAYERLIST":
-                System.out.println(line[2] + line[3]);
+                String players = line.split("PLAYERLIST ")[1];
+                players = players.replace("[", "");
+                players = players.replace("]", "");
+                players = players.replace("\"", "");
+                String[] player = players.split(", ");
+                for(String s: player){playerList.add(s);}
+                System.out.println("Players online: " + playerList);
                 break;
             case "GAME":
                 handleGAMEMessage(line);
@@ -84,37 +104,39 @@ public class ServerCommunicator implements Runnable {
         }
     }
 
-    public void handleGAMEMessage(String[] line){
-        switch (line[2]){
+    public void handleGAMEMessage(String line){
+        String[] splitString = line.split("\\s+");
+
+        switch (splitString[2]){
             case "MATCH":
                 //TODO read map {gametype, playertomove, opponent}
-                for(String s : line){System.out.print(s);}
+                for(String s : splitString){System.out.print(s);}
                 break;
             case "YOURTURN":
                 //TODO read map {turnmessage}
-                for(String s : line){System.out.print(s);}
+                for(String s : splitString){System.out.print(s);}
                 break;
             case "MOVE":
                 //TODO read map {player, details, move}
-                for(String s : line){System.out.print(s);}
+                for(String s : splitString){System.out.print(s);}
                 break;
             case "WIN":
                 //TODO read map {playeronescore, playertwoscore, comment}
                 //if comment.equals("Player forfeited match") opponent forfeited
                 //else if comment.equals("Client disconnected") opponent disconnected
-                for(String s : line){System.out.print(s);}
+                for(String s : splitString){System.out.print(s);}
                 break;
             case "LOSS":
                 //TODO read map {playeronescore, playertwoscore, comment}
                 //if comment.equals("Player forfeited match") opponent forfeited
                 //else if comment.equals("Client disconnected") opponent disconnected
-                for(String s : line){System.out.print(s);}
+                for(String s : splitString){System.out.print(s);}
                 break;
             case "DRAW":
                 //TODO read map {playeronescore, playertwoscore, comment}
                 //if comment.equals("Player forfeited match") opponent forfeited
                 //else if comment.equals("Client disconnected") opponent disconnected
-                for(String s : line){System.out.print(s);}
+                for(String s : splitString){System.out.print(s);}
                 break;
             case "CHALLENGE":
                 handleCHALLENGEMessage(line);
@@ -123,14 +145,16 @@ public class ServerCommunicator implements Runnable {
         }
     }
 
-    public void handleCHALLENGEMessage(String[] line){
-        if(!line[3].equals("CANCELLED")){
+    public void handleCHALLENGEMessage(String line){
+        String[] splitString = line.split("\\s+");
+
+        if(!splitString[3].equals("CANCELLED")){
             //TODO read map {challenger, gametype, challengenumber} and add to challengers
-            for(String s : line){System.out.print(s);}
+            for(String s : splitString){System.out.print(s);}
         }
         else{
             //TODO read map {challengenumber} and remove from challengers
-            for(String s : line){System.out.print(s);}
+            for(String s : splitString){System.out.print(s);}
         }
     }
 
@@ -144,13 +168,14 @@ public class ServerCommunicator implements Runnable {
 
     public void login(){
         //TODO team name
-        sendToServer("login group_2");
+        sendToServer("login " + name);
         System.out.println("logged in");
     }
 
     public void logout(){
         sendToServer("bye");
         try {
+            shouldRun = false;
             fromServer.close();
             toServer.close();
             socket.close();
@@ -181,7 +206,7 @@ public class ServerCommunicator implements Runnable {
     }
 
     public void challenge(String player, String game){
-        sendToServer("challenge " + player + " " + game);
+        sendToServer("challenge " + "\"" + player + "\"" + " " + "\"" + game + "\"");
     }
 
     public void acceptChallenge(int challengeID){

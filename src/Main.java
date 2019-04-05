@@ -37,9 +37,11 @@ public class Main extends Application {
 
         //menu center layout
         VBox centerMenu = new VBox(10);
+
         centerMenu.setAlignment(Pos.CENTER);
 
         Button button1 = new Button("Reversi");
+
         Button button2 = new Button("Tic Tac Toe");
         Button button3 = new Button("Rules");
         Button button4 = new Button("Quit");

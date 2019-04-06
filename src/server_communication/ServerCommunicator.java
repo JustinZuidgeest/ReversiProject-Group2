@@ -1,12 +1,16 @@
 package server_communication;
 
+import tictactoe.TictactoeController;
 
+import java.awt.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class ServerCommunicator implements Runnable {
+    private TictactoeController controller;
+
     private String host;
     private int port;
     private String name;
@@ -17,11 +21,13 @@ public class ServerCommunicator implements Runnable {
 
     private boolean shouldRun;
 
-    ArrayList<String> gameList = new ArrayList<>();
+    public ArrayList<String> gameList = new ArrayList<>();
     ArrayList<String> playerList = new ArrayList<>();
 
 
-    public ServerCommunicator(){
+    public ServerCommunicator(TictactoeController controller){
+        this.controller = controller;
+
         Properties properties = new Properties();
         String fileName = "D:\\Vincent\\School\\Jaar 2\\Project bordspel AI\\ReversiProject-Group2\\src\\server_communication\\settings.conf";
         InputStream is = null;
@@ -84,14 +90,14 @@ public class ServerCommunicator implements Runnable {
         switch (splitString[1]){
             case "GAMELIST":
                 String games = trimLine(line.split("GAMELIST ")[1]);
-                String[] game = games.split(", ");
+                String[] game = games.split(",");
                 for(String s: game){gameList.add(s);}
                 //TODO send gamelist to controller
                 System.out.println("Available games: " + gameList);
                 break;
             case "PLAYERLIST":
                 String players = trimLine(line.split("PLAYERLIST ")[1]);
-                String[] player = players.split(", ");
+                String[] player = players.split(",");
                 for(String s: player){playerList.add(s);}
                 //TODO send playerlist to controller
                 System.out.println("Players online: " + playerList);
@@ -118,6 +124,7 @@ public class ServerCommunicator implements Runnable {
                 //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
                 HashMap<String, String> turnMap = (HashMap<String, String>) Arrays.asList(trimLine(turnInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 //TODO send map to controller
+                controller.aiMove();
                 System.out.println(turnMap);
                 break;
             case "MOVE":
@@ -125,24 +132,27 @@ public class ServerCommunicator implements Runnable {
                 //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
                 HashMap<String, String> moveMap = (HashMap<String, String>) Arrays.asList(trimLine(moveInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 //TODO send map to controller
+                int x = Integer.valueOf(moveMap.get("MOVE")) % 3;
+                int y = Math.floorDiv(Integer.valueOf(moveMap.get("MOVE")), 3);
+                controller.playerMove(x, y);
                 System.out.println(moveMap);
                 break;
             case "WIN":
-                String winInfo = line.split("MOVE ")[1];
+                String winInfo = line.split("WIN ")[1];
                 //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
                 HashMap<String, String> winMap = (HashMap<String, String>) Arrays.asList(trimLine(winInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 //TODO send map to controller
                 System.out.println(winMap);
                 break;
             case "LOSS":
-                String lossInfo = line.split("MOVE ")[1];
+                String lossInfo = line.split("LOSS ")[1];
                 //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
                 HashMap<String, String> lossMap = (HashMap<String, String>) Arrays.asList(trimLine(lossInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 //TODO send map to controller
                 System.out.println(lossMap);
                 break;
             case "DRAW":
-                String drawInfo = line.split("MOVE ")[1];
+                String drawInfo = line.split("DRAW ")[1];
                 //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
                 HashMap<String, String> drawMap = (HashMap<String, String>) Arrays.asList(trimLine(drawInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 //TODO send map to controller
@@ -182,10 +192,18 @@ public class ServerCommunicator implements Runnable {
         }
     }
 
+    public int convertIndexToPoint(int index){
+        Point point = new Point();
+        int x = index % 3;
+        int y = Math.floorDiv(index, 3);
+        return x + y;
+    }
+
     public String trimLine(String lineToTrim){
         lineToTrim = lineToTrim.replace("{", "");
         lineToTrim = lineToTrim.replace("}", "");
         lineToTrim = lineToTrim.replace(" ", "");
+        lineToTrim = lineToTrim.replace("\"\"", "null");
         lineToTrim = lineToTrim.replace("\"", "");
         lineToTrim = lineToTrim.replace("[", "");
         lineToTrim = lineToTrim.replace("]", "");
@@ -211,17 +229,13 @@ public class ServerCommunicator implements Runnable {
         }
     }
 
-    public void sendMove(String move){
+    public void sendMove(int move){
         sendToServer("move " + move);
+        System.out.println("move sent: " + move);
     }
 
     public void subscribe(String game){
-        if(game.equals("reversi")) {
-            sendToServer("subscribe Reversi");
-        }
-        else if(game.equals("tic-tac-toe")){
-            sendToServer("subscribe Tic-tac-toe");
-        }
+        sendToServer("subscribe " + game);
     }
 
     public void getGameList(){

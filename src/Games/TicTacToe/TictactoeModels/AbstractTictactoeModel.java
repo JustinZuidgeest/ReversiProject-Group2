@@ -1,32 +1,58 @@
-package TicTacToe.AI_Models;
+package Games.TicTacToe.TictactoeModels;
 
-import TicTacToe.Symbol;
-
+import Games.Model;
+import Games.Tile;
 import java.awt.Point;
 import java.util.ArrayList;
 
-public abstract class AbstractModel {
+public abstract class AbstractTictactoeModel implements Model {
 
-    private Symbol[][] board;
+    private Tile[][] board;
     private int boardSize;
-    private Symbol boardWinner = null;
+    private Tile boardWinner = null;
+    private int[] scores;
+    private ArrayList<Point> legalMoves;
 
-    public AbstractModel(int boardSize) {
+    public AbstractTictactoeModel(int boardSize) {
         this.boardSize = boardSize;
-        board = new Symbol[boardSize][boardSize];
+        board = new Tile[boardSize][boardSize];
+        legalMoves = new ArrayList<>();
+        scores = new int[]{0, 0};
     }
 
     /**
-     * Fill the board with Symbol.EMPTY (no player has moved here yet) objects to create an empty board
+     * Fill the board with Tile.EMPTY (no player has moved here yet) objects to create an empty board
      * Sets the winner of the current board to null (there is no winner yet)
      */
+    @Override
     public void resetBoard(){
         for(int i=0;i<boardSize;i++){
             for(int j=0;j<boardSize;j++){
-                board[i][j] = Symbol.EMPTY;
+                board[i][j] = Tile.EMPTY;
             }
         }
         boardWinner = null;
+        scores = new int[]{0, 0};
+        updateLegalMoves(Tile.EMPTY);
+    }
+
+    /**
+     * Make a move on the current board and check if this move has produced a game ending board state
+     * @param x The x coordinate for the move
+     * @param y The y coordinate for the move
+     * @param player The Tile (X or O) that will make the move
+     * @return True if this move has produced a game ending board state and false if it hasn't
+     */
+    @Override
+    public boolean move(int x, int y, Tile player){
+        // Set the tile to the player symbol
+        board[y][x] = player;
+        // Update the legal moves
+        updateLegalMoves(player);
+        // Check if this was a winning move
+        if(player != Tile.EMPTY) boardWinner = checkWin(x, y);
+        // Return if this was a winning move or not
+        return (boardWinner != null);
     }
 
     /**
@@ -35,8 +61,11 @@ public abstract class AbstractModel {
      * @param y The y coordinate for the move
      * @return True if the move is legal, false if it isn't
      */
-    public boolean checkLegalMove(int x, int y){
-        return (((x >= 0 && x < boardSize) && (y >= 0 && y < boardSize)) && board[y][x] == Symbol.EMPTY);
+    @Override
+    public boolean checkLegalMove(int x, int y, Tile player){
+        ArrayList<Point> moves = getLegalMoves(player);
+        Point move = new Point(x, y);
+        return moves.contains(move);
     }
 
     /**
@@ -44,29 +73,15 @@ public abstract class AbstractModel {
      * Legal moves consist of squares that are still empty
      * @return The list of legal moves for the current board
      */
-    public ArrayList<Point> generateLegalMoves(){
-        ArrayList<Point> legalMoves = new ArrayList<>();
+    @Override
+    public void updateLegalMoves(Tile player){
+        ArrayList<Point> tempLegalMoves = new ArrayList<>();
         for(int i=0;i<boardSize;i++){
             for(int j=0;j<boardSize;j++){
-                if(checkLegalMove(j, i)) legalMoves.add(new Point(j, i));
+                if(board[i][j] == Tile.EMPTY) tempLegalMoves.add(new Point(j, i));
             }
         }
-        return legalMoves;
-    }
-
-    /**
-     * Make a move on the current board and check if this move has produced a game ending board state
-     * @param x The x coordinate for the move
-     * @param y The y coordinate for the move
-     * @param symbol The Symbol (X or O) that will make the move
-     * @return True if this move has produced a game ending board state and false if it hasn't
-     */
-    public boolean move(int x, int y, Symbol symbol){
-        board[y][x] = symbol;
-        // If the move was made by a player, check if this was a winning move
-        if(symbol != Symbol.EMPTY) boardWinner = checkWinAfterMove(x, y);
-        // Return if this was a winning move or not
-        return (boardWinner != null);
+        legalMoves = tempLegalMoves;
     }
 
     /**
@@ -75,9 +90,10 @@ public abstract class AbstractModel {
      * the move was made on, and any diagonal it may have been made on.
      * @param x The x coordinate for the move
      * @param y The y coordinate for the move
-     * @return A Symbol (X or O) if there is a winner. The Symbol EMPTY if the game is a draw, or null if there is no winner yet
+     * @return A Tile (X or O) if there is a winner. The Tile EMPTY if the game is a draw, or null if there is no winner yet
      */
-    public Symbol checkWinAfterMove(int x, int y){
+    @Override
+    public Tile checkWin(int x, int y){
         // Check horizontal win conditions
         for(int i=0;true;i++) {
             if(board[y][i] != board[y][i+1]){ break;}
@@ -105,31 +121,58 @@ public abstract class AbstractModel {
             }
         }
         // No more legal moves available, draw
-        if(generateLegalMoves().size() == 0){
-            return Symbol.EMPTY;
+        if(getLegalMoves(Tile.EMPTY).size() == 0){
+            return Tile.EMPTY;
         }
         // No winner has occurred yet
         return null;
+    }
+
+    @Override
+    public void updateScores() {
+        // Empty method since unlike Chess, Checkers or Reversi, TicTacToe has no playerscore to update
     }
 
     /**
      * Generates a move using the AI in the concrete model and calculates how long it took to generate this move
      * @return The move that the AI has generated as a Point (x, y) coordinates
      */
-    public Point computerMove(Symbol symbol){
+    @Override
+    public Point computerMove(Tile tile){
         long oldTime = System.currentTimeMillis();
-        Point computerMove = nextMove(symbol);
+        Point computerMove = nextMove(tile);
         long newTime = System.currentTimeMillis();
         System.out.println("AI took " + (newTime - oldTime) + " milliseconds to reach decision");
         return computerMove;
     }
 
-    public Symbol[][] getBoard() {
+    @Override
+    public String getGameName() {
+        return "TicTacToe";
+    }
+
+    @Override
+    public Tile[][] getBoard() {
         return board;
     }
 
-    public Symbol getBoardWinner() { return boardWinner; }
+    @Override
+    public Tile getBoardWinner() { return boardWinner; }
+
+    @Override
+    public void setBoardWinner(Tile boardWinner) {
+        this.boardWinner = boardWinner;
+    }
+
+    @Override
+    public int[] getScores() { return scores; }
+
+    @Override
+    public ArrayList<Point> getLegalMoves(Tile player) {
+        return legalMoves;
+    }
 
     // Abstract function that has to be implemented by a concrete AI
-    abstract public Point nextMove(Symbol player);
+    @Override
+    abstract public Point nextMove(Tile player);
 }

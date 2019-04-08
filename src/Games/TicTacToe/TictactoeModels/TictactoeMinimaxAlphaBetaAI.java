@@ -1,34 +1,35 @@
-package TicTacToe.AI_Models;
+package Games.TicTacToe.TictactoeModels;
 
-import TicTacToe.Symbol;
+import Games.Tile;
 
 import java.awt.Point;
 import java.util.ArrayList;
 
-public class MinimaxAlphaBetaAIModel extends AbstractModel{
+public class TictactoeMinimaxAlphaBetaAI extends AbstractTictactoeModel {
 
-    private int initialDepth = 8;
+    private int initialDepth = 9;
     private int evaluatedPossibilities;
-    private Symbol computerPlayer;
-    private Symbol opponentPlayer;
+    private Tile computerPlayer;
+    private Tile opponentPlayer;
 
-    public MinimaxAlphaBetaAIModel(int boardSize) { super(boardSize); }
+    public TictactoeMinimaxAlphaBetaAI(int boardSize) { super(boardSize); }
 
     @Override
-    public Point nextMove(Symbol symbol) {
+    public Point nextMove(Tile tile) {
         evaluatedPossibilities = 0;
-        computerPlayer = symbol;
-        opponentPlayer = (computerPlayer == Symbol.X) ? Symbol.O : Symbol.X;
+        computerPlayer = tile;
+        opponentPlayer = (computerPlayer == Tile.BLACK) ? Tile.WHITE : Tile.BLACK;
         int[] result = miniMax(initialDepth, computerPlayer, Integer.MIN_VALUE,Integer.MAX_VALUE);
         System.out.println("Minimax AI with Alpha-beta pruning wants to move to x:" + result[1] + " y: " + result[2]);
         System.out.println("AI evaluated " + evaluatedPossibilities + " possibilities to reach this conclusion");
         return new Point(result[1], result[2]);
     }
 
-    private int[] miniMax(int depth, Symbol player, int alpha, int beta){
+    private int[] miniMax(int depth, Tile player, int alpha, int beta){
         evaluatedPossibilities++;
         // A list of all the possible moves for the current game board
-        ArrayList<Point> legalMoves = generateLegalMoves();
+        updateLegalMoves(Tile.EMPTY);
+        ArrayList<Point> legalMoves = getLegalMoves(player);
         // Variables to store the best move and score of that move
         // The computer is the maximizing player and the human is the minimizing player
         int currentScore;
@@ -66,7 +67,7 @@ public class MinimaxAlphaBetaAIModel extends AbstractModel{
                     }
                 }
                 // Undo the move
-                move(legalMove.x, legalMove.y, Symbol.EMPTY);
+                move(legalMove.x, legalMove.y, Tile.EMPTY);
                 // Cut off the search if a better move for the maximizer has already been found (since it will
                 // always choose that one instead)
                 if (alpha >= beta) break;
@@ -76,9 +77,9 @@ public class MinimaxAlphaBetaAIModel extends AbstractModel{
     }
 
     private int evaluateScore(){
-        Symbol winner = getBoardWinner();
+        Tile winner = getBoardWinner();
         if(winner == computerPlayer) return 10;
-        else if(winner == Symbol.EMPTY) return 0;
+        else if(winner == Tile.EMPTY) return 0;
         else if(winner == opponentPlayer) return  -10;
         else return 0;
     }

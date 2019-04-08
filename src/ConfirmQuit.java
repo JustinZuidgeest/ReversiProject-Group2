@@ -19,14 +19,18 @@ public class ConfirmQuit {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle(title);
-        window.setMinWidth(300);
-        window.setMinHeight(100);
+        window.setMinWidth(500);
+        window.setMinHeight(200);
         Label label = new Label();
         label.setText(message);
+        label.setPrefWidth(270);
+        label.setAlignment(Pos.CENTER);
 
 
         Button yesButton = new Button("yes");
+        yesButton.getStyleClass().addAll("button-green");
         Button noButton = new Button("no");
+        noButton.getStyleClass().addAll("button-green");
 
         yesButton.setOnAction(e -> {
             answer = true;
@@ -41,6 +45,7 @@ public class ConfirmQuit {
         layout.getChildren().addAll(label, yesButton, noButton );
         layout.setAlignment(Pos.CENTER);
         Scene scene = new Scene(layout);
+        scene.getStylesheets().addAll("style.css");
         window.setScene(scene);
         window.showAndWait();
 
@@ -49,3 +54,5 @@ public class ConfirmQuit {
 
 
 }
+
+

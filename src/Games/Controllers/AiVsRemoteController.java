@@ -6,7 +6,6 @@ import Games.Tile;
 import Games.View;
 
 import java.awt.Point;
-import java.util.ArrayList;
 
 public class AiVsRemoteController implements Controller {
 

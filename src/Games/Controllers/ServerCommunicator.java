@@ -3,7 +3,6 @@ package Games.Controllers;
 import Games.Controller;
 import Games.Tile;
 
-import java.awt.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.*;
@@ -66,7 +65,6 @@ public class ServerCommunicator implements Runnable {
                     String[] splitString = line.split("\\s+");
                     switch (splitString[0]){
                         case "OK":
-                            //command goed uitgevoerd
                             break;
                         case "ERR":
                             try {
@@ -93,13 +91,11 @@ public class ServerCommunicator implements Runnable {
                 String games = trimLine(line.split("GAMELIST ")[1]);
                 String[] game = games.split(",");
                 for(String s: game){gameList.add(s);}
-                //TODO send gamelist to controller
                 break;
             case "PLAYERLIST":
                 String players = trimLine(line.split("PLAYERLIST ")[1]);
                 String[] player = players.split(",");
                 for(String s: player){playerList.add(s);}
-                //TODO send playerlist to controller
                 break;
             case "GAME":
                 handleGAMEMessage(line);
@@ -121,27 +117,20 @@ public class ServerCommunicator implements Runnable {
                 else{
                     controller.setHumanPlayer(Tile.BLACK);
                 }
-                //Tile human = (player.toUpperCase().startsWith("X")) ? Tile.BLACK : Tile.WHITE;
-                //setHumanPlayer(human);
-                System.out.println(matchMap);
                 break;
             case "YOURTURN":
                 String turnInfo = line.split("YOURTURN ")[1];
                 //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
                 HashMap<String, String> turnMap = (HashMap<String, String>) Arrays.asList(trimLine(turnInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
-                System.out.println(turnMap);
-                //TODO choose between aiMove or playerMove
                 controller.aiMove();
                 break;
             case "MOVE":
                 String moveInfo = line.split("MOVE ")[1];
                 //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
                 HashMap<String, String> moveMap = (HashMap<String, String>) Arrays.asList(trimLine(moveInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
-                System.out.println(moveMap);
                 if(!moveMap.get("PLAYER").equals(name)) {
                     int x = Integer.valueOf(moveMap.get("MOVE")) % controller.getBoardSize();
                     int y = Math.floorDiv(Integer.valueOf(moveMap.get("MOVE")), controller.getBoardSize());
-                    System.out.println("player moved " + x + y);
                     controller.playerMove(x, y);
                 }
                 break;
@@ -150,7 +139,6 @@ public class ServerCommunicator implements Runnable {
                 //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
                 HashMap<String, String> winMap = (HashMap<String, String>) Arrays.asList(trimLine(winInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 //TODO link to GUI display win message
-                System.out.println("YOU WON!!! " + winMap);
                 controller.newGame();
                 break;
             case "LOSS":
@@ -158,7 +146,6 @@ public class ServerCommunicator implements Runnable {
                 //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
                 HashMap<String, String> lossMap = (HashMap<String, String>) Arrays.asList(trimLine(lossInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 //TODO link to GUI display loss message
-                System.out.println("YOU LOST!! " + lossMap);
                 controller.newGame();
                 break;
             case "DRAW":
@@ -166,7 +153,6 @@ public class ServerCommunicator implements Runnable {
                 //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
                 HashMap<String, String> drawMap = (HashMap<String, String>) Arrays.asList(trimLine(drawInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 //TODO link to GUI display draw message
-                System.out.println("ITS A DRAW!! " + drawMap);
                 controller.newGame();
                 break;
             case "CHALLENGE":
@@ -182,16 +168,16 @@ public class ServerCommunicator implements Runnable {
         if(!splitString[3].equals("CANCELLED")){
             String challengeInfo = line.split("CHALLENGE ")[1];
             //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
-            HashMap<String, String> map = (HashMap<String, String>) Arrays.asList(trimLine(challengeInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
+            HashMap<String, String> challengeMap = (HashMap<String, String>) Arrays.asList(trimLine(challengeInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
             //TODO link to GUI display challenge message
-            System.out.println(map);
+            System.out.println(challengeMap);
         }
         else{
             String challengeInfo = line.split("CANCELED ")[1];
             //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
-            HashMap<String, String> map = (HashMap<String, String>) Arrays.asList(trimLine(challengeInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
+            HashMap<String, String> challengeMap = (HashMap<String, String>) Arrays.asList(trimLine(challengeInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
             //TODO cancel challenge message
-            System.out.println(map);
+            System.out.println(challengeMap);
         }
     }
 
@@ -201,14 +187,6 @@ public class ServerCommunicator implements Runnable {
         }catch (IOException e){
             e.printStackTrace();
         }
-    }
-
-    public Point convertIndexToPoint(int index){
-        //TODO get boardsize from controller
-        Point point = new Point();
-        int x = index % 3;
-        int y = Math.floorDiv(index, 3);
-        return point;
     }
 
     public String trimLine(String lineToTrim){
@@ -225,7 +203,6 @@ public class ServerCommunicator implements Runnable {
     public void login(){
         shouldRun = true;
         sendToServer("login " + name);
-        System.out.println("logged in");
     }
 
     public void logout(){
@@ -242,7 +219,6 @@ public class ServerCommunicator implements Runnable {
 
     public void sendMove(int move){
         sendToServer("move " + move);
-        System.out.println("move " + move);
     }
 
     public void subscribe(String game){

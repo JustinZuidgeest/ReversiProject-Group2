@@ -8,19 +8,20 @@ import Games.View;
 import java.awt.Point;
 import java.util.ArrayList;
 
-public class TictactoeController implements Controller {
+public class RemoteController implements Controller {
 
     private View view;
     private Model model;
 
     private boolean gameOver;
     private Tile playerToMove;
+    private ServerCommunicator server;
     // The human player
     private Tile humanPlayer;
     // The AI player
     private Tile computerPlayer;
 
-    public TictactoeController(View view, Model model) {
+    public RemoteController(View view, Model model) {
         this.view = view;
         this.model = model;
         this.server = new ServerCommunicator(this);
@@ -31,7 +32,11 @@ public class TictactoeController implements Controller {
         server.getGameList();
 
         server.subscribe("Tic-tac-toe");
+    }
 
+    @Override
+    public void start(){
+        //null
     }
 
     /**
@@ -60,7 +65,7 @@ public class TictactoeController implements Controller {
      */
     public boolean playerMove(int x, int y){
         try {
-            if(model.checkLegalMove(x, y)){
+            if(model.checkLegalMove(x, y, humanPlayer)){
                 // Execute the move, and execute hasWin() function if this was a winning move
                 if(model.move(x, y, humanPlayer)){
                     //server.sendMove(x*y);

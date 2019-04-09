@@ -20,6 +20,11 @@ public abstract class AbstractTictactoeModel implements Model {
         scores = new int[]{0, 0};
     }
 
+    @Override
+    public int getBoardSize(){
+        return boardSize;
+    }
+
     /**
      * Fill the board with Tile.EMPTY (no player has moved here yet) objects to create an empty board
      * Sets the winner of the current board to null (there is no winner yet)

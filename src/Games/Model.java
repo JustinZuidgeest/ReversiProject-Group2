@@ -18,4 +18,5 @@ public interface Model {
     int[] getScores();
     ArrayList<Point> getLegalMoves(Tile player);
     Point nextMove(Tile player);
+    int getBoardSize();
 }

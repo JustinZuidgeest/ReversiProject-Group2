@@ -7,4 +7,5 @@ public interface Controller {
     boolean playerMove(int x, int y);
     void aiMove();
     void hasWin();
+    int getBoardSize();
 }

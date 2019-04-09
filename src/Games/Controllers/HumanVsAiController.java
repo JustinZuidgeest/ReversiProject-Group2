@@ -20,9 +20,12 @@ public class HumanVsAiController implements Controller {
     // The AI player
     private Tile computerPlayer;
 
+    private int boardSize;
+
     public HumanVsAiController(View view, Model model) {
         this.view = view;
         this.model = model;
+        this.boardSize = model.getBoardSize();
     }
 
     @Override
@@ -78,6 +81,11 @@ public class HumanVsAiController implements Controller {
             String input = scanner.nextLine();
             if(input.toUpperCase().startsWith("N")) break;
         }
+    }
+
+    @Override
+    public int getBoardSize() {
+        return boardSize;
     }
 
     @Override

@@ -29,6 +29,11 @@ public abstract class AbstractReversiModel implements Model {
     }
 
     @Override
+    public int getBoardSize(){
+        return boardSize;
+    }
+
+    @Override
     public void resetBoard() {
         for(int i=0;i<boardSize;i++){
             for(int j=0;j<boardSize;j++){

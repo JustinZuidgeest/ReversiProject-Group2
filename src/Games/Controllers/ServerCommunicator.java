@@ -30,7 +30,7 @@ public class ServerCommunicator implements Runnable {
         this.controller = controller;
 
         Properties properties = new Properties();
-        String fileName = "D:\\Vincent\\School\\Jaar 2\\Project bordspel AI\\ReversiProject-Group2\\src\\server_communication\\settings.conf";
+        String fileName = "D:\\Vincent\\School\\Jaar 2\\Project bordspel AI\\ReversiProject-Group2\\src\\Games\\Controllers\\settings.conf";
         InputStream is = null;
         try {
             is = new FileInputStream(fileName);
@@ -94,14 +94,12 @@ public class ServerCommunicator implements Runnable {
                 String[] game = games.split(",");
                 for(String s: game){gameList.add(s);}
                 //TODO send gamelist to controller
-                System.out.println("Available games: " + gameList);
                 break;
             case "PLAYERLIST":
                 String players = trimLine(line.split("PLAYERLIST ")[1]);
                 String[] player = players.split(",");
                 for(String s: player){playerList.add(s);}
                 //TODO send playerlist to controller
-                System.out.println("Players online: " + playerList);
                 break;
             case "GAME":
                 handleGAMEMessage(line);
@@ -123,6 +121,8 @@ public class ServerCommunicator implements Runnable {
                 else{
                     controller.setHumanPlayer(Tile.BLACK);
                 }
+                //Tile human = (player.toUpperCase().startsWith("X")) ? Tile.BLACK : Tile.WHITE;
+                //setHumanPlayer(human);
                 System.out.println(matchMap);
                 break;
             case "YOURTURN":
@@ -139,8 +139,8 @@ public class ServerCommunicator implements Runnable {
                 HashMap<String, String> moveMap = (HashMap<String, String>) Arrays.asList(trimLine(moveInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 System.out.println(moveMap);
                 if(!moveMap.get("PLAYER").equals(name)) {
-                    int x = Integer.valueOf(moveMap.get("MOVE")) % 3;
-                    int y = Math.floorDiv(Integer.valueOf(moveMap.get("MOVE")), 3);
+                    int x = Integer.valueOf(moveMap.get("MOVE")) % controller.getBoardSize();
+                    int y = Math.floorDiv(Integer.valueOf(moveMap.get("MOVE")), controller.getBoardSize());
                     System.out.println("player moved " + x + y);
                     controller.playerMove(x, y);
                 }
@@ -242,6 +242,7 @@ public class ServerCommunicator implements Runnable {
 
     public void sendMove(int move){
         sendToServer("move " + move);
+        System.out.println("move " + move);
     }
 
     public void subscribe(String game){

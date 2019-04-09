@@ -20,11 +20,14 @@ public class RemoteController implements Controller {
     private Tile humanPlayer;
     // The AI player
     private Tile computerPlayer;
+    private int boardSize;
 
     public RemoteController(View view, Model model) {
         this.view = view;
         this.model = model;
         this.server = new ServerCommunicator(this);
+
+        this.boardSize = model.getBoardSize();
 
         server.connectToServer();
         new Thread(server).start();
@@ -32,6 +35,7 @@ public class RemoteController implements Controller {
         server.getGameList();
 
         server.subscribe("Tic-tac-toe");
+        newGame();
     }
 
     @Override
@@ -63,15 +67,18 @@ public class RemoteController implements Controller {
      * @param y The y coordinate of the move
      * @return True if the move was succesfull, false if it wasn't
      */
-    public boolean playerMove(int x, int y){
+    @Override
+    public boolean playerMove(int x, int y) {
         try {
             if(model.checkLegalMove(x, y, humanPlayer)){
                 // Execute the move, and execute hasWin() function if this was a winning move
                 if(model.move(x, y, humanPlayer)){
-                    //server.sendMove(x*y);
                     view.updateBoard(model.getBoard());
                     hasWin();
-                }else view.updateBoard(model.getBoard());
+                }else{
+                    view.updateBoard(model.getBoard());
+                    System.out.println("The scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
+                }
                 return true;
             }else{
                 throw new IllegalArgumentException();
@@ -86,15 +93,24 @@ public class RemoteController implements Controller {
      * Makes a move for the computer player. Generates a computer move based on the current AI initialized in the model
      * and executes the move. Checks if this move was a winning move, and ends the game if it was.
      */
-    public void aiMove(){
+    @Override
+    public void aiMove() {
         // Generate a move made by the computer
         Point aiMove = model.computerMove(computerPlayer);
-        server.sendMove((aiMove.y * 3) + aiMove.x);
         // Execute the move, and execute hasWin() function if this was a winning move
+        server.sendMove((aiMove.y * boardSize) + aiMove.x);
         if(model.move(aiMove.x, aiMove.y, computerPlayer)){
             view.updateBoard(model.getBoard());
             hasWin();
-        }else view.updateBoard(model.getBoard());
+        }else{
+            view.updateBoard(model.getBoard());
+            System.out.println("The scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
+        }
+    }
+
+    @Override
+    public int getBoardSize() {
+        return boardSize;
     }
 
     /**

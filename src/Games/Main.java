@@ -1,6 +1,7 @@
 package Games;
 
 import Games.Controllers.HumanVsAiController;
+import Games.Controllers.RemoteController;
 import Games.Reversi.ReversiCommandlineView;
 import Games.Reversi.ReversiModels.RandomReversiAI;
 import Games.TicTacToe.TictactoeCommandlineView;
@@ -31,7 +32,7 @@ public class Main {
             model = new RandomReversiAI(8);
         }
         // Create the controller and pass the view and model
-        controller = new HumanVsAiController(view, model);
+        controller = new RemoteController(view, model);
         // Start the main game loop
         controller.start();
     }

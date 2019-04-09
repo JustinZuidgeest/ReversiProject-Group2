@@ -47,7 +47,7 @@ public class HumanVsHumanController implements Controller {
             System.out.println("Please select your side: X or O");
             String player = scanner.nextLine();
             Tile player1 = (player.toUpperCase().startsWith("X")) ? Tile.BLACK : Tile.WHITE;
-            setHumanPlayer(player1);
+            setPlayerOne(player1);
             playerToMove = player1;
             while (true) {
                 if(playerToMove == playerOne){
@@ -101,7 +101,7 @@ public class HumanVsHumanController implements Controller {
     }
 
     @Override
-    public void setHumanPlayer(Tile tile) {
+    public void setPlayerOne(Tile tile) {
         playerOne = (tile == Tile.BLACK) ? Tile.BLACK : Tile.WHITE;
         playerTwo = (tile == Tile.BLACK) ? Tile.WHITE : Tile.BLACK;
     }
@@ -111,7 +111,8 @@ public class HumanVsHumanController implements Controller {
         try {
             if(model.checkLegalMove(x, y, playerOne)){
                 // Execute the move, and execute hasWin() function if this was a winning move
-                if(model.move(x, y, playerOne)){
+                model.move(x, y, playerOne);
+                if(model.hasWinner()){
                     view.updateBoard(model.getBoard());
                     hasWin();
                 }else{
@@ -132,7 +133,8 @@ public class HumanVsHumanController implements Controller {
         try {
             if(model.checkLegalMove(x, y, playerTwo)){
                 // Execute the move, and execute hasWin() function if this was a winning move
-                if(model.move(x, y, playerTwo)){
+                model.move(x, y, playerTwo);
+                if(model.hasWinner()){
                     view.updateBoard(model.getBoard());
                     hasWin();
                 }else{
@@ -151,7 +153,7 @@ public class HumanVsHumanController implements Controller {
 
     @Override
     public void aiMove(){
-
+        //No AI in this controller
     }
 
     private boolean playerHasMoves(Tile player){

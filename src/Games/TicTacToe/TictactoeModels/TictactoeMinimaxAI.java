@@ -22,7 +22,7 @@ public class TictactoeMinimaxAI extends AbstractTictactoeModel {
         computerPlayer = tile;
         opponentPlayer = (computerPlayer == Tile.BLACK) ? Tile.WHITE : Tile.BLACK;
         int[] result = miniMax(initialDepth, tile);
-        System.out.println("Minimax AI wants to move to x:" + result[0] + " y: " + result[1]);
+        System.out.println("Minimax AI with depth " + initialDepth + " wants to move to x:" + result[0] + " y: " + result[1]);
         System.out.println("AI evaluated " + evaluatedPossibilities + " possibilities to reach this conclusion");
         return new Point(result[0], result[1]);
     }
@@ -30,7 +30,7 @@ public class TictactoeMinimaxAI extends AbstractTictactoeModel {
     private int[] miniMax(int depth, Tile player){
         evaluatedPossibilities++;
         // A list of all the possible moves for the current game board
-        updateLegalMoves(Tile.EMPTY);
+        updateLegalMoves();
         ArrayList<Point> legalMoves = getLegalMoves(player);
         // Variables to store the best move and score of that move
         // The computer is the maximizing player and the human is the minimizing player
@@ -40,14 +40,14 @@ public class TictactoeMinimaxAI extends AbstractTictactoeModel {
         int bestCol = -1;
 
         // Base case for when the end of the decision tree has been reached (if max depth is reached or a game ending move was made)
-        if(depth == 0 || getBoardWinner() != null){
+        if(depth == 0 || hasWinner()){
             if(player == computerPlayer) bestScore = evaluateScore() - (initialDepth - depth);
             else bestScore = evaluateScore() + (initialDepth - depth);
         }else{
             for(Point legalMove:legalMoves){
                 // Try the move
                 move(legalMove.x, legalMove.y, player);
-                checkWin(legalMove.x, legalMove.y);
+                checkWin(legalMove.x, legalMove.y, getBoard());
                 // If player is computer, player is maximizing player
                 if(player == computerPlayer){
                     currentScore = miniMax(depth -1, opponentPlayer)[2];

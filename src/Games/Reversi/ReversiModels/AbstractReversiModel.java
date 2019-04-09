@@ -29,11 +29,6 @@ public abstract class AbstractReversiModel implements Model {
     }
 
     @Override
-    public int getBoardSize(){
-        return boardSize;
-    }
-
-    @Override
     public void resetBoard() {
         for(int i=0;i<boardSize;i++){
             for(int j=0;j<boardSize;j++){
@@ -46,27 +41,23 @@ public abstract class AbstractReversiModel implements Model {
         tilesOnBoard.addAll(Arrays.asList(tiles));
         boardWinner = null;
         updateScores();
-        updateLegalMoves(Tile.WHITE);
-        updateLegalMoves(Tile.BLACK);
+        updateLegalMoves();
     }
 
     @Override
-    public boolean move(int x, int y, Tile player) {
+    public void move(int x, int y, Tile player) {
         // Set the tile to the player color
         board[y][x] = player;
         // Add this tile to the list of tiles on the board
         tilesOnBoard.add(new Point(x, y));
         // Flip all tiles
-        flipTiles(x, y, player);
-        // Update the legal moves for the other player
-        updateLegalMoves(Tile.BLACK);
-        updateLegalMoves(Tile.WHITE);
+        flipTiles(x, y, player, board);
+        // Update the legal moves for both players
+        updateLegalMoves();
         // Update the scores after this move
         updateScores();
         // Check if this was a winning move
-        boardWinner = checkWin(x, y);
-        // Return if this was a winning move or not
-        return (boardWinner != null);
+        boardWinner = checkWin(x, y, board);
     }
 
     @Override
@@ -77,53 +68,54 @@ public abstract class AbstractReversiModel implements Model {
     }
 
     @Override
-    public void updateLegalMoves(Tile player) {
-        long oldTime = System.currentTimeMillis();
+    public void updateLegalMoves() {
+        whiteLegalMoves = generateLegalMoves(Tile.WHITE, board);
+        blackLegalMoves = generateLegalMoves(Tile.BLACK, board);
+    }
+
+    public ArrayList<Point> generateLegalMoves(Tile player, Tile[][] board){
         Tile oppositeColor = (player == Tile.BLACK) ? Tile.WHITE : Tile.BLACK;
         ArrayList<Point> legalMoves = new ArrayList<>();
-        // Loop through all the non-empty tiles on the board
-        for(Point tile:tilesOnBoard){
-            //Check to see if this tile belongs to the requested player
-            if(board[tile.y][tile.x] == player){
-                // Loop through all the directions from this tile
-                for(int[] direction:allDirections){
-                    int tempX = tile.x + direction[0];
-                    int tempY = tile.y + direction[1];
-                    // If a direction is on the board and contains the opposite color piece continue down this direction
-                    if(onBoard(tempX, tempY) && board[tempY][tempX] == oppositeColor) {
-                        tempX += direction[0];
-                        tempY += direction[1];
-                        // Check if new tile is on the board and keep going
-                        while(onBoard(tempX, tempY)) {
-                            // If own tile is encountered again, stop looking and continue in the next direction
-                            if(board[tempY][tempX] == player){
-                                break;
+        // Loop through all the tiles on the board
+        for(int i=0;i<boardSize;i++){
+            for(int j=0;j<boardSize;j++) {
+                // Check if tile is not empty
+                if(board[i][j] != Tile.EMPTY) {
+                    //Check to see if this tile belongs to the requested player
+                    if (board[i][j] == player) {
+                        // Loop through all the directions from this tile
+                        for (int[] direction : allDirections) {
+                            int tempX = j + direction[0];
+                            int tempY = i + direction[1];
+                            // If a direction is on the board and contains the opposite color piece continue down this direction
+                            if (onBoard(tempX, tempY) && board[tempY][tempX] == oppositeColor) {
+                                tempX += direction[0];
+                                tempY += direction[1];
+                                // Check if new tile is on the board and keep going
+                                while (onBoard(tempX, tempY)) {
+                                    // If own tile is encountered again, stop looking and continue in the next direction
+                                    if (board[tempY][tempX] == player) {
+                                        break;
+                                    }
+                                    // If an empty tile is encountered again, add tile to list of possible moves and contine in the next direction
+                                    else if (board[tempY][tempX] == Tile.EMPTY) {
+                                        Point move = new Point(tempX, tempY);
+                                        if (!legalMoves.contains(move)) legalMoves.add(move);
+                                        break;
+                                    }
+                                    tempX += direction[0];
+                                    tempY += direction[1];
+                                }
                             }
-                            // If an empty tile is encountered again, add tile to list of possible moves and contine in the next direction
-                            else if (board[tempY][tempX] == Tile.EMPTY) {
-                                Point move = new Point(tempX, tempY);
-                                if(!legalMoves.contains(move)) legalMoves.add(move);
-                                break;
-                            }
-                            tempX += direction[0];
-                            tempY += direction[1];
                         }
                     }
                 }
             }
         }
-        long newTime = System.currentTimeMillis();
-        System.out.println("Generating moves for player " + player + " took " + (newTime - oldTime) +  " ms");
-        if(player == Tile.WHITE){
-            whiteLegalMoves = legalMoves;
-            System.out.println("Legal moves for White: " + legalMoves);
-        }else if(player == Tile.BLACK){
-            blackLegalMoves = legalMoves;
-            System.out.println("Legal moves for Black: " + legalMoves);
-        }
+        return legalMoves;
     }
 
-    private void flipTiles(int x, int y, Tile player){
+    public void flipTiles(int x, int y, Tile player, Tile[][] board){
         Tile oppositeColor = (player == Tile.BLACK) ? Tile.WHITE : Tile.BLACK;
         // Loop through all the directions
         for(int[] direction:allDirections){
@@ -166,7 +158,7 @@ public abstract class AbstractReversiModel implements Model {
     }
 
     @Override
-    public Tile checkWin(int x, int y) {
+    public Tile checkWin(int x, int y, Tile[][] board) {
         if(getLegalMoves(Tile.WHITE).size() == 0 && getLegalMoves(Tile.BLACK).size() == 0){
             if(scores[0] > scores[1]){
                 return Tile.WHITE;
@@ -209,18 +201,23 @@ public abstract class AbstractReversiModel implements Model {
     }
 
     @Override
+    public int getBoardSize(){
+        return boardSize;
+    }
+
+    @Override
     public Tile[][] getBoard() {
         return board;
     }
 
     @Override
-    public Tile getBoardWinner() {
-        return boardWinner;
+    public boolean hasWinner() {
+        return boardWinner != null;
     }
 
     @Override
-    public void setBoardWinner(Tile boardWinner) {
-        this.boardWinner = boardWinner;
+    public Tile getBoardWinner() {
+        return boardWinner;
     }
 
     @Override

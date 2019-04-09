@@ -16,9 +16,9 @@ public class AiVsRemoteController implements Controller {
     private Tile playerToMove;
     private ServerCommunicator server;
     // The human player
-    private Tile humanPlayer;
+    private Tile AIPlayer;
     // The AI player
-    private Tile computerPlayer;
+    private Tile remotePlayer;
     private int boardSize;
 
     public AiVsRemoteController(View view, Model model) {
@@ -33,7 +33,7 @@ public class AiVsRemoteController implements Controller {
         server.login();
         server.getGameList();
 
-        server.subscribe("Tic-tac-toe");
+        server.subscribe(model.getGameName());
         newGame();
     }
 
@@ -48,15 +48,15 @@ public class AiVsRemoteController implements Controller {
     @Override
     public void newGame() {
         model.resetBoard();
-        humanPlayer = null;
-        computerPlayer = null;
+        AIPlayer = null;
+        remotePlayer = null;
         view.updateBoard(model.getBoard());
     }
 
     @Override
-    public void setHumanPlayer(Tile tile) {
-        humanPlayer = (tile == Tile.BLACK) ? Tile.BLACK : Tile.WHITE;
-        computerPlayer = (tile == Tile.BLACK) ? Tile.WHITE : Tile.BLACK;
+    public void setPlayerOne(Tile tile) {
+        AIPlayer = (tile == Tile.BLACK) ? Tile.BLACK : Tile.WHITE;
+        remotePlayer = (tile == Tile.BLACK) ? Tile.WHITE : Tile.BLACK;
     }
 
     /**
@@ -69,9 +69,10 @@ public class AiVsRemoteController implements Controller {
     @Override
     public boolean playerMove(int x, int y) {
         try {
-            if(model.checkLegalMove(x, y, humanPlayer)){
+            if(model.checkLegalMove(x, y, AIPlayer)){
                 // Execute the move, and execute hasWin() function if this was a winning move
-                if(model.move(x, y, humanPlayer)){
+                model.move(x, y, AIPlayer);
+                if(model.hasWinner()){
                     view.updateBoard(model.getBoard());
                     hasWin();
                 }else{
@@ -95,10 +96,11 @@ public class AiVsRemoteController implements Controller {
     @Override
     public void aiMove() {
         // Generate a move made by the computer
-        Point aiMove = model.computerMove(computerPlayer);
+        Point aiMove = model.computerMove(remotePlayer);
         // Execute the move, and execute hasWin() function if this was a winning move
         server.sendMove((aiMove.y * boardSize) + aiMove.x);
-        if(model.move(aiMove.x, aiMove.y, computerPlayer)){
+        model.move(aiMove.x, aiMove.y, remotePlayer);
+        if(model.hasWinner()){
             view.updateBoard(model.getBoard());
             hasWin();
         }else{

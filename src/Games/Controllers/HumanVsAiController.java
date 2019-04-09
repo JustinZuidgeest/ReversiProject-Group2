@@ -48,7 +48,7 @@ public class HumanVsAiController implements Controller {
             System.out.println("Please select your side: X or O");
             String player = scanner.nextLine();
             Tile human = (player.toUpperCase().startsWith("X")) ? Tile.BLACK : Tile.WHITE;
-            setHumanPlayer(human);
+            setPlayerOne(human);
             while (true) {
                 if(playerToMove == humanPlayer){
                     int userX;
@@ -89,7 +89,7 @@ public class HumanVsAiController implements Controller {
     }
 
     @Override
-    public void setHumanPlayer(Tile tile) {
+    public void setPlayerOne(Tile tile) {
         humanPlayer = (tile == Tile.BLACK) ? Tile.BLACK : Tile.WHITE;
         computerPlayer = (tile == Tile.BLACK) ? Tile.WHITE : Tile.BLACK;
     }
@@ -99,7 +99,8 @@ public class HumanVsAiController implements Controller {
         try {
             if(model.checkLegalMove(x, y, humanPlayer)){
                 // Execute the move, and execute hasWin() function if this was a winning move
-                if(model.move(x, y, humanPlayer)){
+                model.move(x, y, humanPlayer);
+                if(model.hasWinner()){
                     view.updateBoard(model.getBoard());
                     hasWin();
                 }else{
@@ -125,7 +126,8 @@ public class HumanVsAiController implements Controller {
         // Generate a move made by the computer
         Point aiMove = model.computerMove(computerPlayer);
         // Execute the move, and execute hasWin() function if this was a winning move
-        if(model.move(aiMove.x, aiMove.y, computerPlayer)){
+        model.move(aiMove.x, aiMove.y, computerPlayer);
+        if(model.hasWinner()){
             view.updateBoard(model.getBoard());
             hasWin();
         }else{

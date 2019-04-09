@@ -7,14 +7,14 @@ public interface Model {
     String getGameName();
     void resetBoard();
     boolean checkLegalMove(int x, int y, Tile player);
-    void updateLegalMoves(Tile player);
-    boolean move(int x, int y, Tile tile);
-    Tile checkWin(int x, int y);
+    void updateLegalMoves();
+    void move(int x, int y, Tile tile);
+    Tile checkWin(int x, int y, Tile[][] board);
     void updateScores();
     Point computerMove(Tile tile);
     Tile[][] getBoard();
+    boolean hasWinner();
     Tile getBoardWinner();
-    void setBoardWinner(Tile boardWinner);
     int[] getScores();
     ArrayList<Point> getLegalMoves(Tile player);
     Point nextMove(Tile player);

@@ -20,11 +20,6 @@ public abstract class AbstractTictactoeModel implements Model {
         scores = new int[]{0, 0};
     }
 
-    @Override
-    public int getBoardSize(){
-        return boardSize;
-    }
-
     /**
      * Fill the board with Tile.EMPTY (no player has moved here yet) objects to create an empty board
      * Sets the winner of the current board to null (there is no winner yet)
@@ -38,7 +33,7 @@ public abstract class AbstractTictactoeModel implements Model {
         }
         boardWinner = null;
         scores = new int[]{0, 0};
-        updateLegalMoves(Tile.EMPTY);
+        updateLegalMoves();
     }
 
     /**
@@ -49,15 +44,13 @@ public abstract class AbstractTictactoeModel implements Model {
      * @return True if this move has produced a game ending board state and false if it hasn't
      */
     @Override
-    public boolean move(int x, int y, Tile player){
+    public void move(int x, int y, Tile player){
         // Set the tile to the player symbol
         board[y][x] = player;
         // Update the legal moves
-        updateLegalMoves(player);
+        updateLegalMoves();
         // Check if this was a winning move
-        if(player != Tile.EMPTY) boardWinner = checkWin(x, y);
-        // Return if this was a winning move or not
-        return (boardWinner != null);
+        if(player != Tile.EMPTY) boardWinner = checkWin(x, y, board);
     }
 
     /**
@@ -79,14 +72,18 @@ public abstract class AbstractTictactoeModel implements Model {
      * @return The list of legal moves for the current board
      */
     @Override
-    public void updateLegalMoves(Tile player){
+    public void updateLegalMoves(){
+        legalMoves = generateLegalMoves(board);
+    }
+
+    public ArrayList<Point> generateLegalMoves(Tile[][] board){
         ArrayList<Point> tempLegalMoves = new ArrayList<>();
         for(int i=0;i<boardSize;i++){
             for(int j=0;j<boardSize;j++){
                 if(board[i][j] == Tile.EMPTY) tempLegalMoves.add(new Point(j, i));
             }
         }
-        legalMoves = tempLegalMoves;
+        return tempLegalMoves;
     }
 
     /**
@@ -98,7 +95,7 @@ public abstract class AbstractTictactoeModel implements Model {
      * @return A Tile (X or O) if there is a winner. The Tile EMPTY if the game is a draw, or null if there is no winner yet
      */
     @Override
-    public Tile checkWin(int x, int y){
+    public Tile checkWin(int x, int y, Tile[][] board){
         // Check horizontal win conditions
         for(int i=0;true;i++) {
             if(board[y][i] != board[y][i+1]){ break;}
@@ -135,7 +132,7 @@ public abstract class AbstractTictactoeModel implements Model {
 
     @Override
     public void updateScores() {
-        // Empty method since unlike Chess, Checkers or Reversi, TicTacToe has no playerscore to update
+        // Empty method since unlike Chess, Checkers or Reversi, TicTacToe does not keep track of score based on moves
     }
 
     /**
@@ -153,7 +150,12 @@ public abstract class AbstractTictactoeModel implements Model {
 
     @Override
     public String getGameName() {
-        return "TicTacToe";
+        return "Tic-tac-toe";
+    }
+
+    @Override
+    public int getBoardSize(){
+        return boardSize;
     }
 
     @Override
@@ -162,12 +164,12 @@ public abstract class AbstractTictactoeModel implements Model {
     }
 
     @Override
-    public Tile getBoardWinner() { return boardWinner; }
+    public boolean hasWinner() {
+        return boardWinner != null;
+    }
 
     @Override
-    public void setBoardWinner(Tile boardWinner) {
-        this.boardWinner = boardWinner;
-    }
+    public Tile getBoardWinner() { return boardWinner; }
 
     @Override
     public int[] getScores() { return scores; }

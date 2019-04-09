@@ -20,7 +20,7 @@ public class TictactoeMinimaxAlphaBetaAI extends AbstractTictactoeModel {
         computerPlayer = tile;
         opponentPlayer = (computerPlayer == Tile.BLACK) ? Tile.WHITE : Tile.BLACK;
         int[] result = miniMax(initialDepth, computerPlayer, Integer.MIN_VALUE,Integer.MAX_VALUE);
-        System.out.println("Minimax AI with Alpha-beta pruning wants to move to x:" + result[1] + " y: " + result[2]);
+        System.out.println("Minimax AI with depth " + initialDepth + " with Alpha-beta pruning wants to move to x:" + result[1] + ", y: " + result[2]);
         System.out.println("AI evaluated " + evaluatedPossibilities + " possibilities to reach this conclusion");
         return new Point(result[1], result[2]);
     }
@@ -28,7 +28,7 @@ public class TictactoeMinimaxAlphaBetaAI extends AbstractTictactoeModel {
     private int[] miniMax(int depth, Tile player, int alpha, int beta){
         evaluatedPossibilities++;
         // A list of all the possible moves for the current game board
-        updateLegalMoves(Tile.EMPTY);
+        updateLegalMoves();
         ArrayList<Point> legalMoves = getLegalMoves(player);
         // Variables to store the best move and score of that move
         // The computer is the maximizing player and the human is the minimizing player
@@ -37,7 +37,7 @@ public class TictactoeMinimaxAlphaBetaAI extends AbstractTictactoeModel {
         int bestCol = -1;
 
         // Base case for when the end of the decision tree has been reached (if max depth is reached or a game ending move was made)
-        if(depth == 0 || getBoardWinner() != null){
+        if(depth == 0 || hasWinner()){
             if(player == computerPlayer) currentScore = evaluateScore() - (initialDepth - depth);
             else currentScore = evaluateScore() + (initialDepth - depth);
             return new int[]{currentScore, bestCol, bestRow};

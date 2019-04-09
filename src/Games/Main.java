@@ -1,11 +1,10 @@
 package Games;
 
+import Games.Controllers.AiVsRemoteController;
 import Games.Controllers.HumanVsAiController;
-import Games.Controllers.RemoteController;
 import Games.Reversi.ReversiCommandlineView;
-import Games.Reversi.ReversiModels.RandomReversiAI;
+import Games.Reversi.ReversiModels.ReversiMiniMaxAlphaBetaAI;
 import Games.TicTacToe.TictactoeCommandlineView;
-import Games.TicTacToe.TictactoeModels.TictactoeMinimaxAI;
 import Games.TicTacToe.TictactoeModels.TictactoeMinimaxAlphaBetaAI;
 
 import java.util.Scanner;
@@ -29,10 +28,10 @@ public class Main {
         }else{
             // Create the view for Reversi
             view = new ReversiCommandlineView();
-            model = new RandomReversiAI(8);
+            model = new ReversiMiniMaxAlphaBetaAI(8);
         }
         // Create the controller and pass the view and model
-        controller = new RemoteController(view, model);
+        controller = new HumanVsAiController(view, model);
         // Start the main game loop
         controller.start();
     }

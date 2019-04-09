@@ -15,7 +15,7 @@ public class TictactoeRandomAI extends AbstractTictactoeModel {
     @Override
     public Point nextMove(Tile player) {
         Random random = new Random();
-        updateLegalMoves(player);
+        updateLegalMoves();
         ArrayList<Point> legalMoves = getLegalMoves(player);
         return legalMoves.get(random.nextInt(legalMoves.size()));
     }

@@ -29,7 +29,7 @@ public class ServerCommunicator implements Runnable {
         this.controller = controller;
 
         Properties properties = new Properties();
-        String fileName = "D:\\Vincent\\School\\Jaar 2\\Project bordspel AI\\ReversiProject-Group2\\src\\Games\\Controllers\\settings.conf";
+        String fileName = "src/Games/Controllers/settings.conf";
         InputStream is = null;
         try {
             is = new FileInputStream(fileName);
@@ -112,10 +112,10 @@ public class ServerCommunicator implements Runnable {
                 //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
                 HashMap<String, String> matchMap = (HashMap<String, String>) Arrays.asList(trimLine(matchInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 if (matchMap.get("PLAYERTOMOVE").equals(name)) {
-                    controller.setHumanPlayer(Tile.WHITE);
+                    controller.setPlayerOne(Tile.WHITE);
                 }
                 else{
-                    controller.setHumanPlayer(Tile.BLACK);
+                    controller.setPlayerOne(Tile.BLACK);
                 }
                 break;
             case "YOURTURN":

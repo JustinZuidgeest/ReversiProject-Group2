@@ -70,8 +70,8 @@ public class ServerCommunicator implements Runnable {
                             break;
                         case "ERR":
                             try {
-                                throw new ERRExeption(line);
-                            }catch (ERRExeption e){
+                                throw new ERRException(line);
+                            }catch (ERRException e){
                                 e.printStackTrace();
                             }
                             break;

@@ -29,8 +29,6 @@ public class TictactoeController {
 
         server.subscribe("Tic-tac-toe");
 
-        setPlayerOne(Symbol.X);
-
     }
 
     /**
@@ -83,7 +81,6 @@ public class TictactoeController {
         server.sendMove((aiMove.y * 3) + aiMove.x);
         // Execute the move, and execute hasWin() function if this was a winning move
         if(model.move(aiMove.x, aiMove.y, playerTwo)){
-
             view.printBoard(model.getBoard());
             hasWin();
         }else view.printBoard(model.getBoard());

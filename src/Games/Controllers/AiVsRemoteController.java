@@ -8,7 +8,7 @@ import Games.View;
 import java.awt.Point;
 import java.util.ArrayList;
 
-public class RemoteController implements Controller {
+public class AiVsRemoteController implements Controller {
 
     private View view;
     private Model model;
@@ -22,7 +22,7 @@ public class RemoteController implements Controller {
     private Tile computerPlayer;
     private int boardSize;
 
-    public RemoteController(View view, Model model) {
+    public AiVsRemoteController(View view, Model model) {
         this.view = view;
         this.model = model;
         this.server = new ServerCommunicator(this);

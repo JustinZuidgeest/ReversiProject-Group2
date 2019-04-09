@@ -1,35 +1,18 @@
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javafx.event.*;
-import javafx.scene.paint.Color;
-import javafx.application.Application;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
-
-import static java.awt.Color.GREEN;
 
 public class Main extends Application {
 
-    Stage window;
-    Button button;
-    Scene scene, scene1, scene2, scene3, tttsceneRegels, revsceneRegels;
+    private Stage window;
+    private Scene mainMenuScene, reversiScene, ticTacToeScene, rulesScene, tttsceneRegels, revsceneRegels;
 
 
     public static void main(String[] args) {
@@ -51,82 +34,70 @@ public class Main extends Application {
         centerMenu.setAlignment(Pos.CENTER);
         centerMenu.setPadding(new Insets(5));
 
-        Button button1 = new Button("Reversi");
-        button1.setMaxWidth(400);
-        button1.setMinHeight(100);
-        button1.getStylesheets().add("style.css");
-        Button button2 = new Button("Tic Tac Toe");
-        button2.setMaxWidth(400);
-        button2.setMinHeight(100);
-        Button button3 = new Button("Rules");
-        button3.setMaxWidth(400);
-        button3.setMinHeight(100);
-        Button button4 = new Button("Quit");
-        button4.setMaxWidth(400);
-        button4.setMinHeight(100);
+        Button reversiButton = new Button("Reversi");
+        reversiButton.setMaxWidth(400);
+        reversiButton.setMinHeight(100);
+        reversiButton.getStylesheets().add("style.css");
+        Button ticTacToeButton = new Button("Tic Tac Toe");
+        ticTacToeButton.setMaxWidth(400);
+        ticTacToeButton.setMinHeight(100);
+        Button rulesButton = new Button("Rules");
+        rulesButton.setMaxWidth(400);
+        rulesButton.setMinHeight(100);
+        Button quitWindowButton = new Button("Quit");
+        quitWindowButton.setMaxWidth(400);
+        quitWindowButton.setMinHeight(100);
 
-        centerMenu.getChildren().addAll(button1, button2, button3, button4);
+        centerMenu.getChildren().addAll(reversiButton, ticTacToeButton, rulesButton, quitWindowButton);
 
-        button1.setOnAction(e -> {
-            window.setScene(scene1);
+        reversiButton.setOnAction(e -> {
+            window.setScene(reversiScene);
         });
-        button2.setOnAction(e -> {
-            window.setScene(scene2);
+        ticTacToeButton.setOnAction(e -> {
+            window.setScene(ticTacToeScene);
         });
-        button3.setOnAction(e -> {
-            window.setScene(scene3);
+        rulesButton.setOnAction(e -> {
+            window.setScene(rulesScene);
         });
-        button4.setOnAction(e -> closeProgram());
+        quitWindowButton.setOnAction(e -> closeProgram());
 
         //main menu window
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(centerMenu);
 
-        scene = new Scene(borderPane, 1000, 700);
-        scene.getStylesheets().add("style.css");
-        window.setScene(scene);
+        mainMenuScene = new Scene(borderPane, 1000, 700);
+        mainMenuScene.getStylesheets().add("style.css");
+        window.setScene(mainMenuScene);
         window.show();
 
 
         //Reversi
 
         Button quitReversi = new Button("Quit game");
-        quitReversi.setOnAction(e -> window.setScene(scene));
+        quitReversi.setOnAction(e -> window.setScene(mainMenuScene));
 
-        Group tileGroup1 = new Group();
-        final int TILE_SIZE = 10;
-        final int WIDTH = 8;
-        final int HEIGHT = 8;
-        Pane checkers2 = new Pane();
-        checkers2.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
-        checkers2.getChildren().addAll(tileGroup1);
-
-        for (int y = 0; y < HEIGHT; y++){
-            for(int x = 0; x < WIDTH; x++){
-                Tile tile = new Tile((x + y) % 2 == 0, x , y);
-
-                tileGroup1.getChildren().add(tile);
-            }
-        }
+        Pane reversiBoard = new reversiBoard().getBoard();
 
         VBox leftMenuR = new VBox(10);
-        leftMenuR.getChildren().addAll(quitReversi, checkers2);
+        leftMenuR.getChildren().addAll(quitReversi, reversiBoard);
 
         BorderPane borderPaneRev = new BorderPane();
         borderPaneRev.setLeft(leftMenuR);
-        borderPaneRev.setCenter(checkers2);
+        borderPaneRev.setCenter(reversiBoard);
 
-        scene1 = new Scene(borderPaneRev, 1000, 700);
-        scene1.getStylesheets().addAll("style.css");
+        reversiScene = new Scene(borderPaneRev, 1000, 700);
+        reversiScene.getStylesheets().addAll("style.css");
 
         //Quit Tic Tac Toe
         Button quitTTT = new Button("Quit game");
-        quitTTT.setOnAction(e -> window.setScene(scene));
+        quitTTT.setOnAction(e -> window.setScene(mainMenuScene));
 
         VBox leftMenuT = new VBox(10);
         leftMenuT.getChildren().addAll(quitTTT);
 
-
+        final int TILE_SIZE = 10;
+        final int WIDTH = 8;
+        final int HEIGHT = 8;
 
         Group tileGroup = new Group();
         Pane checkers = new Pane();
@@ -146,8 +117,8 @@ public class Main extends Application {
         borderPaneTTT.setLeft(leftMenuT);
         borderPaneTTT.setCenter(checkers);
 
-        scene2 = new Scene(borderPaneTTT, 1000, 700);
-        scene2.getStylesheets().addAll("style.css");
+        ticTacToeScene = new Scene(borderPaneTTT, 1000, 700);
+        ticTacToeScene.getStylesheets().addAll("style.css");
 
 
         //Quit rules
@@ -158,7 +129,7 @@ public class Main extends Application {
         Button tictactoeRules = new Button("Tic Tac Toe rules");
         tictactoeRules.setMinWidth(200);
         tictactoeRules.setMinHeight(100);
-        quitRules.setOnAction(e -> window.setScene(scene));
+        quitRules.setOnAction(e -> window.setScene(mainMenuScene));
         reversiRules.setOnAction(e -> window.setScene(revsceneRegels));
         tictactoeRules.setOnAction(e -> window.setScene(tttsceneRegels));
 
@@ -174,13 +145,13 @@ public class Main extends Application {
         borderPaneRules.setCenter(centerMenuRules);
         centerMenuRules.setAlignment(Pos.CENTER);
 
-        scene3 = new Scene(borderPaneRules, 1000, 700);
-        scene3.getStylesheets().addAll("style.css");
+        rulesScene = new Scene(borderPaneRules, 1000, 700);
+        rulesScene.getStylesheets().addAll("style.css");
 
         //reversi regels
         Button backtoRules = new Button("Back to rules");
         backtoRules.setOnAction(e -> {
-            window.setScene(scene3);
+            window.setScene(rulesScene);
         });
         HBox topBox = new HBox();
         topBox.getChildren().addAll(backtoRules);
@@ -216,29 +187,7 @@ public class Main extends Application {
         revsceneRegels = new Scene(revRBP, 1000, 700);
         revsceneRegels.getStylesheets().addAll("style.css");
 
-        //tictactoe regels
-        Button backtoRules2 = new Button("Back to rules");
-        backtoRules2.setOnAction(e -> {
-            window.setScene(scene3);
-        });
-
-        VBox rulesboxTTT = new VBox(10);
-        rulesboxTTT.getChildren().addAll(backtoRules2);
-
-        Text text = new Text();
-        String textMessage = "Dit zijn de regels van Tic Tac Toe";
-        text.setText(textMessage);
-        VBox textBox = new VBox();
-        textBox.getChildren().addAll(text);
-        textBox.setAlignment(Pos.CENTER);
-
-        BorderPane tttRBP = new BorderPane();
-        tttRBP.setLeft(rulesboxTTT);
-        tttRBP.setCenter(textBox);
-        tttsceneRegels = new Scene(tttRBP, 1000, 700);
-        tttsceneRegels.getStylesheets().addAll("style.css");
-
-
+        tttsceneRegels = new ticTacToeRuleScene().getScene(window, rulesScene);
     }
 
     private void closeProgram(){

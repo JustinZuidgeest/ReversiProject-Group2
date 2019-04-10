@@ -1,5 +1,6 @@
 package Games.TicTacToe.TictactoeModels;
 
+import Games.TicTacToe.AbstractTictactoeModel;
 import Games.Tile;
 
 import java.awt.Point;

@@ -1,13 +1,14 @@
 package Games.Reversi.ReversiModels;
 
+import Games.Reversi.AbstractReversiModel;
 import Games.Tile;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class RandomReversiAI extends AbstractReversiModel {
+public class ReversiRandomAI extends AbstractReversiModel {
 
-    public RandomReversiAI(int boardSize) { super(boardSize); }
+    public ReversiRandomAI(int boardSize) { super(boardSize); }
 
     @Override
     public Point nextMove(Tile player) {

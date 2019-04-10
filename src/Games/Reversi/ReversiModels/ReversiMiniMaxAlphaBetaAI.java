@@ -1,25 +1,40 @@
 package Games.Reversi.ReversiModels;
 
+import Games.Reversi.AbstractReversiModel;
 import Games.Tile;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public class ReversiMiniMaxAlphaBetaAI extends AbstractReversiModel{
+public class ReversiMinimaxAlphaBetaAI extends AbstractReversiModel {
 
-    private int initialDepth = 5;
+    private int initialDepth = 9;
     private int evaluatedPossibilities;
     private Tile computerPlayer;
     private Tile opponentPlayer;
+    private long maxTime = 9000;
+    private Long startTime;
 
-    public ReversiMiniMaxAlphaBetaAI(int boardSize) { super(boardSize); }
+    int[][] scoreRubric = new int[][]{
+            {99,  -8,  8,  6,  6,  8,  -8, 99},
+            {-8, -24, -4, -3, -3, -4, -24, -8},
+            {8,   -4,  7,  4,  4,  7,  -4,  8},
+            {6,   -3,  4,  0,  0,  4,  -3,  6},
+            {6,   -3,  4,  0,  0,  4,  -3,  6},
+            {8,   -4,  7,  4,  4,  7,  -4,  8},
+            {-8, -24, -4, -3, -3, -4, -24, -8},
+            {99,  -8,  8,  6,  6,  8,  -8, 99},
+    };
+
+    public ReversiMinimaxAlphaBetaAI(int boardSize) { super(boardSize); }
 
     @Override
     public Point nextMove(Tile player) {
+        startTime = System.currentTimeMillis();
         evaluatedPossibilities = 0;
         computerPlayer = player;
         opponentPlayer = (computerPlayer == Tile.BLACK) ? Tile.WHITE : Tile.BLACK;
-        int[] result = miniMax(initialDepth, computerPlayer, Integer.MIN_VALUE,Integer.MAX_VALUE, getBoard());
+        int[] result = miniMax(initialDepth, computerPlayer, Integer.MIN_VALUE, Integer.MAX_VALUE, getBoard());
         System.out.println("Minimax AI with Alpha-Beta pruning with depth " + initialDepth + " wants to move to x:" + result[1] + " y: " + result[2]);
         System.out.println("The score for this move: " + result[0]);
         System.out.println("AI evaluated " + evaluatedPossibilities + " possibilities to reach this conclusion");
@@ -37,32 +52,36 @@ public class ReversiMiniMaxAlphaBetaAI extends AbstractReversiModel{
         // A list of all the possible moves the opponent can make for the current game board
         ArrayList<Point> legalMovesOpponent = generateLegalMoves(opponent, boardCopy);
 
-        // Variables to store the best move and score of that move
-        // The computer is the maximizing player and the human is the minimizing player
+        // Variables to store the best available move and score of that move
         int currentScore;
         int bestRow = -1;
         int bestCol = -1;
 
-        // Base case for when the end of the decision tree has been reached (if max depth is reached or a game ending move was made)
-        if(depth == 0 || evluateWin(legalMovesThisPlayer, legalMovesOpponent)){
-            currentScore = evaluateScore(boardCopy, player);
-            //if(depth == 0){System.out.println("Minimax reached end because depth 0 was reached. Score was " + currentScore);}
-            //else if(evluateWin(legalMovesThisPlayer, legalMovesOpponent)) System.out.println("Minimax reached end because there was a winner. Score was " + currentScore);
+        //Cutoff failsafe mechanism to end minimax as quickly as possible when nearing the max time limit
+        if((System.currentTimeMillis() - startTime) >= maxTime){
+            currentScore = evaluateScore(boardCopy);
             return new int[]{currentScore, bestCol, bestRow};
         }
-        // If no moves for this player remain in this tree (but the game has not ended yet)
+
+        // Base case for when the end of the decision tree has been reached (if max depth is reached or a game ending move was made)
+        if(depth == 0 || evluateWin(legalMovesThisPlayer, legalMovesOpponent)){
+            currentScore = evaluateScore(boardCopy);
+            return new int[]{currentScore, bestCol, bestRow};
+        }
+        // If the current player has ran itself out of moves (but the game has not ended yet)
         else if(legalMovesThisPlayer.size() == 0){
-            currentScore = (player == computerPlayer) ? 0 : 0;
-            //System.out.println("Minimax reached end because it ran out of moves. Score was: " + currentScore);
+            currentScore = (player == computerPlayer) ? -500 : 500;
             return new int[]{currentScore, bestCol, bestRow};
         }else{
             for(Point legalMove:legalMovesThisPlayer){
+                //A copy of the board the way it was passed to the function
+                boardCopy = copyBoard(board);
                 // Try the move
                 boardCopy[legalMove.y][legalMove.x] = player;
                 flipTiles(legalMove.x, legalMove.y, player, boardCopy);
                 // If player is computer, player is maximizing player
                 if(player == computerPlayer){
-                    currentScore = miniMax(depth -1, opponentPlayer, alpha, beta, boardCopy)[2];
+                    currentScore = miniMax(depth -1, opponentPlayer, alpha, beta, boardCopy)[0];
                     // If the score of this move was better than current best, replace current best
                     if(currentScore > alpha){
                         alpha = currentScore;
@@ -71,7 +90,7 @@ public class ReversiMiniMaxAlphaBetaAI extends AbstractReversiModel{
                     }
                     // If player is human, player is minimizing player
                 }else{
-                    currentScore = miniMax(depth -1, computerPlayer, alpha, beta, boardCopy)[2];
+                    currentScore = miniMax(depth -1, computerPlayer, alpha, beta, boardCopy)[0];
                     // If the score of this move was better than current best, replace current best
                     if(currentScore < beta){
                         beta = currentScore;
@@ -84,11 +103,19 @@ public class ReversiMiniMaxAlphaBetaAI extends AbstractReversiModel{
                 if (alpha >= beta) break;
             }
         }
-        return new int[]{(player == computerPlayer) ? alpha : beta, bestCol, bestRow};
+        return new int[]{((player == computerPlayer) ? alpha : beta), bestCol, bestRow};
     }
 
-    private int evaluateScore(Tile[][] board, Tile player){
-        return 0;
+    private int evaluateScore(Tile[][] board){
+        int blackScore = 0;
+        int whiteScore = 0;
+        for(int i=0;i<getBoardSize();i++){
+            for(int j=0;j<getBoardSize();j++){
+                if(board[i][j] == Tile.BLACK) blackScore += scoreRubric[i][j];
+                else if(board[i][j] == Tile.WHITE) whiteScore += scoreRubric[i][j];
+            }
+        }
+        return (computerPlayer == Tile.BLACK) ? (blackScore - whiteScore) : (whiteScore - blackScore);
     }
 
     private boolean evluateWin(ArrayList<Point> player1Moves, ArrayList<Point> player2Moves){

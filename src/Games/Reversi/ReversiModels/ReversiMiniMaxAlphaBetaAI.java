@@ -36,7 +36,7 @@ public class ReversiMinimaxAlphaBetaAI extends AbstractReversiModel {
         opponentPlayer = (computerPlayer == Tile.BLACK) ? Tile.WHITE : Tile.BLACK;
         int[] result = miniMax(initialDepth, computerPlayer, Integer.MIN_VALUE, Integer.MAX_VALUE, getBoard());
         System.out.println("Minimax AI with Alpha-Beta pruning with depth " + initialDepth + " wants to move to x:" + result[1] + " y: " + result[2]);
-        System.out.println("The score for this move: " + result[0]);
+        //System.out.println("The score for this move: " + result[0]);
         System.out.println("AI evaluated " + evaluatedPossibilities + " possibilities to reach this conclusion");
         return new Point(result[1], result[2]);
     }

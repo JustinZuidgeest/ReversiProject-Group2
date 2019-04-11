@@ -1,3 +1,5 @@
+package view.scenes;
+
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -5,7 +7,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
+import view.Main;
+import view.Scenes;
 
 public class ReversiRegels extends RulesMenu {
 
@@ -45,7 +48,7 @@ public class ReversiRegels extends RulesMenu {
         revRBP.setCenter(textBox2);
 
         Scene revsceneRegels = new Scene(revRBP, 1000, 700);
-        revsceneRegels.getStylesheets().addAll("style.css");
+        revsceneRegels.getStylesheets().addAll("view/style.css");
 
         return revsceneRegels;
     }

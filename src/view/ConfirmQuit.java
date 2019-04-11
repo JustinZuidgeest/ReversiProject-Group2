@@ -1,15 +1,12 @@
-import javafx.event.ActionEvent;
+package view;
+
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.layout.HBox;
-
-
-import java.awt.*;
 
 public class ConfirmQuit {
 
@@ -45,7 +42,7 @@ public class ConfirmQuit {
         layout.getChildren().addAll(label, yesButton, noButton );
         layout.setAlignment(Pos.CENTER);
         Scene scene = new Scene(layout);
-        scene.getStylesheets().addAll("style.css");
+        scene.getStylesheets().addAll("view/style.css");
         window.setScene(scene);
         window.showAndWait();
 

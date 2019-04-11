@@ -1,10 +1,13 @@
+package view.scenes;
+
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+import view.Main;
+import view.Scenes;
 
 public class RulesMenu{
     public Scene getScene() {
@@ -32,7 +35,7 @@ public class RulesMenu{
         centerMenuRules.setAlignment(Pos.CENTER);
 
         Scene rulesScene = new Scene(borderPaneRules, 1000, 700);
-        rulesScene.getStylesheets().addAll("style.css");
+        rulesScene.getStylesheets().addAll("view/style.css");
 
         return rulesScene;
     }

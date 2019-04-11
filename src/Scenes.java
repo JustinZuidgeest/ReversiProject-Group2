@@ -1,1 +1,0 @@
-public enum Scenes {MAINMENU, RULESMENU, TTTRULES, REVRULES}

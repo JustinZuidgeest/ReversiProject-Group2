@@ -1,3 +1,5 @@
+package view;
+
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -21,6 +23,8 @@ public class Difficulty {
         label.setPrefWidth(270);
         label.setAlignment(Pos.CENTER);
 
+        Button eenvseen = new Button("PvP");
+        eenvseen.getStyleClass().addAll("button-green");
         Button easy = new Button("easy");
         easy.getStyleClass().addAll("button-green");
         Button medium = new Button("medium");
@@ -28,6 +32,9 @@ public class Difficulty {
         Button hard = new Button("hard");
         hard.getStyleClass().addAll("button-green");
 
+        eenvseen.setOnAction(event -> {
+            resultaat = 4;
+        });
         easy.setOnAction(event -> {
             resultaat = 1;
             difWindow.close();
@@ -42,11 +49,11 @@ public class Difficulty {
         });
 
         VBox difBox = new VBox(5);
-        difBox.getChildren().addAll(label, easy, medium, hard);
+        difBox.getChildren().addAll(label, eenvseen, easy, medium, hard);
         difBox.setAlignment(Pos.CENTER);
 
         Scene difScene = new Scene(difBox);
-        difScene.getStylesheets().addAll("style.css");
+        difScene.getStylesheets().addAll("view/style.css");
         difWindow.setScene(difScene);
         difWindow.showAndWait();
 

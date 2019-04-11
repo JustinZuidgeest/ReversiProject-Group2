@@ -1,24 +1,25 @@
-import javafx.geometry.Pos;
+package view.scenes;
+
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
+import view.Difficulty;
+import view.Main;
+import view.Scenes;
+import view.Tile;
 
 public class TttToGame {
 
-    public Scene ticTacToeScene;
-    static int result;
-
-    public Scene getScene(Stage window, Scene mainMenuScene) {
+    public Scene getScene() {
 
         Button quitTTT = new Button("Quit game");
-        quitTTT.setOnAction(e -> window.setScene(mainMenuScene));
+        quitTTT.setOnAction(e -> Main.getInstance().switchScene(Scenes.MAINMENU));
+
+
 
         VBox leftMenuT = new VBox(10);
         leftMenuT.getChildren().addAll(quitTTT);
@@ -27,9 +28,11 @@ public class TttToGame {
         Button play = new Button("play");
         play.setOnAction(e -> startGame());
 
+        Button remoteButton = new Button("Remote");
+
         Button stop = new Button("stop");
 
-        rightMenuT.getChildren().addAll(play, stop);
+        rightMenuT.getChildren().addAll(play, remoteButton, stop);
 
         Button easy = new Button("easy");
         Button medium = new Button("medium");
@@ -60,8 +63,8 @@ public class TttToGame {
         borderPaneTTT.setRight(rightMenuT);
 
         //ttt scene maken
-        ticTacToeScene = new Scene(borderPaneTTT, 1000, 700);
-        ticTacToeScene.getStylesheets().addAll("style.css");
+        Scene ticTacToeScene = new Scene(borderPaneTTT, 1000, 700);
+        ticTacToeScene.getStylesheets().addAll("view/style.css");
         return ticTacToeScene;
     }
 
@@ -73,6 +76,9 @@ public class TttToGame {
         if (result == 2) {
         }
         if (result == 3) {
+        }
+        if (result == 4){
+            //PVP
         }
 
     }

@@ -1,13 +1,9 @@
+package view;
+
 import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.*;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.scene.layout.Pane;
+import view.scenes.*;
 
 public class Main extends Application {
 
@@ -20,6 +16,8 @@ public class Main extends Application {
     private Scene rulesScene2;
     private Scene tttsceneRegels;
     private Scene revsceneRegels;
+    private Scene revsettings;
+    private Scene tttsettings;
 
 
     public static void main(String[] args) {
@@ -54,6 +52,8 @@ public class Main extends Application {
         rulesScene = new RulesMenu().getScene();
         revsceneRegels = new ReversiRegels().getScene();
         tttsceneRegels = new TicTacToeRuleScene().getScene();
+        revsettings = new RevToGame().getScene();
+        tttsettings = new TttToGame().getScene();
     }
 
     public static Main getInstance(){
@@ -70,6 +70,10 @@ public class Main extends Application {
                 break;
             case TTTRULES: window.setScene(tttsceneRegels);
                 break;
+            case REVSETTINGS: window.setScene(revsettings);
+                break;
+            case TTTSETTINGS: window.setScene(tttsettings);
+            break;
         }
     }
 

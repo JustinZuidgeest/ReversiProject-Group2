@@ -1,3 +1,0 @@
-package view.scenes;
-
-public enum Scenes {MAINMENU, RULESMENU, TTTRULES, REVRULES, REVSETTINGS, TTTSETTINGS}

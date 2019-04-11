@@ -31,7 +31,6 @@ public class AiVsRemoteController implements Controller {
         server.connectToServer();
         new Thread(server).start();
         server.login();
-        server.getGameList();
 
         server.subscribe(model.getGameName());
         newGame();
@@ -76,8 +75,8 @@ public class AiVsRemoteController implements Controller {
                     view.updateBoard(model.getBoard());
                     hasWin();
                 }else{
-                    view.updateBoard(model.getBoard());
-                    System.out.println("The scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
+                    //view.updateBoard(model.getBoard());
+                    //System.out.println("The scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
                 }
                 return true;
             }else{
@@ -104,8 +103,8 @@ public class AiVsRemoteController implements Controller {
             view.updateBoard(model.getBoard());
             hasWin();
         }else{
-            view.updateBoard(model.getBoard());
-            System.out.println("The scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
+            //view.updateBoard(model.getBoard());
+            //System.out.println("The scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
         }
     }
 

@@ -44,6 +44,9 @@ public class ServerCommunicator implements Runnable {
         host = properties.getProperty("host");
         port = Integer.valueOf(properties.getProperty("port"));
         name = properties.getProperty("name");
+
+        getPlayerList();
+        getGameList();
     }
 
     public void connectToServer(){
@@ -96,6 +99,7 @@ public class ServerCommunicator implements Runnable {
                 String players = trimLine(line.split("PLAYERLIST ")[1]);
                 String[] player = players.split(",");
                 for(String s: player){playerList.add(s);}
+                System.out.println("----------------------PLAYERS ONLINE: " + playerList + "-----------------------");
                 break;
             case "GAME":
                 handleGAMEMessage(line);
@@ -113,10 +117,13 @@ public class ServerCommunicator implements Runnable {
                 HashMap<String, String> matchMap = (HashMap<String, String>) Arrays.asList(trimLine(matchInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 if (matchMap.get("PLAYERTOMOVE").equals(name)) {
                     controller.setPlayerOne(Tile.WHITE);
+                    System.out.println("-------------- colour white------------------");
                 }
                 else{
                     controller.setPlayerOne(Tile.BLACK);
+                    System.out.println("--------------colour black------------------");
                 }
+                System.out.println("--------------MATCH: " + matchMap + "------------------");
                 break;
             case "YOURTURN":
                 String turnInfo = line.split("YOURTURN ")[1];
@@ -132,6 +139,7 @@ public class ServerCommunicator implements Runnable {
                     int x = Integer.valueOf(moveMap.get("MOVE")) % controller.getBoardSize();
                     int y = Math.floorDiv(Integer.valueOf(moveMap.get("MOVE")), controller.getBoardSize());
                     controller.playerMove(x, y);
+                    System.out.println("--------------ENEMY MOVE: " + moveMap + "------------------");
                 }
                 break;
             case "WIN":
@@ -139,6 +147,7 @@ public class ServerCommunicator implements Runnable {
                 //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
                 HashMap<String, String> winMap = (HashMap<String, String>) Arrays.asList(trimLine(winInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 //TODO link to GUI display win message
+                System.out.println("--------------WE WIN: " + winMap + "------------------");
                 controller.newGame();
                 break;
             case "LOSS":
@@ -146,6 +155,7 @@ public class ServerCommunicator implements Runnable {
                 //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
                 HashMap<String, String> lossMap = (HashMap<String, String>) Arrays.asList(trimLine(lossInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 //TODO link to GUI display loss message
+                System.out.println("--------------WE LOSE: " + lossMap + "------------------");
                 controller.newGame();
                 break;
             case "DRAW":
@@ -153,6 +163,7 @@ public class ServerCommunicator implements Runnable {
                 //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
                 HashMap<String, String> drawMap = (HashMap<String, String>) Arrays.asList(trimLine(drawInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 //TODO link to GUI display draw message
+                System.out.println("--------------ITS A DRAW: " + drawMap + "------------------");
                 controller.newGame();
                 break;
             case "CHALLENGE":

@@ -8,17 +8,17 @@ import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import view.panes.BoardPane;
 import view.panes.MainMenu;
+import view.panes.ScorePane;
 
 public class View extends Application {
 
     private static View instance;
     private Stage primaryStage;
-    private VBox mainMenu;
     private BoardPane boardPane;
+    private ScorePane scorePane;
     private Model model;
     private Controller controller;
     private BorderPane primaryPane;
@@ -31,8 +31,8 @@ public class View extends Application {
         primaryPane = new BorderPane();
         primaryScene = new Scene(primaryPane);
 
-        initPanes();
-        setCenter(mainMenu);
+        // Start the application at the Main Menu
+        setCenter(new MainMenu());
 
         primaryStage.setScene(primaryScene);
         primaryStage.setMaxWidth(800);
@@ -41,12 +41,16 @@ public class View extends Application {
         primaryStage.show();
     }
 
-    private void initPanes(){
-        mainMenu = new MainMenu();
-    }
-
     public void setCenter(Node node){
         Platform.runLater(() -> primaryPane.setCenter(node));
+    }
+
+    public void setRight(Node node){
+        Platform.runLater(() -> primaryPane.setRight(node));
+    }
+
+    public void setLeft(Node node){
+        Platform.runLater(() -> primaryPane.setLeft(node));
     }
 
     public void setTop(Node node){
@@ -61,9 +65,31 @@ public class View extends Application {
         Platform.runLater(() -> boardPane.updateBoard(board));
     }
 
+    public void updateScores(int player1, int player2){
+        Platform.runLater(() -> scorePane.updateScores(player1, player2));
+    }
+
+    public void clearStage(){
+        Platform.runLater(() -> {
+            primaryPane.setCenter(null);
+            primaryPane.setLeft(null);
+            primaryPane.setRight(null);
+            primaryPane.setBottom(null);
+            primaryPane.setTop(null);
+        });
+    }
+
     public void moveMade(int x, int y){
         controller.playerMove(x, y);
         controller.aiMove();
+    }
+
+    public ScorePane getScorePane() {
+        return scorePane;
+    }
+
+    public void setScorePane(ScorePane scorePane) {
+        this.scorePane = scorePane;
     }
 
     public BoardPane getBoardPane() {

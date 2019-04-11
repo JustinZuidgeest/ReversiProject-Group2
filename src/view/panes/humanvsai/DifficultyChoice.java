@@ -1,13 +1,14 @@
-package view.panes;
+package view.panes.humanvsai;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import view.Game;
 import view.View;
+import view.panes.BackToMainButton;
 
-public class DifficultyChoise extends VBox {
-    public DifficultyChoise(Game game) {
+public class DifficultyChoice extends VBox {
+    public DifficultyChoice(Game game) {
         this.setAlignment(Pos.CENTER);
         this.setSpacing(30);
 

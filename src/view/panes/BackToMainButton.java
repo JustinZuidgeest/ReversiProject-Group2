@@ -12,6 +12,7 @@ public class BackToMainButton extends Button {
 
     private void backToMain(){
         MainMenu mainMenu = new MainMenu();
+        View.getInstance().clearStage();
         View.getInstance().setCenter(mainMenu);
     }
 }

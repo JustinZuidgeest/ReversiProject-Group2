@@ -104,7 +104,7 @@ public class HumanVsAiController implements Controller {
                     hasWin();
                 }else{
                     View.getInstance().updateBoard(model.getBoard());
-                    //System.out.println("The scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
+                    View.getInstance().updateScores(model.getScores()[0], model.getScores()[1]);
                 }
                 return true;
             }else{
@@ -131,7 +131,7 @@ public class HumanVsAiController implements Controller {
             hasWin();
         }else{
             View.getInstance().updateBoard(model.getBoard());
-            //System.out.println("The scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
+            View.getInstance().updateScores(model.getScores()[0], model.getScores()[1]);
         }
     }
 

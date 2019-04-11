@@ -1,10 +1,11 @@
-package view.panes;
+package view.panes.humanvsai;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import view.Game;
 import view.View;
+import view.panes.BackToMainButton;
 
 public class HumanVsAiBottomPane extends HBox {
     public HumanVsAiBottomPane(Game game, int difficulty) {
@@ -22,12 +23,14 @@ public class HumanVsAiBottomPane extends HBox {
     }
 
     private void newGameDifficulty(Game game){
-        DifficultyChoise difficultyChoise = new DifficultyChoise(game);
-        View.getInstance().setCenter(difficultyChoise);
+        DifficultyChoice difficultyChoice = new DifficultyChoice(game);
+        View.getInstance().clearStage();
+        View.getInstance().setCenter(difficultyChoice);
     }
 
     private void newGameColor(Game game, int difficulty){
         ColorChoice colorChoice = new ColorChoice(game, difficulty);
+        View.getInstance().clearStage();
         View.getInstance().setCenter(colorChoice);
     }
 }

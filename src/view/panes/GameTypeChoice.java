@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import view.Game;
 import view.View;
+import view.panes.humanvsai.DifficultyChoice;
 
 public class GameTypeChoice extends VBox {
     public GameTypeChoice(Game game) {
@@ -28,8 +29,8 @@ public class GameTypeChoice extends VBox {
     }
 
     private void vsAI(Game game){
-        DifficultyChoise difficultyChoise = new DifficultyChoise(game);
-        View.getInstance().setCenter(difficultyChoise);
+        DifficultyChoice difficultyChoice = new DifficultyChoice(game);
+        View.getInstance().setCenter(difficultyChoice);
     }
 
     private void vsRemote(Game game){

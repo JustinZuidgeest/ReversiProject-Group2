@@ -51,6 +51,7 @@ public abstract class AbstractTictactoeModel implements Model {
         updateLegalMoves();
         // Check if this was a winning move
         if(player != Tile.EMPTY) boardWinner = checkWin(x, y, board);
+        if(boardWinner != null) scores = (boardWinner == Tile.BLACK) ? new int[]{1, 0} : (boardWinner == Tile.WHITE) ? new int[]{0, 1} : new int[]{0, 0};
     }
 
     /**
@@ -144,7 +145,7 @@ public abstract class AbstractTictactoeModel implements Model {
         long oldTime = System.currentTimeMillis();
         Point computerMove = nextMove(tile);
         long newTime = System.currentTimeMillis();
-        System.out.println("AI took " + (newTime - oldTime) + " milliseconds to reach decision");
+        //System.out.println("AI took " + (newTime - oldTime) + " milliseconds to reach decision");
         return computerMove;
     }
 

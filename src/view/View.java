@@ -5,13 +5,19 @@ import games.Model;
 import games.Tile;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import view.panes.BoardPane;
 import view.panes.MainMenu;
 import view.panes.ScorePane;
+
+import java.awt.*;
 
 public class View extends Application {
 
@@ -23,6 +29,8 @@ public class View extends Application {
     private Controller controller;
     private BorderPane primaryPane;
     private Scene primaryScene;
+    private boolean canMove;
+    private Point nextMove;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -65,8 +73,8 @@ public class View extends Application {
         Platform.runLater(() -> boardPane.updateBoard(board));
     }
 
-    public void updateScores(int player1, int player2){
-        Platform.runLater(() -> scorePane.updateScores(player1, player2));
+    public void updateScores(int black, int white){
+        Platform.runLater(() -> scorePane.updateScores(black, white));
     }
 
     public void clearStage(){
@@ -80,9 +88,34 @@ public class View extends Application {
     }
 
     public void moveMade(int x, int y){
-        controller.playerMove(x, y);
-        controller.aiMove();
+        if(canMove){
+            nextMove = new Point(x, y);
+        }
     }
+
+    public void startController(){
+        Thread thread = new Thread(controller);
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+    public void showWinScreen(Tile winner, int black, int white){
+        Platform.runLater(() -> {
+            HBox scoreBox = new HBox();
+            scoreBox.setAlignment(Pos.CENTER);
+            Text winnerText = new Text();
+            String winnerString = (winner == Tile.BLACK) ? "Black" : (winner == Tile.WHITE) ? "White" : "Nobody";
+            winnerText.setText("The game has ended! The winner was " + winnerString + ". The final score was: Black - " + black + " vs White - " + white);
+            scoreBox.getChildren().add(winnerText);
+            setTop(scoreBox);
+        });
+    }
+
+    public void setCanMove(boolean canMove) { this.canMove = canMove; }
+
+    public Point getNextMove() { return nextMove; }
+
+    public void setNextMove(Point nextMove) { this.nextMove = nextMove; }
 
     public ScorePane getScorePane() {
         return scorePane;
@@ -119,6 +152,8 @@ public class View extends Application {
     public static View getInstance(){
         return instance;
     }
+
+    public void killController(){ if (controller != null) controller.killThread(); }
 
     public void quitApplication(){
         primaryStage.close();

@@ -63,5 +63,6 @@ public class ColorChoice extends VBox {
 
         controller.newGame();
         controller.setPlayerOne(player);
+        View.getInstance().startController();
     }
 }

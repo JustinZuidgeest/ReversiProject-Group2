@@ -24,8 +24,8 @@ public class TictactoeMinimaxAlphaBetaAI extends AbstractTictactoeModel {
         computerPlayer = tile;
         opponentPlayer = (computerPlayer == Tile.BLACK) ? Tile.WHITE : Tile.BLACK;
         int[] result = miniMax(initialDepth, computerPlayer, Integer.MIN_VALUE,Integer.MAX_VALUE);
-        System.out.println("Minimax AI with depth " + initialDepth + " with Alpha-beta pruning wants to move to x:" + result[1] + ", y: " + result[2]);
-        System.out.println("AI evaluated " + evaluatedPossibilities + " possibilities to reach this conclusion");
+        //System.out.println("Minimax AI with depth " + initialDepth + " with Alpha-beta pruning wants to move to x:" + result[1] + ", y: " + result[2]);
+        //System.out.println("AI evaluated " + evaluatedPossibilities + " possibilities to reach this conclusion");
         return new Point(result[1], result[2]);
     }
 

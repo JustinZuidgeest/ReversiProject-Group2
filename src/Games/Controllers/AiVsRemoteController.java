@@ -10,6 +10,7 @@ public class AiVsRemoteController implements Controller {
 
     private Model model;
 
+    private boolean die = false;
     private boolean gameOver;
     private Tile playerToMove;
     private ServerCommunicator server;
@@ -35,7 +36,7 @@ public class AiVsRemoteController implements Controller {
     }
 
     @Override
-    public void start(){
+    public void run(){
         //null
     }
 
@@ -119,5 +120,10 @@ public class AiVsRemoteController implements Controller {
         //view.printWinner(model.getBoardWinner());
         System.out.println("The final scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
         gameOver = true;
+    }
+
+    @Override
+    public void killThread() {
+        die = true;
     }
 }

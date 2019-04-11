@@ -10,6 +10,7 @@ public class HumanVsHumanController implements Controller {
 
     private Model model;
 
+    private boolean die = false;
     private boolean gameOver;
     private Tile playerToMove;
     // The human player
@@ -35,7 +36,7 @@ public class HumanVsHumanController implements Controller {
     }
 
     @Override
-    public void start() {
+    public void run() {
         Scanner scanner = new Scanner(System.in);
         while(true) {
             gameOver = false;
@@ -162,5 +163,10 @@ public class HumanVsHumanController implements Controller {
         //view.printWinner(model.getBoardWinner());
         System.out.println("The final scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
         gameOver = true;
+    }
+
+    @Override
+    public void killThread() {
+        die = true;
     }
 }

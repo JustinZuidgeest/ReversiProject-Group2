@@ -24,12 +24,14 @@ public class HumanVsAiBottomPane extends HBox {
 
     private void newGameDifficulty(Game game){
         DifficultyChoice difficultyChoice = new DifficultyChoice(game);
+        View.getInstance().killController();
         View.getInstance().clearStage();
         View.getInstance().setCenter(difficultyChoice);
     }
 
     private void newGameColor(Game game, int difficulty){
         ColorChoice colorChoice = new ColorChoice(game, difficulty);
+        View.getInstance().killController();
         View.getInstance().clearStage();
         View.getInstance().setCenter(colorChoice);
     }

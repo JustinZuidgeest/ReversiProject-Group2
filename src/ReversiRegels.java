@@ -9,14 +9,9 @@ import javafx.stage.Stage;
 
 public class ReversiRegels extends RulesMenu {
 
-    public Scene revsceneRegels;
-    public RulesMenu rulesMenuScene;
-    public ticTacToeRuleScene tttsceneMenu;
-    public MainMenu nieuweMenu;
-
-    public Scene getScene(Stage window) {
+    public Scene getScene() {
         Button backtoRules = new Button("Back to rules");
-        backtoRules.setOnAction(e -> window.setScene(rulesScene));
+        backtoRules.setOnAction(e -> Main.getInstance().switchScene(Scenes.RULESMENU));
 
         HBox topBox = new HBox();
         topBox.getChildren().addAll(backtoRules);
@@ -49,11 +44,9 @@ public class ReversiRegels extends RulesMenu {
         revRBP.setTop(topBox);
         revRBP.setCenter(textBox2);
 
-        revsceneRegels = new Scene(revRBP, 1000, 700);
+        Scene revsceneRegels = new Scene(revRBP, 1000, 700);
         revsceneRegels.getStylesheets().addAll("style.css");
 
         return revsceneRegels;
     }
-
-
 }

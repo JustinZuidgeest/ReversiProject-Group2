@@ -7,10 +7,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class RulesMenu{
-
-    public Scene rulesScene;
-
-    public Scene getScene(Stage window, Scene mainMenuScene, Scene revsceneRegels, Scene tttsceneRegels) {
+    public Scene getScene() {
         Button quitRules = new Button("Menu");
         Button reversiRules = new Button("Reversi rules");
         reversiRules.setMinWidth(200);
@@ -18,9 +15,9 @@ public class RulesMenu{
         Button tictactoeRules = new Button("Tic Tac Toe rules");
         tictactoeRules.setMinWidth(200);
         tictactoeRules.setMinHeight(100);
-        quitRules.setOnAction(e -> window.setScene(mainMenuScene));
-        reversiRules.setOnAction(e -> window.setScene(revsceneRegels));
-        tictactoeRules.setOnAction(e -> window.setScene(tttsceneRegels));
+        quitRules.setOnAction(e -> Main.getInstance().switchScene(Scenes.MAINMENU));
+        reversiRules.setOnAction(e -> Main.getInstance().switchScene(Scenes.REVRULES));
+        tictactoeRules.setOnAction(e -> Main.getInstance().switchScene(Scenes.TTTRULES));
 
         VBox leftMenuRules = new VBox();
         leftMenuRules.getChildren().addAll(quitRules);
@@ -34,7 +31,7 @@ public class RulesMenu{
         borderPaneRules.setCenter(centerMenuRules);
         centerMenuRules.setAlignment(Pos.CENTER);
 
-        rulesScene = new Scene(borderPaneRules, 1000, 700);
+        Scene rulesScene = new Scene(borderPaneRules, 1000, 700);
         rulesScene.getStylesheets().addAll("style.css");
 
         return rulesScene;

@@ -4,13 +4,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 public class MainMenu {
 
     public Scene mainMenuScene;
 
-    public Scene getScene(Stage window, Scene reversiScene, Scene ticTacToeScene, Scene rulesScene) {
+    public Scene getScene() {
         //menu center layout
         VBox centerMenu = new VBox(1);
         centerMenu.setAlignment(Pos.CENTER);
@@ -33,15 +32,15 @@ public class MainMenu {
         centerMenu.getChildren().addAll(reversiButton, ticTacToeButton, rulesButton, quitWindowButton);
 
         reversiButton.setOnAction(e -> {
-            window.setScene(reversiScene);
+            //TODO implement this button
         });
         ticTacToeButton.setOnAction(e -> {
-            window.setScene(ticTacToeScene);
+            //TODO implement this button
         });
         rulesButton.setOnAction(e -> {
-            window.setScene(rulesScene);
+            Main.getInstance().switchScene(Scenes.RULESMENU);
         });
-        quitWindowButton.setOnAction(e -> closeProgram(window));
+        quitWindowButton.setOnAction(e -> Main.getInstance().closeProgram());
 
         //main menu window
         BorderPane borderPane = new BorderPane();
@@ -51,12 +50,4 @@ public class MainMenu {
         mainMenuScene.getStylesheets().add("style.css");
         return mainMenuScene;
     }
-
-    public void closeProgram(Stage window) {
-        boolean result = ConfirmQuit.display("Quit", "Are you sure you want to quit?");
-        if (result) {
-            window.close();
-        }
-    }
-
 }

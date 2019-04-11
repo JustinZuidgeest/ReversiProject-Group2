@@ -1,21 +1,17 @@
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
-public class ticTacToeRuleScene extends RulesMenu{
+public class TicTacToeRuleScene extends RulesMenu{
 
-    public Scene tttsceneRegels;
-
-    public Scene getScene(Stage window){
+    public Scene getScene(){
         //tictactoe regels
         Button backtoRules2 = new Button("Back to rules");
         backtoRules2.setOnAction(e -> {
-            window.setScene(rulesScene);
+            Main.getInstance().switchScene(Scenes.RULESMENU);
         });
 
         VBox rulesboxTTT = new VBox(10);
@@ -36,7 +32,7 @@ public class ticTacToeRuleScene extends RulesMenu{
         BorderPane tttRBP = new BorderPane();
         tttRBP.setTop(rulesboxTTT);
         tttRBP.setCenter(textBox);
-        tttsceneRegels = new Scene(tttRBP, 1000, 700);
+        Scene tttsceneRegels = new Scene(tttRBP, 1000, 700);
         tttsceneRegels.getStylesheets().addAll("style.css");
         return tttsceneRegels;
     }

@@ -8,51 +8,30 @@ import games.reversi.reversimodels.ReversiMinimaxAlphaBetaAI;
 import games.tictactoe.tictactoemodels.TictactoeMinimaxAlphaBetaAI;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import view.Game;
 import view.View;
 import view.panes.BackToMainButton;
 import view.panes.BoardPane;
 import view.panes.ScorePane;
 
-public class HumanVsAiBottomPane extends HBox {
-    public HumanVsAiBottomPane(Game game, int difficulty, Tile player) {
+public class HumanVsAiColorChoice extends VBox {
+    public HumanVsAiColorChoice(Game game, int difficulty) {
         this.setAlignment(Pos.CENTER);
         this.setSpacing(30);
 
-        Button newDifficultyButton = new Button("Select Another Difficulty");
-        Button newColorButton = new Button("Select Another Color");
-        Button newGameButton = new Button("Start a new Game");
-        Button mainMenuButton = new BackToMainButton();
+        Button blackColor = new Button("Play as Black");
+        Button whiteColor = new Button("Play as White");
+        Button backButton = new BackToMainButton();
 
-        newDifficultyButton.setOnAction(e -> newGameDifficulty(game));
-        newColorButton.setOnAction(e -> newGameColor(game, difficulty));
-        newGameButton.setOnAction(e -> newGame(game, difficulty, player));
+        blackColor.setOnAction(e -> playGame(game, difficulty, Tile.BLACK));
+        whiteColor.setOnAction(e -> playGame(game, difficulty, Tile.WHITE));
 
-        this.getChildren().addAll(mainMenuButton, newDifficultyButton, newColorButton, newGameButton);
+        this.getChildren().addAll(blackColor, whiteColor, backButton);
     }
 
-    private void newGameDifficulty(Game game){
-        DifficultyChoice difficultyChoice = new DifficultyChoice(game);
+    private void playGame(Game game, int difficulty, Tile player){
         View.getInstance().setNextMove(null);
-        View.getInstance().killController();
-        View.getInstance().clearStage();
-        View.getInstance().setCenter(difficultyChoice);
-    }
-
-    private void newGameColor(Game game, int difficulty){
-        HumanVsAiColorChoice humanVsAiColorChoice = new HumanVsAiColorChoice(game, difficulty);
-        View.getInstance().setNextMove(null);
-        View.getInstance().killController();
-        View.getInstance().clearStage();
-        View.getInstance().setCenter(humanVsAiColorChoice);
-    }
-
-    private void newGame(Game game, int difficulty, Tile player){
-        View.getInstance().setNextMove(null);
-        View.getInstance().killController();
-        View.getInstance().clearStage();
-
         BoardPane boardPane;
         Model model;
         Controller controller;

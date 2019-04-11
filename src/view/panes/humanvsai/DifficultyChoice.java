@@ -25,7 +25,7 @@ public class DifficultyChoice extends VBox {
     }
 
     private void initColorChoice(Game game, int difficulty) {
-        ColorChoice colorChoice = new ColorChoice(game, difficulty);
-        View.getInstance().setCenter(colorChoice);
+        HumanVsAiColorChoice humanVsAiColorChoice = new HumanVsAiColorChoice(game, difficulty);
+        View.getInstance().setCenter(humanVsAiColorChoice);
     }
 }

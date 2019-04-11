@@ -3,8 +3,9 @@ package games.controllers;
 import games.Controller;
 import games.Model;
 import games.Tile;
+import view.View;
 
-import java.util.Scanner;
+import java.awt.*;
 
 public class HumanVsHumanController implements Controller {
 
@@ -27,70 +28,71 @@ public class HumanVsHumanController implements Controller {
 
     @Override
     public void newGame() {
+        gameOver = false;
         model.resetBoard();
         // Black (X) moves first
         playerToMove = Tile.BLACK;
         playerOne = null;
         playerTwo = null;
-        //view.updateBoard(model.getBoard());
+        View.getInstance().updateBoard(model.getBoard());
     }
 
     @Override
     public void run() {
-        Scanner scanner = new Scanner(System.in);
-        while(true) {
-            gameOver = false;
-            newGame();
-            System.out.println("-------Welcome to " + model.getGameName() + "-------");
-            System.out.println("Please select your side: X or O");
-            String player = scanner.nextLine();
-            Tile player1 = (player.toUpperCase().startsWith("X")) ? Tile.BLACK : Tile.WHITE;
-            setPlayerOne(player1);
-            playerToMove = player1;
-            while (true) {
-                if(playerToMove == playerOne){
-                    int userX;
-                    int userY;
-                    try {
-                        System.out.print("x coordinate: ");
-                        userX = Integer.parseInt(scanner.nextLine());
-                        System.out.print("y coordinate: ");
-                        userY = Integer.parseInt(scanner.nextLine());
-                    } catch (NumberFormatException e) {
-                        System.out.println("That's not a number");
-                        continue;
-                    }
-                    // Check if the player entered a correct move
-                    if (!playerMove(userX, userY)) continue;
-                    if (gameOver) break;
-                    if(playerHasMoves(playerTwo)){
-                        playerToMove = playerTwo;
-                    }else System.out.println("Player " + playerTwo + " has no legal moves, returning turn to " + playerOne);
-                }
-                else if(playerToMove == playerTwo){
-                    int userX;
-                    int userY;
-                    try {
-                        System.out.print("x coordinate: ");
-                        userX = Integer.parseInt(scanner.nextLine());
-                        System.out.print("y coordinate: ");
-                        userY = Integer.parseInt(scanner.nextLine());
-                    } catch (NumberFormatException e) {
-                        System.out.println("That's not a number");
-                        continue;
-                    }
-                    // Check if the player entered a correct move
-                    if (!playerTwoMove(userX, userY)) continue;
-                    if (gameOver) break;
-                    if(playerHasMoves(playerOne)){
-                        playerToMove = playerOne;
-                    }else System.out.println("Player " + playerOne + " has no legal moves, returning turn to " + playerTwo);
-                }
+        System.out.println("New Human vs Human game thread has started");
+        while(!die) {
+            // Retrieve the move that the player clicked
+            Point playerMove = View.getInstance().getNextMove();
+
+            // Sleep the thread for small intervals to avoid cooking the CPU
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            System.out.println("Game has ended, new game? y/n");
-            String input = scanner.nextLine();
-            if(input.toUpperCase().startsWith("N")) break;
+
+            // If the first player is the next to move and has clicked a move
+            if(playerToMove == playerOne && playerMove != null){
+
+                // Check if the player clicked a correct move, allow him to click another move if it wasn't
+                // Execute the move if the move was legal
+                if (!playerMove(playerMove.x, playerMove.y)){
+                    View.getInstance().setNextMove(null);
+                    continue;
+                }
+
+                View.getInstance().setNextMove(null);
+
+                //Check if the game has ended and break out of the loop if it has
+                if(gameOver) break;
+
+                // If the AI player has moves available, hand over the turn to the AI player
+                if(playerHasMoves(playerTwo)){
+                    playerToMove = playerTwo;
+                }else System.out.println("Player " + playerTwo + " has no legal moves, returning turn to " + playerOne);
+            }
+            //If the second player is the next to move and has clicked a move
+            else if(playerToMove == playerTwo && playerMove != null){
+
+                // Check if the player clicked a correct move, allow him to click another move if it wasn't
+                // Execute the move if the move was legal
+                if (!playerTwoMove(playerMove.x, playerMove.y)){
+                    View.getInstance().setNextMove(null);
+                    continue;
+                }
+
+                View.getInstance().setNextMove(null);
+
+                //Check if the game has ended and break out of the loop if it has
+                if(gameOver) break;
+
+                // If the AI player has moves available, hand over the turn to the AI player
+                if(playerHasMoves(playerOne)){
+                    playerToMove = playerOne;
+                }else System.out.println("Player " + playerOne + " has no legal moves, returning turn to " + playerOne);
+            }
         }
+        System.out.println("Human vs Human game thread died :(");
     }
 
     @Override
@@ -102,6 +104,7 @@ public class HumanVsHumanController implements Controller {
     public void setPlayerOne(Tile tile) {
         playerOne = (tile == Tile.BLACK) ? Tile.BLACK : Tile.WHITE;
         playerTwo = (tile == Tile.BLACK) ? Tile.WHITE : Tile.BLACK;
+        View.getInstance().setCanMove(true);
     }
 
     @Override
@@ -111,11 +114,11 @@ public class HumanVsHumanController implements Controller {
                 // Execute the move, and execute hasWin() function if this was a winning move
                 model.move(x, y, playerOne);
                 if(model.hasWinner()){
-                    //view.updateBoard(model.getBoard());
+                    View.getInstance().updateBoard(model.getBoard());
                     hasWin();
                 }else{
-                    //view.updateBoard(model.getBoard());
-                    System.out.println("The scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
+                    View.getInstance().updateBoard(model.getBoard());
+                    View.getInstance().updateScores(model.getScores()[0], model.getScores()[1]);
                 }
                 return true;
             }else{
@@ -127,17 +130,17 @@ public class HumanVsHumanController implements Controller {
         }
     }
 
-    public boolean playerTwoMove(int x, int y) {
+    private boolean playerTwoMove(int x, int y) {
         try {
             if(model.checkLegalMove(x, y, playerTwo)){
                 // Execute the move, and execute hasWin() function if this was a winning move
                 model.move(x, y, playerTwo);
                 if(model.hasWinner()){
-                    //view.updateBoard(model.getBoard());
+                    View.getInstance().updateBoard(model.getBoard());
                     hasWin();
                 }else{
-                    //view.updateBoard(model.getBoard());
-                    System.out.println("The scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
+                    View.getInstance().updateBoard(model.getBoard());
+                    View.getInstance().updateScores(model.getScores()[0], model.getScores()[1]);
                 }
                 return true;
             }else{
@@ -160,9 +163,8 @@ public class HumanVsHumanController implements Controller {
 
     @Override
     public void hasWin() {
-        //view.printWinner(model.getBoardWinner());
-        System.out.println("The final scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
         gameOver = true;
+        View.getInstance().showWinScreen(model.getBoardWinner(), model.getScores()[0], model.getScores()[1]);
     }
 
     @Override

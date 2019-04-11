@@ -7,7 +7,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import view.Main;
-import view.Scenes;
 
 public class TicTacToeRuleScene extends RulesMenu{
 

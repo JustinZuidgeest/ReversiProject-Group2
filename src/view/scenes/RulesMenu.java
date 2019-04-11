@@ -7,7 +7,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import view.Main;
-import view.Scenes;
 
 public class RulesMenu{
     public Scene getScene() {

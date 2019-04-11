@@ -5,11 +5,9 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import view.Difficulty;
+import view.popupWindows.Difficulty;
 import view.Main;
-import view.Scenes;
-import view.reversiBoard;
+import view.board.BoardMaker;
 
 public class RevToGame {
 
@@ -19,7 +17,17 @@ public class RevToGame {
         Button quitReversi = new Button("Quit game");
         quitReversi.setOnAction(e -> Main.getInstance().switchScene(Scenes.MAINMENU));
 
-        Pane reversiBoard = new reversiBoard().getBoard();
+        Tile[][] board = new Tile[8][8];
+
+        for(int i=0;i<8;i++){
+            for(int j=0;j<8;j++){
+                board[j][i] = Tile.EMPTY;
+            }
+        }
+        board[3][3] = board[4][4] = Tile.WHITE;
+        board[3][4] = board[4][3] = Tile.BLACK;
+
+        Pane reversiBoard = new BoardMaker().getBoard(board);
 
         VBox leftMenuR = new VBox(10);
         leftMenuR.getChildren().addAll(quitReversi);

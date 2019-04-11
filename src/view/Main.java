@@ -3,6 +3,7 @@ package view;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import view.popupWindows.ConfirmQuit;
 import view.scenes.*;
 
 public class Main extends Application {
@@ -75,6 +76,14 @@ public class Main extends Application {
             case TTTSETTINGS: window.setScene(tttsettings);
             break;
         }
+    }
+
+    public void updateBoard(Tile[][] board){
+        //TODO display board
+    }
+
+    public void tileClicked(int x, int y){
+
     }
 
     public Scene getScene(Scenes scene){

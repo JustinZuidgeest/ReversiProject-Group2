@@ -8,7 +8,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import view.Main;
-import view.Scenes;
 
 public class ReversiRegels extends RulesMenu {
 

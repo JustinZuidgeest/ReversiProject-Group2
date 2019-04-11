@@ -1,15 +1,13 @@
-package Games.Reversi;
+package games.reversi;
 
-import Games.Tile;
-import Games.View;
+import games.Tile;
 
-public class ReversiCommandlineView implements View {
+public class ReversiCommandlineView {
 
     /**
      * Prints the current state of the game board on the console
      * @param board The game board
      */
-    @Override
     public void updateBoard(Tile[][] board){
         System.out.println("Current board:");
         System.out.print("  ");
@@ -29,7 +27,6 @@ public class ReversiCommandlineView implements View {
         }
     }
 
-    @Override
     public void printWinner(Tile player) {
         if(player == Tile.BLACK) System.out.println("The Black color has won!");
         else if(player == Tile.WHITE) System.out.println("The White color has won!");

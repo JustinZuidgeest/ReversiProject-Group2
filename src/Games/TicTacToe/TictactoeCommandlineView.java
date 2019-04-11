@@ -1,15 +1,13 @@
-package Games.TicTacToe;
+package games.tictactoe;
 
-import Games.Tile;
-import Games.View;
+import games.Tile;
 
-public class TictactoeCommandlineView implements View {
+public class TictactoeCommandlineView {
 
         /**
      * Prints the current state of the game board on the console
      * @param board The game board
      */
-    @Override
     public void updateBoard(Tile[][] board){
         System.out.println("Current board:");
         System.out.print("  ");
@@ -33,7 +31,6 @@ public class TictactoeCommandlineView implements View {
      * Prints a message that the game has been won
      * @param player The Tile object that represents the winning player
      */
-    @Override
     public void printWinner(Tile player){
         if(player == Tile.BLACK) System.out.println("The X player has won!");
         else if(player == Tile.WHITE) System.out.println("The O player has won!");

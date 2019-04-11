@@ -1,7 +1,7 @@
-package Games.TicTacToe;
+package games.tictactoe;
 
-import Games.Model;
-import Games.Tile;
+import games.Model;
+import games.Tile;
 import java.awt.Point;
 import java.util.ArrayList;
 
@@ -132,7 +132,7 @@ public abstract class AbstractTictactoeModel implements Model {
 
     @Override
     public void updateScores() {
-        // Empty method since unlike Chess, Checkers or Reversi, TicTacToe does not keep track of score based on moves
+        // Empty method since unlike Chess, Checkers or reversi, tictactoe does not keep track of score based on moves
     }
 
     /**

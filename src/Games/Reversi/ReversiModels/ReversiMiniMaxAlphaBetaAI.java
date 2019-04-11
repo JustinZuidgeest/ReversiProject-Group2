@@ -1,14 +1,14 @@
-package Games.Reversi.ReversiModels;
+package games.reversi.reversimodels;
 
-import Games.Reversi.AbstractReversiModel;
-import Games.Tile;
+import games.reversi.AbstractReversiModel;
+import games.Tile;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 public class ReversiMinimaxAlphaBetaAI extends AbstractReversiModel {
 
-    private int initialDepth = 9;
+    private int initialDepth;
     private int evaluatedPossibilities;
     private Tile computerPlayer;
     private Tile opponentPlayer;
@@ -26,7 +26,10 @@ public class ReversiMinimaxAlphaBetaAI extends AbstractReversiModel {
             {99,  -8,  8,  6,  6,  8,  -8, 99},
     };
 
-    public ReversiMinimaxAlphaBetaAI(int boardSize) { super(boardSize); }
+    public ReversiMinimaxAlphaBetaAI(int boardSize, int initialDepth) {
+        super(boardSize);
+        this.initialDepth = initialDepth;
+    }
 
     @Override
     public Point nextMove(Tile player) {
@@ -35,9 +38,9 @@ public class ReversiMinimaxAlphaBetaAI extends AbstractReversiModel {
         computerPlayer = player;
         opponentPlayer = (computerPlayer == Tile.BLACK) ? Tile.WHITE : Tile.BLACK;
         int[] result = miniMax(initialDepth, computerPlayer, Integer.MIN_VALUE, Integer.MAX_VALUE, getBoard());
-        System.out.println("Minimax AI with Alpha-Beta pruning with depth " + initialDepth + " wants to move to x:" + result[1] + " y: " + result[2]);
-        System.out.println("The score for this move: " + result[0]);
-        System.out.println("AI evaluated " + evaluatedPossibilities + " possibilities to reach this conclusion");
+        //System.out.println("Minimax AI with Alpha-Beta pruning with depth " + initialDepth + " wants to move to x:" + result[1] + " y: " + result[2]);
+        //System.out.println("The score for this move: " + result[0]);
+        //System.out.println("AI evaluated " + evaluatedPossibilities + " possibilities to reach this conclusion");
         return new Point(result[1], result[2]);
     }
 

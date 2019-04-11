@@ -1,19 +1,22 @@
-package Games.TicTacToe.TictactoeModels;
+package games.tictactoe.tictactoemodels;
 
-import Games.TicTacToe.AbstractTictactoeModel;
-import Games.Tile;
+import games.tictactoe.AbstractTictactoeModel;
+import games.Tile;
 
 import java.awt.Point;
 import java.util.ArrayList;
 
 public class TictactoeMinimaxAlphaBetaAI extends AbstractTictactoeModel {
 
-    private int initialDepth = 9;
+    private int initialDepth;
     private int evaluatedPossibilities;
     private Tile computerPlayer;
     private Tile opponentPlayer;
 
-    public TictactoeMinimaxAlphaBetaAI(int boardSize) { super(boardSize); }
+    public TictactoeMinimaxAlphaBetaAI(int boardSize, int initialDepth) {
+        super(boardSize);
+        this.initialDepth = initialDepth;
+    }
 
     @Override
     public Point nextMove(Tile tile) {

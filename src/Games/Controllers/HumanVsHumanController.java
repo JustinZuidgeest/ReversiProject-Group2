@@ -1,15 +1,13 @@
-package Games.Controllers;
+package games.controllers;
 
-import Games.Controller;
-import Games.Model;
-import Games.Tile;
-import Games.View;
+import games.Controller;
+import games.Model;
+import games.Tile;
 
 import java.util.Scanner;
 
 public class HumanVsHumanController implements Controller {
 
-    private View view;
     private Model model;
 
     private boolean gameOver;
@@ -21,8 +19,7 @@ public class HumanVsHumanController implements Controller {
 
     private int boardSize;
 
-    public HumanVsHumanController(View view, Model model) {
-        this.view = view;
+    public HumanVsHumanController(Model model) {
         this.model = model;
         this.boardSize = model.getBoardSize();
     }
@@ -34,7 +31,7 @@ public class HumanVsHumanController implements Controller {
         playerToMove = Tile.BLACK;
         playerOne = null;
         playerTwo = null;
-        view.updateBoard(model.getBoard());
+        //view.updateBoard(model.getBoard());
     }
 
     @Override
@@ -113,10 +110,10 @@ public class HumanVsHumanController implements Controller {
                 // Execute the move, and execute hasWin() function if this was a winning move
                 model.move(x, y, playerOne);
                 if(model.hasWinner()){
-                    view.updateBoard(model.getBoard());
+                    //view.updateBoard(model.getBoard());
                     hasWin();
                 }else{
-                    view.updateBoard(model.getBoard());
+                    //view.updateBoard(model.getBoard());
                     System.out.println("The scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
                 }
                 return true;
@@ -135,10 +132,10 @@ public class HumanVsHumanController implements Controller {
                 // Execute the move, and execute hasWin() function if this was a winning move
                 model.move(x, y, playerTwo);
                 if(model.hasWinner()){
-                    view.updateBoard(model.getBoard());
+                    //view.updateBoard(model.getBoard());
                     hasWin();
                 }else{
-                    view.updateBoard(model.getBoard());
+                    //view.updateBoard(model.getBoard());
                     System.out.println("The scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
                 }
                 return true;
@@ -162,7 +159,7 @@ public class HumanVsHumanController implements Controller {
 
     @Override
     public void hasWin() {
-        view.printWinner(model.getBoardWinner());
+        //view.printWinner(model.getBoardWinner());
         System.out.println("The final scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
         gameOver = true;
     }

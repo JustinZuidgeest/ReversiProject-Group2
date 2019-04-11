@@ -45,8 +45,7 @@ public class ServerCommunicator implements Runnable {
         port = Integer.valueOf(properties.getProperty("port"));
         name = properties.getProperty("name");
 
-        getPlayerList();
-        getGameList();
+
     }
 
     public void connectToServer(){
@@ -214,6 +213,8 @@ public class ServerCommunicator implements Runnable {
     public void login(){
         shouldRun = true;
         sendToServer("login " + name);
+        getPlayerList();
+        getGameList();
     }
 
     public void logout(){

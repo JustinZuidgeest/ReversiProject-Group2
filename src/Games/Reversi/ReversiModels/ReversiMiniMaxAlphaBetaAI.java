@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class ReversiMinimaxAlphaBetaAI extends AbstractReversiModel {
 
-    private int initialDepth = 9;
+    private int initialDepth = 8;
     private int evaluatedPossibilities;
     private Tile computerPlayer;
     private Tile opponentPlayer;

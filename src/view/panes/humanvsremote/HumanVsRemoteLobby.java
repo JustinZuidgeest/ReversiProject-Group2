@@ -28,8 +28,10 @@ public class HumanVsRemoteLobby extends HBox {
     private VBox leftPane;
     private VBox rightPane;
     private Controller controller;
+    private String ownName;
 
-    public HumanVsRemoteLobby(Game game) {
+    public HumanVsRemoteLobby(Game game, String ownName) {
+        this.ownName = ownName;
         this.setAlignment(Pos.CENTER);
         this.setSpacing(30);
 
@@ -95,7 +97,7 @@ public class HumanVsRemoteLobby extends HBox {
             String gameString = (game == Game.REVERSI) ? "Reversi" : "Tic-tac-toe";
             if(map.get("GAMETYPE").equals(gameString)){
                 Button button = new Button("Accept challenge from " + map.get("CHALLENGER"));
-                button.setOnMouseClicked(e -> acceptChallenge((String)map.get("CHALLENGENUMBER"), game));
+                button.setOnMouseClicked(e -> acceptChallenge((String)map.get("CHALLENGENUMBER")));
                 rightPane.getChildren().add(button);
             }
         }
@@ -108,9 +110,11 @@ public class HumanVsRemoteLobby extends HBox {
         ArrayList<String> namesList = View.getInstance().getController().getServer().controllerGetPlayerList();
         System.out.println(namesList);
         for(String player : namesList){
-            Button button = new Button("Invite " + player);
-            button.setOnMouseClicked(e -> invitePlayer(player, game));
-            leftPane.getChildren().add(button);
+            if(!player.equals(ownName)){
+                Button button = new Button("Invite " + player);
+                button.setOnMouseClicked(e -> invitePlayer(player, game));
+                leftPane.getChildren().add(button);
+            }
         }
     }
 
@@ -119,39 +123,7 @@ public class HumanVsRemoteLobby extends HBox {
         View.getInstance().getController().getServer().challenge(player, gameString);
     }
 
-    private void acceptChallenge(String number, Game game){
+    private void acceptChallenge(String number){
         View.getInstance().getController().getServer().acceptChallenge(Integer.parseInt(number));
-        challengeAccepted(game);
-    }
-
-    private void challengeAccepted(Game game){
-        View.getInstance().clearStage();
-        View.getInstance().setNextMove(null);
-        BoardPane boardPane;
-        String stringOne;
-        String stringTwo = "You are playing vs a remote opponent";
-
-        if (game == Game.TICTACTOE){
-            boardPane = new BoardPane(3);
-            View.getInstance().setBoardPane(boardPane);
-            View.getInstance().setCenter(boardPane);
-            stringOne = "Welcome to a new game of TicTacToe!";
-        }
-        else if(game == Game.REVERSI){
-            boardPane = new BoardPane(8);
-            View.getInstance().setBoardPane(boardPane);
-            View.getInstance().setCenter(boardPane);
-            stringOne = "Welcome to a new game of Reversi!";
-        }
-        else throw new IllegalArgumentException();
-
-        InfoPane infoPane = new InfoPane(stringOne, stringTwo);
-        View.getInstance().setInfoPane(infoPane);
-        View.getInstance().setTop(infoPane);
-
-        HumanVsRemoteBottomPane humanVsRemoteBottomPane = new HumanVsRemoteBottomPane();
-        View.getInstance().setBottom(humanVsRemoteBottomPane);
-
-        View.getInstance().getController().newGame();
     }
 }

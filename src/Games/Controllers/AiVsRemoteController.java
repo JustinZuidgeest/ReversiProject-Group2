@@ -11,8 +11,6 @@ public class AiVsRemoteController implements Controller {
 
     private Model model;
 
-    private boolean die = false;
-    private boolean gameOver;
     private ServerCommunicator server;
     // The human player
     private Tile AIPlayer;
@@ -48,9 +46,8 @@ public class AiVsRemoteController implements Controller {
      */
     @Override
     public void newGame() {
+        View.getInstance().setCanMove(false);
         model.resetBoard();
-        AIPlayer = null;
-        remotePlayer = null;
         View.getInstance().updateBoard(model.getBoard());
     }
 
@@ -70,9 +67,10 @@ public class AiVsRemoteController implements Controller {
     @Override
     public boolean playerMove(int x, int y) {
         try {
-            if(model.checkLegalMove(x, y, AIPlayer)){
+            System.out.println("Remote playermove x: " + x + ", y: " + y);
+            if(model.checkLegalMove(x, y, remotePlayer)){
                 // Execute the move, and execute hasWin() function if this was a winning move
-                model.move(x, y, AIPlayer);
+                model.move(x, y, remotePlayer);
                 if(model.hasWinner()){
                     View.getInstance().updateBoard(model.getBoard());
                     hasWin();
@@ -105,10 +103,11 @@ public class AiVsRemoteController implements Controller {
     @Override
     public void aiMove() {
         // Generate a move made by the computer
-        Point aiMove = model.computerMove(remotePlayer);
+        Point aiMove = model.computerMove(AIPlayer);
+        System.out.println("Our AI moves x: " + aiMove.x + ", y: " + aiMove.y);
         // Execute the move, and execute hasWin() function if this was a winning move
         server.sendMove((aiMove.y * boardSize) + aiMove.x);
-        model.move(aiMove.x, aiMove.y, remotePlayer);
+        model.move(aiMove.x, aiMove.y, AIPlayer);
         if(model.hasWinner()){
             View.getInstance().updateBoard(model.getBoard());
             hasWin();
@@ -133,13 +132,10 @@ public class AiVsRemoteController implements Controller {
     public void hasWin() {
         //view.printWinner(model.getBoardWinner());
         System.out.println("The final scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
-        gameOver = true;
     }
 
     @Override
-    public void killThread() {
-        die = true;
-    }
+    public void killThread(){}
 
     @Override
     public ServerCommunicator getServer() {

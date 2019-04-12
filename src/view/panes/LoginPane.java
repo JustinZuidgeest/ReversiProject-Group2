@@ -89,7 +89,7 @@ public class LoginPane extends HBox {
                 e.printStackTrace();
             }
             if(gameType == GameType.REMOTE){
-                HumanVsRemoteLobby humanVsRemoteLobby = new HumanVsRemoteLobby(game);
+                HumanVsRemoteLobby humanVsRemoteLobby = new HumanVsRemoteLobby(game, name);
                 View.getInstance().setCenter(humanVsRemoteLobby);
             }else if(gameType == GameType.TOURNAMENT){
                 TournamentLobby tournamentLobby = new TournamentLobby(game);

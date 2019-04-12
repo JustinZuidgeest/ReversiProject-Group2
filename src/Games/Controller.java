@@ -1,5 +1,7 @@
 package Games;
 
+import Games.Controllers.ServerCommunicator;
+
 public interface Controller extends Runnable{
     void newGame();
     void run();
@@ -10,4 +12,5 @@ public interface Controller extends Runnable{
     void hasWin();
     int getBoardSize();
     void killThread();
+    ServerCommunicator getServer();
 }

@@ -6,6 +6,7 @@ import Games.Tile;
 import view.View;
 
 import java.awt.Point;
+import java.util.ArrayList;
 
 public class HumanVsAiController implements Controller {
 
@@ -168,5 +169,10 @@ public class HumanVsAiController implements Controller {
     @Override
     public void killThread() {
         die = true;
+    }
+
+    @Override
+    public ServerCommunicator getServer() {
+        return null;
     }
 }

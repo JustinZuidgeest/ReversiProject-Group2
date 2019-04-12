@@ -5,6 +5,7 @@ import Games.Model;
 import Games.Tile;
 
 import java.awt.Point;
+import java.util.ArrayList;
 
 public class AiVsRemoteController implements Controller {
 
@@ -131,5 +132,10 @@ public class AiVsRemoteController implements Controller {
     @Override
     public void killThread() {
         die = true;
+    }
+
+    @Override
+    public ServerCommunicator getServer() {
+        return null;
     }
 }

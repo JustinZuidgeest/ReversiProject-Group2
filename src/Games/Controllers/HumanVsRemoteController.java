@@ -6,6 +6,7 @@ import Games.Tile;
 import view.View;
 
 import java.awt.Point;
+import java.util.ArrayList;
 
 public class HumanVsRemoteController implements Controller {
 
@@ -29,7 +30,9 @@ public class HumanVsRemoteController implements Controller {
         this.boardSize = model.getBoardSize();
 
         server.connectToServer();
-        new Thread(server).start();
+        Thread thread = new Thread(server);
+        thread.setDaemon(true);
+        thread.start();
         server.login();
 
         server.getGameList();
@@ -159,7 +162,7 @@ public class HumanVsRemoteController implements Controller {
                     hasWin();
                 }else{
                     View.getInstance().updateBoard(model.getBoard());
-                    View.getInstance().updateScores(model.getScores()[0], model.getScores()[1]);
+                    //View.getInstance().updateScores(model.getScores()[0], model.getScores()[1]);
                 }
                 return true;
             }else{
@@ -202,5 +205,10 @@ public class HumanVsRemoteController implements Controller {
     @Override
     public void killThread() {
         die = true;
+    }
+
+    @Override
+    public ServerCommunicator getServer() {
+        return server;
     }
 }

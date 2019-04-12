@@ -6,6 +6,7 @@ import Games.Tile;
 import view.View;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class HumanVsHumanController implements Controller {
 
@@ -180,5 +181,10 @@ public class HumanVsHumanController implements Controller {
     @Override
     public void killThread() {
         die = true;
+    }
+
+    @Override
+    public ServerCommunicator getServer() {
+        return null;
     }
 }

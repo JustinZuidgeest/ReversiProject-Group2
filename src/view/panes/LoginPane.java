@@ -6,7 +6,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import view.Game;
 import view.GameType;
+import view.View;
+import view.panes.humanvsremote.HumanVsRemoteLobby;
 
 import java.io.*;
 import java.util.Properties;
@@ -22,15 +25,16 @@ public class LoginPane extends HBox {
     private String port;
     private String name;
 
-    public LoginPane(GameType gameType) {
+    public LoginPane(GameType gameType, Game game) {
         this.setAlignment(Pos.CENTER);
         this.setSpacing(30);
 
         usernameText = new Text("Enter your username:");
         textField = new TextField();
         Button setName = new Button("Login");
+        Button backButton = new BackToMainButton();
 
-        setName.setOnAction(e -> loginClicked(gameType));
+        setName.setOnAction(e -> loginClicked(gameType, game));
 
         properties = new Properties();
         InputStream is = null;
@@ -61,7 +65,7 @@ public class LoginPane extends HBox {
         this.getChildren().addAll(usernameText, textField, setName);
     }
 
-    private void loginClicked(GameType gameType){
+    private void loginClicked(GameType gameType, Game game){
         String fieldString = textField.getText();
         if (!fieldString.isEmpty()) {
             try {
@@ -73,6 +77,7 @@ public class LoginPane extends HBox {
             properties.setProperty("name", fieldString);
             properties.setProperty("host", host);
             properties.setProperty("port", port);
+
             try {
                 properties.store(os, null);
             } catch (IOException e) {
@@ -85,7 +90,9 @@ public class LoginPane extends HBox {
                 e.printStackTrace();
             }
 
-            //TODO gametype
+            HumanVsRemoteLobby humanVsRemoteLobby = new HumanVsRemoteLobby(gameType, game);
+            View.getInstance().setCenter(humanVsRemoteLobby);
+
         } else {
             Platform.runLater(() -> usernameText.setText("Username can't be empty"));
         }

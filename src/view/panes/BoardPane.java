@@ -21,7 +21,7 @@ public class BoardPane extends Pane{
                 box.heightProperty().bind(this.heightProperty().divide(boardSize));
                 box.xProperty().bind(this.widthProperty().divide(boardSize).multiply(j));
                 box.yProperty().bind(this.heightProperty().divide(boardSize).multiply(i));
-                box.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> clickedOnTile(e.getX(), e.getY()));
+                box.setOnMouseClicked(e -> clickedOnTile(e.getX(), e.getY()));
                 if((i%2==0 && j%2==1) || (i%2==1 && j%2==0)){
                     box.setFill(Color.LIGHTGRAY);
                 }else{

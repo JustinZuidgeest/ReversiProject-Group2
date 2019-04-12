@@ -1,6 +1,6 @@
 package view.panes;
 
-import games.Tile;
+import Games.Tile;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;

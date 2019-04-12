@@ -1,12 +1,12 @@
-package games.reversi.reversimodels;
+package Games.Reversi.ReversiModels;
 
-import games.reversi.AbstractReversiModel;
-import games.Tile;
+import Games.Reversi.AbstractReversiModel;
+import Games.Tile;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public class ReversiMinimaxAlphaBetaAI extends AbstractReversiModel {
+public class ReversiMiniMaxAlphaBetaAI extends AbstractReversiModel {
 
     private int initialDepth;
     private int evaluatedPossibilities;
@@ -26,7 +26,7 @@ public class ReversiMinimaxAlphaBetaAI extends AbstractReversiModel {
             {99,  -8,  8,  6,  6,  8,  -8, 99},
     };
 
-    public ReversiMinimaxAlphaBetaAI(int boardSize, int initialDepth) {
+    public ReversiMiniMaxAlphaBetaAI(int boardSize, int initialDepth) {
         super(boardSize);
         this.initialDepth = initialDepth;
     }

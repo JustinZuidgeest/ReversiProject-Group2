@@ -1,6 +1,6 @@
-package games.tictactoe;
+package Games.TicTacToe;
 
-import games.Tile;
+import Games.Tile;
 
 public class TictactoeCommandlineView {
 

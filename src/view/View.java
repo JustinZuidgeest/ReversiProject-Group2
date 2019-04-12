@@ -1,8 +1,8 @@
 package view;
 
-import games.Controller;
-import games.Model;
-import games.Tile;
+import Games.Controller;
+import Games.Model;
+import Games.Tile;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -10,7 +10,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import view.panes.BoardPane;
@@ -45,7 +44,7 @@ public class View extends Application {
         primaryStage.setScene(primaryScene);
         primaryStage.setMaxWidth(800);
         primaryStage.setMaxHeight(800);
-        primaryStage.setTitle("Arithm games");
+        primaryStage.setTitle("Arithm Games");
         primaryStage.show();
     }
 

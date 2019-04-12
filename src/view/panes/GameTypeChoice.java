@@ -1,21 +1,17 @@
 package view.panes;
 
-import games.Controller;
-import games.Model;
-import games.Tile;
-import games.controllers.HumanVsAiController;
-import games.controllers.HumanVsHumanController;
-import games.reversi.reversimodels.ReversiMinimaxAlphaBetaAI;
-import games.reversi.reversimodels.ReversiRandomAI;
-import games.tictactoe.tictactoemodels.TictactoeMinimaxAlphaBetaAI;
-import games.tictactoe.tictactoemodels.TictactoeRandomAI;
+import Games.Controller;
+import Games.Model;
+import Games.Tile;
+import Games.controllers.HumanVsHumanController;
+import Games.Reversi.ReversiModels.ReversiRandomAI;
+import Games.TicTacToe.TictactoeModels.TictactoeRandomAI;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import view.Game;
 import view.View;
 import view.panes.humanvsai.DifficultyChoice;
-import view.panes.humanvsai.HumanVsAiBottomPane;
 import view.panes.humanvshuman.HumanVsHumanBottomPane;
 
 public class GameTypeChoice extends VBox {

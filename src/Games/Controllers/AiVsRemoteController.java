@@ -1,8 +1,8 @@
-package games.controllers;
+package Games.controllers;
 
-import games.Controller;
-import games.Model;
-import games.Tile;
+import Games.Controller;
+import Games.Model;
+import Games.Tile;
 
 import java.awt.Point;
 

@@ -1,7 +1,7 @@
-package games.tictactoe.tictactoemodels;
+package Games.TicTacToe.TictactoeModels;
 
-import games.tictactoe.AbstractTictactoeModel;
-import games.Tile;
+import Games.TicTacToe.AbstractTictactoeModel;
+import Games.Tile;
 
 import java.awt.Point;
 import java.util.ArrayList;

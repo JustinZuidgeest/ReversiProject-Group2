@@ -1,7 +1,7 @@
-package games.reversi.reversimodels;
+package Games.Reversi.ReversiModels;
 
-import games.reversi.AbstractReversiModel;
-import games.Tile;
+import Games.Reversi.AbstractReversiModel;
+import Games.Tile;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;

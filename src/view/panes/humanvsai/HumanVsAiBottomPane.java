@@ -1,11 +1,11 @@
 package view.panes.humanvsai;
 
-import games.Controller;
-import games.Model;
-import games.Tile;
-import games.controllers.HumanVsAiController;
-import games.reversi.reversimodels.ReversiMinimaxAlphaBetaAI;
-import games.tictactoe.tictactoemodels.TictactoeMinimaxAlphaBetaAI;
+import Games.Controller;
+import Games.Model;
+import Games.Tile;
+import Games.controllers.HumanVsAiController;
+import Games.Reversi.ReversiModels.ReversiMiniMaxAlphaBetaAI;
+import Games.TicTacToe.TictactoeModels.TictactoeMinimaxAlphaBetaAI;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
@@ -67,7 +67,7 @@ public class HumanVsAiBottomPane extends HBox {
             boardPane = new BoardPane(8);
             View.getInstance().setBoardPane(boardPane);
             View.getInstance().setCenter(boardPane);
-            model = new ReversiMinimaxAlphaBetaAI(8, difficulty);
+            model = new ReversiMiniMaxAlphaBetaAI(8, difficulty);
         }
         else throw new IllegalArgumentException();
 

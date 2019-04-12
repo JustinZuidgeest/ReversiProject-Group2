@@ -1,4 +1,4 @@
-package games;
+package Games;
 
 public interface Controller extends Runnable{
     void newGame();

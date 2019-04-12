@@ -1,7 +1,7 @@
-package games.controllers;
+package Games.controllers;
 
-import games.Controller;
-import games.Tile;
+import Games.Controller;
+import Games.Tile;
 
 import java.io.*;
 import java.net.Socket;
@@ -29,7 +29,7 @@ public class ServerCommunicator implements Runnable {
         this.controller = controller;
 
         Properties properties = new Properties();
-        String fileName = "src/games/controllers/settings.conf";
+        String fileName = "src/Games/controllers/settings.conf";
         InputStream is = null;
         try {
             is = new FileInputStream(fileName);

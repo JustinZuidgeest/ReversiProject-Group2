@@ -1,3 +1,3 @@
-package games;
+package Games;
 
 public enum Tile {EMPTY, BLACK, WHITE}

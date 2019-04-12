@@ -1,7 +1,7 @@
-package games.reversi;
+package Games.Reversi;
 
-import games.Model;
-import games.Tile;
+import Games.Model;
+import Games.Tile;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -198,7 +198,7 @@ public abstract class AbstractReversiModel implements Model {
 
     @Override
     public String getGameName() {
-        return "reversi";
+        return "Reversi";
     }
 
     @Override

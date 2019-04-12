@@ -1,6 +1,6 @@
-package games.reversi;
+package Games.Reversi;
 
-import games.Tile;
+import Games.Tile;
 
 public class ReversiCommandlineView {
 

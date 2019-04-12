@@ -114,10 +114,12 @@ public class ServerCommunicator implements Runnable {
                 //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
                 HashMap<String, String> matchMap = (HashMap<String, String>) Arrays.asList(trimLine(matchInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 if (matchMap.get("PLAYERTOMOVE").equals(name)) {
-                    controller.setPlayerOne(Tile.WHITE);
+                    controller.setPlayerOne(Tile.BLACK);
+                    View.getInstance().startController();
                 }
                 else{
-                    controller.setPlayerOne(Tile.BLACK);
+                    controller.setPlayerOne(Tile.WHITE);
+                    View.getInstance().startController();
                 }
                 break;
             case "YOURTURN":
@@ -126,9 +128,6 @@ public class ServerCommunicator implements Runnable {
                 HashMap<String, String> turnMap = (HashMap<String, String>) Arrays.asList(trimLine(turnInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 if(controller instanceof AiVsRemoteController) {
                     controller.aiMove();
-                }
-                else if(controller instanceof HumanVsRemoteController){
-                    ((HumanVsRemoteController) controller).setPlayerToMove();
                 }
                 break;
             case "MOVE":
@@ -147,7 +146,6 @@ public class ServerCommunicator implements Runnable {
                         int x = Integer.valueOf(moveMap.get("MOVE")) % controller.getBoardSize();
                         int y = Math.floorDiv(Integer.valueOf(moveMap.get("MOVE")), controller.getBoardSize());
                         controller.playerTwoMove(x, y);
-                        ((HumanVsRemoteController) controller).waitingOnRemotePlayer(0);
                     }
                 }
                 break;

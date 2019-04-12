@@ -45,10 +45,17 @@ public class HumanVsRemoteController implements Controller {
     public void setPlayerOne(Tile tile) {
         humanPlayer = (tile == Tile.BLACK) ? Tile.BLACK : Tile.WHITE;
         remotePlayer = (tile == Tile.BLACK) ? Tile.WHITE : Tile.BLACK;
-    }
-
-    public void setPlayerToMove(){
-        playerToMove = humanPlayer;
+        if(humanPlayer == Tile.WHITE){
+            playerToMove = remotePlayer;
+            View.getInstance().setCanMove(false);
+        }
+        else{
+            playerToMove = humanPlayer;
+            View.getInstance().setCanMove(true);
+        }
+        System.out.println("Set human player to: " + humanPlayer);
+        System.out.println("Set remote player to: " + remotePlayer);
+        System.out.println("Set player to move to: " + playerToMove);
     }
 
     @Override
@@ -66,7 +73,6 @@ public class HumanVsRemoteController implements Controller {
 
             // If the first player is the next to move and has clicked a move
             if (playerToMove == humanPlayer && playerMove != null) {
-
                 // Check if the player clicked a correct move, allow him to click another move if it wasn't
                 // Execute the move if the move was legal
                 if (!playerMove(playerMove.x, playerMove.y)) {
@@ -75,6 +81,7 @@ public class HumanVsRemoteController implements Controller {
                 }
 
                 View.getInstance().setNextMove(null);
+                View.getInstance().setCanMove(false);
 
                 //Check if the game has ended and break out of the loop if it has
                 if (gameOver) break;
@@ -82,27 +89,10 @@ public class HumanVsRemoteController implements Controller {
                 // If the AI player has moves available, hand over the turn to the AI player
                 if (playerHasMoves(remotePlayer)) {
                     playerToMove = remotePlayer;
-                } else
-                    System.out.println("Player " + remotePlayer + " has no legal moves, returning turn to " + humanPlayer);
-                //If the second player is the next to move and has clicked a move
-
-            }
-            //If the second player is the next to move and has clicked a move
-            else if (playerToMove == remotePlayer && playerMove != null) {
-                waitingOnRemotePlayer(1);
-                while(waiting){
-                    //waiting on remote player
-                }
-                playerToMove = humanPlayer;
-                //Check if the game has ended and break out of the loop if it has
-                if (gameOver) break;
-
-                // If the AI player has moves available, hand over the turn to the AI player
-                if (playerHasMoves(humanPlayer)) {
-                    playerToMove = humanPlayer;
-                } else
-                    System.out.println("Player " + humanPlayer + " has no legal moves, returning turn to " + remotePlayer);
-                //If the second player is the next to move and has clicked a move
+                    String infoString = "It's the remote player's turn to move!";
+                    String scoreString = "The scores are: Black - " + model.getScores()[0] + " White - " + model.getScores()[1];
+                    View.getInstance().updateInfoPane(infoString, scoreString);
+                } else System.out.println("Player " + remotePlayer + " has no legal moves, returning turn to " + humanPlayer);
             }
         }
     }
@@ -113,13 +103,7 @@ public class HumanVsRemoteController implements Controller {
     @Override
     public void newGame() {
         model.resetBoard();
-        humanPlayer = null;
-        remotePlayer = null;
-        //view.updateBoard(model.getBoard());
-    }
-
-    public void waitingOnRemotePlayer(int i){
-        waiting = i==1;
+        View.getInstance().updateBoard(model.getBoard());
     }
 
     /**
@@ -131,16 +115,18 @@ public class HumanVsRemoteController implements Controller {
      */
     @Override
     public boolean playerMove(int x, int y) {
+        System.out.println("Player move x: " + x + ", y: " + y);
         try {
             if(model.checkLegalMove(x, y, humanPlayer)){
                 // Execute the move, and execute hasWin() function if this was a winning move
                 model.move(x, y, humanPlayer);
+                server.sendMove((y * model.getBoardSize()) + x);
+                System.out.println("Sending " + ((y * model.getBoardSize()) + x) + " to server");
                 if(model.hasWinner()){
-                    //view.updateBoard(model.getBoard());
+                    View.getInstance().updateBoard(model.getBoard());
                     hasWin();
                 }else{
-                    //view.updateBoard(model.getBoard());
-                    System.out.println("The scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
+                    View.getInstance().updateBoard(model.getBoard());
                 }
                 return true;
             }else{
@@ -153,6 +139,7 @@ public class HumanVsRemoteController implements Controller {
     }
 
     public boolean playerTwoMove(int x, int y) {
+        System.out.println("Remote opponent move x: " + x + ", y: " + y);
         try {
             if(model.checkLegalMove(x, y, remotePlayer)){
                 // Execute the move, and execute hasWin() function if this was a winning move
@@ -162,8 +149,15 @@ public class HumanVsRemoteController implements Controller {
                     hasWin();
                 }else{
                     View.getInstance().updateBoard(model.getBoard());
-                    //todo infopane implementation
-                    //View.getInstance().updateScores(model.getScores()[0], model.getScores()[1]);
+                    // If the AI player has moves available, hand over the turn to the AI player
+                    if (playerHasMoves(humanPlayer)) {
+                        playerToMove = humanPlayer;
+                        View.getInstance().setCanMove(true);
+                        String infoString = "It's your turn to move!";
+                        String scoreString = "The scores are: Black - " + model.getScores()[0] + " White - " + model.getScores()[1];
+                        View.getInstance().updateInfoPane(infoString, scoreString);
+                    } else
+                        System.out.println("Player " + remotePlayer + " has no legal moves, returning turn to " + humanPlayer);
                 }
                 return true;
             }else{
@@ -198,9 +192,12 @@ public class HumanVsRemoteController implements Controller {
      */
     @Override
     public void hasWin() {
-        //view.printWinner(model.getBoardWinner());
-        System.out.println("The final scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
         gameOver = true;
+        Tile winner = model.getBoardWinner();
+        String winnerColor = (winner == Tile.BLACK) ? "Black" : (winner == Tile.WHITE) ? "White" : "Nobody";
+        String gameWinner = "The game has ended! The winner is " + winnerColor;
+        String gameScores = "The final scores are: Black - " + model.getScores()[0] + " White - " + model.getScores()[1];
+        View.getInstance().updateInfoPane(gameWinner, gameScores);
     }
 
     @Override

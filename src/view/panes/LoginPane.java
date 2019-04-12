@@ -32,7 +32,6 @@ public class LoginPane extends HBox {
         usernameText = new Text("Enter your username:");
         textField = new TextField();
         Button setName = new Button("Login");
-        Button backButton = new BackToMainButton();
 
         setName.setOnAction(e -> loginClicked(gameType, game));
 
@@ -89,9 +88,13 @@ public class LoginPane extends HBox {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            HumanVsRemoteLobby humanVsRemoteLobby = new HumanVsRemoteLobby(gameType, game);
-            View.getInstance().setCenter(humanVsRemoteLobby);
+            if(gameType == GameType.REMOTE){
+                HumanVsRemoteLobby humanVsRemoteLobby = new HumanVsRemoteLobby(game);
+                View.getInstance().setCenter(humanVsRemoteLobby);
+            }else if(gameType == GameType.TOURNAMENT){
+                //TODO
+            }
+            else throw new IllegalArgumentException();
 
         } else {
             Platform.runLater(() -> usernameText.setText("Username can't be empty"));

@@ -154,16 +154,17 @@ public class HumanVsAiController implements Controller {
             hasWin();
         }else{
             View.getInstance().updateBoard(model.getBoard());
-            String infoString = "It's the player's turn to move!";
-            String scoreString = "The scores are: Black - " + model.getScores()[0] + " White - " + model.getScores()[1];
-            View.getInstance().updateInfoPane(infoString, scoreString);
         }
     }
 
     @Override
     public void hasWin() {
         gameOver = true;
-        //View.getInstance().showWinScreen(model.getBoardWinner(), model.getScores()[0], model.getScores()[1]);
+        Tile winner = model.getBoardWinner();
+        String winnerColor = (winner == Tile.BLACK) ? "Black" : (winner == Tile.WHITE) ? "White" : "Nobody";
+        String gameWinner = "The game has ended! The winner is " + winnerColor;
+        String gameScores = "The final scores are: Black - " + model.getScores()[0] + " White - " + model.getScores()[1];
+        View.getInstance().updateInfoPane(gameWinner, gameScores);
     }
 
     @Override

@@ -11,6 +11,7 @@ import Games.TicTacToe.TictactoeModels.TictactoeRandomAI;
 import Games.Tile;
 import view.panes.BoardPane;
 import view.panes.InfoPane;
+import view.panes.humanvsai.HumanVsAiBottomPane;
 import view.panes.humanvshuman.HumanVsHumanBottomPane;
 
 public class GameLauncher {
@@ -37,6 +38,8 @@ public class GameLauncher {
         else throw new IllegalArgumentException();
 
         if(gameType == GameType.LOCAL){
+            HumanVsHumanBottomPane humanVsHumanBottomPane = new HumanVsHumanBottomPane(game);
+            View.getInstance().setBottom(humanVsHumanBottomPane);
             if(game == Game.REVERSI) model = new ReversiRandomAI(8);
             else if(game == Game.TICTACTOE) model = new TictactoeRandomAI(3);
             else throw new IllegalArgumentException();
@@ -44,6 +47,8 @@ public class GameLauncher {
             stringTwo = "You are playing locally against another player";
         }
         else if(gameType == GameType.VSAI){
+            HumanVsAiBottomPane humanVsAiBottomPane = new HumanVsAiBottomPane(game, difficulty, player);
+            View.getInstance().setBottom(humanVsAiBottomPane);
             if(game == Game.REVERSI) model = new ReversiMiniMaxAlphaBetaAI(8, difficulty);
             else if(game == Game.TICTACTOE) model = new TictactoeMinimaxAlphaBetaAI(3, difficulty);
             else throw new IllegalArgumentException();
@@ -59,9 +64,6 @@ public class GameLauncher {
         InfoPane infoPane = new InfoPane(stringOne, stringTwo);
         View.getInstance().setInfoPane(infoPane);
         View.getInstance().setTop(infoPane);
-
-        HumanVsHumanBottomPane humanVsHumanBottomPane = new HumanVsHumanBottomPane(game);
-        View.getInstance().setBottom(humanVsHumanBottomPane);
 
         controller.newGame();
         controller.setPlayerOne(player);

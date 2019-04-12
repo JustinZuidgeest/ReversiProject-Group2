@@ -46,6 +46,8 @@ public class GameTypeChoice extends VBox {
     }
 
     private void tournament(Game game){
-        //TODO implement this functionality
+        LoginPane loginPane = new LoginPane(GameType.REMOTE, game);
+        View.getInstance().setCenter(loginPane);
+        View.getInstance().setBottom(new BackToMainButton());
     }
 }

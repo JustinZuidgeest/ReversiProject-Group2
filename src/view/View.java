@@ -69,7 +69,9 @@ public class View extends Application {
     }
 
     public void updateBoard(Tile[][] board){
-        Platform.runLater(() -> boardPane.updateBoard(board));
+        if(boardPane != null) {
+            Platform.runLater(() -> boardPane.updateBoard(board));
+        }
     }
 
     public void updateInfoPane(String infoOne, String infoTwo){ Platform.runLater(() -> infoPane.updateScores(infoOne, infoTwo)); }
@@ -85,8 +87,10 @@ public class View extends Application {
     }
 
     public void moveMade(int x, int y){
+        System.out.println("Canmove: " + canMove);
         if(canMove){
             nextMove = new Point(x, y);
+            System.out.println("Clicked: " + nextMove);
         }
     }
 

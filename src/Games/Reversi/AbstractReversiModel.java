@@ -183,8 +183,7 @@ public abstract class AbstractReversiModel implements Model {
                 whiteScore++;
             }
         }
-        scores[0] = blackScore;
-        scores[1] = whiteScore;
+        scores = new int[]{blackScore, whiteScore};
     }
 
     @Override
@@ -192,7 +191,7 @@ public abstract class AbstractReversiModel implements Model {
         long oldTime = System.currentTimeMillis();
         Point computerMove = nextMove(tile);
         long newTime = System.currentTimeMillis();
-        //System.out.println("AI took " + (newTime - oldTime) + " milliseconds to reach decision");
+        System.out.println("AI took " + (newTime - oldTime) + " milliseconds to reach decision");
         return computerMove;
     }
 

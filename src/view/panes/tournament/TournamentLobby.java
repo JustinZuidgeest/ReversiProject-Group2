@@ -29,8 +29,8 @@ public class TournamentLobby extends VBox {
         playerPane.setAlignment(Pos.CENTER);
         Model model;
 
-        if(game == Game.TICTACTOE) model = new TictactoeMinimaxAlphaBetaAI(3, 1);
-        else if(game == Game.REVERSI) model = new ReversiMiniMaxAlphaBetaAI(8, 1);
+        if(game == Game.TICTACTOE) model = new TictactoeMinimaxAlphaBetaAI(3, 10);
+        else if(game == Game.REVERSI) model = new ReversiMiniMaxAlphaBetaAI(8, 7);
         else throw new IllegalArgumentException();
 
         controller = new AiVsRemoteController(model);
@@ -74,7 +74,6 @@ public class TournamentLobby extends VBox {
     private void fillPlayerList(Game game){
         playerPane.getChildren().clear();
         ArrayList<String> namesList = View.getInstance().getController().getServer().controllerGetPlayerList();
-        System.out.println(namesList);
         Label playerList = new Label("There are " + namesList.size() +" players connected to the lobby:");
         playerPane.getChildren().add(playerList);
         for(String player : namesList){

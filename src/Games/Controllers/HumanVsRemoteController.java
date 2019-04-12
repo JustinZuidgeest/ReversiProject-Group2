@@ -159,7 +159,8 @@ public class HumanVsRemoteController implements Controller {
                     hasWin();
                 }else{
                     View.getInstance().updateBoard(model.getBoard());
-                    View.getInstance().updateScores(model.getScores()[0], model.getScores()[1]);
+                    //todo infopane implementation
+                    //View.getInstance().updateScores(model.getScores()[0], model.getScores()[1]);
                 }
                 return true;
             }else{

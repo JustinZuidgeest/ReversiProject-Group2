@@ -181,13 +181,7 @@ public class ServerCommunicator implements Runnable {
     public void handleCHALLENGEMessage(String line){
         String[] splitString = line.split("\\s+");
 
-        if(!splitString[3].equals("CANCELLED")){
-            String challengeInfo = line.split("CHALLENGE ")[1];
-            //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
-            HashMap<String, String> challengeMap = (HashMap<String, String>) Arrays.asList(trimLine(challengeInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
-            challengeList.add(challengeMap);
-        }
-        else{
+        if(splitString[3].equals("CANCELLED")){
             String challengeInfo = line.split("CANCELED ")[1];
             //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
             HashMap<String, String> challengeMap = (HashMap<String, String>) Arrays.asList(trimLine(challengeInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
@@ -196,6 +190,12 @@ public class ServerCommunicator implements Runnable {
                     challengeList.remove(i);
                 }
             }
+        }
+        else{
+            String challengeInfo = line.split("CHALLENGE ")[1];
+            //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
+            HashMap<String, String> challengeMap = (HashMap<String, String>) Arrays.asList(trimLine(challengeInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
+            challengeList.add(challengeMap);
         }
     }
 

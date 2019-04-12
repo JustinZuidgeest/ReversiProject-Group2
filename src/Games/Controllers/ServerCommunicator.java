@@ -2,7 +2,11 @@ package Games.Controllers;
 
 import Games.Controller;
 import Games.Tile;
+import view.Game;
 import view.View;
+import view.panes.BoardPane;
+import view.panes.InfoPane;
+import view.panes.humanvsremote.HumanVsRemoteBottomPane;
 
 import java.io.*;
 import java.net.Socket;
@@ -105,6 +109,37 @@ public class ServerCommunicator implements Runnable {
         }
     }
 
+    private void startGame(String game){
+        View.getInstance().clearStage();
+        View.getInstance().setNextMove(null);
+        BoardPane boardPane;
+        String stringOne;
+        String stringTwo = "You are playing vs a remote opponent";
+
+        if (game.equals("Tic-tac-toe")){
+            boardPane = new BoardPane(3);
+            View.getInstance().setBoardPane(boardPane);
+            View.getInstance().setCenter(boardPane);
+            stringOne = "Welcome to a new game of TicTacToe!";
+        }
+        else if(game.equals("Reversi")){
+            boardPane = new BoardPane(8);
+            View.getInstance().setBoardPane(boardPane);
+            View.getInstance().setCenter(boardPane);
+            stringOne = "Welcome to a new game of Reversi!";
+        }
+        else throw new IllegalArgumentException();
+
+        InfoPane infoPane = new InfoPane(stringOne, stringTwo);
+        View.getInstance().setInfoPane(infoPane);
+        View.getInstance().setTop(infoPane);
+
+        HumanVsRemoteBottomPane humanVsRemoteBottomPane = new HumanVsRemoteBottomPane();
+        View.getInstance().setBottom(humanVsRemoteBottomPane);
+
+        View.getInstance().getController().newGame();
+    }
+
     public void handleGAMEMessage(String line){
         String[] splitString = line.split("\\s+");
 
@@ -115,10 +150,12 @@ public class ServerCommunicator implements Runnable {
                 HashMap<String, String> matchMap = (HashMap<String, String>) Arrays.asList(trimLine(matchInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 if (matchMap.get("PLAYERTOMOVE").equals(name)) {
                     controller.setPlayerOne(Tile.BLACK);
+                    startGame(matchMap.get("GAMETYPE"));
                     View.getInstance().startController();
                 }
                 else{
                     controller.setPlayerOne(Tile.WHITE);
+                    startGame(matchMap.get("GAMETYPE"));
                     View.getInstance().startController();
                 }
                 break;
@@ -259,9 +296,11 @@ public class ServerCommunicator implements Runnable {
 
     public void forfeit(){ sendToServer("forfeit"); }
 
-    public ArrayList controllerGetPlayerList(){ return playerList;}
+    public ArrayList controllerGetPlayerList(){
+        return playerList;
+    }
 
     public ArrayList controllerGetGameList(){ return gameList;}
 
-    public ArrayList controllerGetChallengeList(){ return challengeList;}
+    public ArrayList controllerGetChallengeList(){return challengeList;}
 }

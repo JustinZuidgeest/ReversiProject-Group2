@@ -56,6 +56,7 @@ public class HumanVsRemoteLobby extends HBox {
 
         refreshButton.setOnAction(e -> {
             Platform.runLater(() ->{
+                View.getInstance().getController().getServer().getPlayerList();
                 fillLeftPane(game);
                 fillRightPane(game);
             });
@@ -76,6 +77,7 @@ public class HumanVsRemoteLobby extends HBox {
             e.printStackTrace();
         }
 
+        View.getInstance().getController().getServer().getPlayerList();
         fillLeftPane(game);
         fillRightPane(game);
 

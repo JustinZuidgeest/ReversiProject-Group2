@@ -143,6 +143,6 @@ public class AiVsRemoteController implements Controller {
 
     @Override
     public ServerCommunicator getServer() {
-        return null;
+        return server;
     }
 }

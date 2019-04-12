@@ -42,6 +42,7 @@ public class TournamentLobby extends VBox {
 
         refreshButton.setOnAction(e -> {
             Platform.runLater(() ->{
+                View.getInstance().getController().getServer().getPlayerList();
                 fillPlayerList(game);
             });
         });
@@ -61,7 +62,10 @@ public class TournamentLobby extends VBox {
             e.printStackTrace();
         }
 
-        Platform.runLater(() -> fillPlayerList(game));
+        Platform.runLater(() ->{
+            View.getInstance().getController().getServer().getPlayerList();
+            fillPlayerList(game);
+        });
     }
 
     private void fillPlayerList(Game game){

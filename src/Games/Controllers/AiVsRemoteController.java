@@ -3,9 +3,9 @@ package Games.Controllers;
 import Games.Controller;
 import Games.Model;
 import Games.Tile;
+import view.View;
 
 import java.awt.Point;
-import java.util.ArrayList;
 
 public class AiVsRemoteController implements Controller {
 
@@ -13,7 +13,6 @@ public class AiVsRemoteController implements Controller {
 
     private boolean die = false;
     private boolean gameOver;
-    private Tile playerToMove;
     private ServerCommunicator server;
     // The human player
     private Tile AIPlayer;
@@ -28,10 +27,13 @@ public class AiVsRemoteController implements Controller {
         this.boardSize = model.getBoardSize();
 
         server.connectToServer();
-        new Thread(server).start();
+        Thread thread = new Thread(server);
+        thread.setDaemon(true);
+        thread.start();
         server.login();
 
         server.getGameList();
+        server.getPlayerList();
 
         newGame();
     }
@@ -49,7 +51,7 @@ public class AiVsRemoteController implements Controller {
         model.resetBoard();
         AIPlayer = null;
         remotePlayer = null;
-        //view.updateBoard(model.getBoard());
+        View.getInstance().updateBoard(model.getBoard());
     }
 
     @Override
@@ -72,11 +74,13 @@ public class AiVsRemoteController implements Controller {
                 // Execute the move, and execute hasWin() function if this was a winning move
                 model.move(x, y, AIPlayer);
                 if(model.hasWinner()){
-                    //view.updateBoard(model.getBoard());
+                    View.getInstance().updateBoard(model.getBoard());
                     hasWin();
                 }else{
-                    //view.updateBoard(model.getBoard());
-                    System.out.println("The scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
+                    View.getInstance().updateBoard(model.getBoard());
+                    String infoString = "It's our turn to move!";
+                    String scoreString = "The scores are: Black - " + model.getScores()[0] + " White - " + model.getScores()[1];
+                    View.getInstance().updateInfoPane(infoString, scoreString);
                 }
                 return true;
             }else{
@@ -106,12 +110,15 @@ public class AiVsRemoteController implements Controller {
         server.sendMove((aiMove.y * boardSize) + aiMove.x);
         model.move(aiMove.x, aiMove.y, remotePlayer);
         if(model.hasWinner()){
-            //view.updateBoard(model.getBoard());
+            View.getInstance().updateBoard(model.getBoard());
             hasWin();
         }else{
-            //view.updateBoard(model.getBoard());
+            View.getInstance().updateBoard(model.getBoard());
             System.out.println("The scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
         }
+        String infoString = "It's the remote player's turn to move!";
+        String scoreString = "The scores are: Black - " + model.getScores()[0] + " White - " + model.getScores()[1];
+        View.getInstance().updateInfoPane(infoString, scoreString);
     }
 
     @Override

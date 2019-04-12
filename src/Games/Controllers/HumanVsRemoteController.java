@@ -21,7 +21,6 @@ public class HumanVsRemoteController implements Controller {
     // The remote player
     private Tile remotePlayer;
     private int boardSize;
-    private boolean waiting;
 
     public HumanVsRemoteController(Model model) {
         this.model = model;

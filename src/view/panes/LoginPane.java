@@ -10,6 +10,7 @@ import view.Game;
 import view.GameType;
 import view.View;
 import view.panes.humanvsremote.HumanVsRemoteLobby;
+import view.panes.tournament.TournamentLobby;
 
 import java.io.*;
 import java.util.Properties;
@@ -51,7 +52,6 @@ public class LoginPane extends HBox {
         host = properties.getProperty("host");
         port = properties.getProperty("port");
         name = properties.getProperty("name");
-        System.out.println("Name is " + name);
 
         try {
             is.close();
@@ -92,7 +92,8 @@ public class LoginPane extends HBox {
                 HumanVsRemoteLobby humanVsRemoteLobby = new HumanVsRemoteLobby(game);
                 View.getInstance().setCenter(humanVsRemoteLobby);
             }else if(gameType == GameType.TOURNAMENT){
-                //TODO
+                TournamentLobby tournamentLobby = new TournamentLobby(game);
+                View.getInstance().setCenter(tournamentLobby);
             }
             else throw new IllegalArgumentException();
 

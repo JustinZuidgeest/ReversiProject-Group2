@@ -84,7 +84,7 @@ public class HumanVsRemoteLobby extends HBox {
 
     private void fillRightPane(Game game){
         rightPane.getChildren().clear();
-        Label acceptChallenges = new Label("Accept Challenges:\n\n");
+        Label acceptChallenges = new Label("Accept Challenges:");
         rightPane.getChildren().add(acceptChallenges);
         ArrayList<Map> challengeList = View.getInstance().getController().getServer().controllerGetChallengeList();
         for(Map map : challengeList){
@@ -99,9 +99,10 @@ public class HumanVsRemoteLobby extends HBox {
 
     private void fillLeftPane(Game game){
         leftPane.getChildren().clear();
-        Label playersOnline = new Label("Invite Players:\n\n");
+        Label playersOnline = new Label("Invite Players:");
         leftPane.getChildren().add(playersOnline);
         ArrayList<String> namesList = View.getInstance().getController().getServer().controllerGetPlayerList();
+        System.out.println(namesList);
         for(String player : namesList){
             Button button = new Button("Invite " + player);
             button.setOnMouseClicked(e -> invitePlayer(player, game));

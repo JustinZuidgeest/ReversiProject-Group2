@@ -26,7 +26,7 @@ public class GameTypeChoice extends VBox {
         vsRemoteButton.setOnAction(e -> vsRemote(game));
         tournamentButton.setOnAction(e -> tournament(game));
 
-        this.getChildren().addAll(vsHumanButton, vsAIButton, vsRemoteButton, backButton);
+        this.getChildren().addAll(vsHumanButton, vsAIButton, vsRemoteButton, tournamentButton, backButton);
     }
 
     private void vsHuman(Game game){
@@ -46,7 +46,7 @@ public class GameTypeChoice extends VBox {
     }
 
     private void tournament(Game game){
-        LoginPane loginPane = new LoginPane(GameType.REMOTE, game);
+        LoginPane loginPane = new LoginPane(GameType.TOURNAMENT, game);
         View.getInstance().setCenter(loginPane);
         View.getInstance().setBottom(new BackToMainButton());
     }

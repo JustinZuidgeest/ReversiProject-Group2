@@ -130,7 +130,8 @@ public class HumanVsHumanController implements Controller {
         }
     }
 
-    private boolean playerTwoMove(int x, int y) {
+    @Override
+    public boolean playerTwoMove(int x, int y) {
         try {
             if(model.checkLegalMove(x, y, playerTwo)){
                 // Execute the move, and execute hasWin() function if this was a winning move
@@ -151,6 +152,7 @@ public class HumanVsHumanController implements Controller {
             return false;
         }
     }
+
 
     @Override
     public void aiMove(){

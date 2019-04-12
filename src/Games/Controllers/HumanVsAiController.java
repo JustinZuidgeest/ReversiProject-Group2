@@ -127,6 +127,12 @@ public class HumanVsAiController implements Controller {
         }
     }
 
+    @Override
+    public boolean playerTwoMove(int x, int y){
+        //No playerTwoMove in controller
+        return false;
+    }
+
     private boolean playerHasMoves(Tile player){
         return (model.getLegalMoves(player).size() != 0);
     }

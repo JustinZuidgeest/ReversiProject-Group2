@@ -29,9 +29,9 @@ public class AiVsRemoteController implements Controller {
         server.connectToServer();
         new Thread(server).start();
         server.login();
+
         server.getGameList();
 
-        server.subscribe(model.getGameName());
         newGame();
     }
 
@@ -85,6 +85,12 @@ public class AiVsRemoteController implements Controller {
             System.out.println("Not a legal move");
             return false;
         }
+    }
+
+    @Override
+    public boolean playerTwoMove(int x, int y){
+        //No playerTwoMove in controller
+        return false;
     }
 
     /**

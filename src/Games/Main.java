@@ -3,7 +3,7 @@ package Games;
 import Games.Controllers.AiVsRemoteController;
 import Games.Controllers.HumanVsAiController;
 import Games.Reversi.ReversiCommandlineView;
-import Games.Reversi.ReversiModels.ReversiMiniMaxAlphaBetaAI;
+import Games.Reversi.ReversiModels.ReversiMinimaxAlphaBetaAI;
 import Games.TicTacToe.TictactoeCommandlineView;
 import Games.TicTacToe.TictactoeModels.TictactoeMinimaxAlphaBetaAI;
 
@@ -28,10 +28,10 @@ public class Main {
         }else{
             // Create the view for Reversi
             view = new ReversiCommandlineView();
-            model = new ReversiMiniMaxAlphaBetaAI(8);
+            model = new ReversiMinimaxAlphaBetaAI(8);
         }
         // Create the controller and pass the view and model
-        controller = new HumanVsAiController(view, model);
+        controller = new AiVsRemoteController(view, model);
         // Start the main game loop
         controller.start();
     }

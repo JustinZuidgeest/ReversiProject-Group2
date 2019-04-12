@@ -1,4 +1,4 @@
-package Games.TicTacToe.TictactoeModels;
+package Games.TicTacToe;
 
 import Games.Model;
 import Games.Tile;

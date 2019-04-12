@@ -71,6 +71,9 @@ public class HumanVsAiController implements Controller {
                 // If the AI player has moves available, hand over the turn to the AI player
                 if(playerHasMoves(computerPlayer)){
                     playerToMove = computerPlayer;
+                    String infoString = "The AI is calculating a move...";
+                    String scoreString = "The scores are: Black - " + model.getScores()[0] + " White - " + model.getScores()[1];
+                    View.getInstance().updateInfoPane(infoString, scoreString);
                 }else System.out.println("Player " + computerPlayer + " has no legal moves, returning turn to " + humanPlayer);
             }
             //If the AI is the next to move
@@ -85,6 +88,9 @@ public class HumanVsAiController implements Controller {
                 if(playerHasMoves(humanPlayer)){
                     playerToMove = humanPlayer;
                     View.getInstance().setCanMove(true);
+                    String infoString = "It's the your turn to move!";
+                    String scoreString = "The scores are: Black - " + model.getScores()[0] + " White - " + model.getScores()[1];
+                    View.getInstance().updateInfoPane(infoString, scoreString);
                 }else System.out.println("Player " + humanPlayer + " has no legal moves, returning turn to " + computerPlayer);
             }
         }
@@ -115,7 +121,6 @@ public class HumanVsAiController implements Controller {
                     hasWin();
                 }else{
                     View.getInstance().updateBoard(model.getBoard());
-                    View.getInstance().updateScores(model.getScores()[0], model.getScores()[1]);
                 }
                 return true;
             }else{
@@ -142,14 +147,16 @@ public class HumanVsAiController implements Controller {
             hasWin();
         }else{
             View.getInstance().updateBoard(model.getBoard());
-            View.getInstance().updateScores(model.getScores()[0], model.getScores()[1]);
+            String infoString = "It's the player's turn to move!";
+            String scoreString = "The scores are: Black - " + model.getScores()[0] + " White - " + model.getScores()[1];
+            View.getInstance().updateInfoPane(infoString, scoreString);
         }
     }
 
     @Override
     public void hasWin() {
         gameOver = true;
-        View.getInstance().showWinScreen(model.getBoardWinner(), model.getScores()[0], model.getScores()[1]);
+        //View.getInstance().showWinScreen(model.getBoardWinner(), model.getScores()[0], model.getScores()[1]);
     }
 
     @Override

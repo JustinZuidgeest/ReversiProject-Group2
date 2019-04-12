@@ -14,7 +14,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import view.panes.BoardPane;
 import view.panes.MainMenu;
-import view.panes.ScorePane;
+import view.panes.InfoPane;
 
 import java.awt.*;
 
@@ -23,7 +23,7 @@ public class View extends Application {
     private static View instance;
     private Stage primaryStage;
     private BoardPane boardPane;
-    private ScorePane scorePane;
+    private InfoPane infoPane;
     private Model model;
     private Controller controller;
     private BorderPane primaryPane;
@@ -72,9 +72,7 @@ public class View extends Application {
         Platform.runLater(() -> boardPane.updateBoard(board));
     }
 
-    public void updateScores(int black, int white){
-        Platform.runLater(() -> scorePane.updateScores(black, white));
-    }
+    public void updateInfoPane(String infoOne, String infoTwo){ Platform.runLater(() -> infoPane.updateScores(infoOne, infoTwo)); }
 
     public void clearStage(){
         Platform.runLater(() -> {
@@ -98,30 +96,18 @@ public class View extends Application {
         thread.start();
     }
 
-    public void showWinScreen(Tile winner, int black, int white){
-        Platform.runLater(() -> {
-            HBox scoreBox = new HBox();
-            scoreBox.setAlignment(Pos.CENTER);
-            Text winnerText = new Text();
-            String winnerString = (winner == Tile.BLACK) ? "Black" : (winner == Tile.WHITE) ? "White" : "Nobody";
-            winnerText.setText("The game has ended! The winner was " + winnerString + ". The final score was: Black - " + black + " vs White - " + white);
-            scoreBox.getChildren().add(winnerText);
-            setTop(scoreBox);
-        });
-    }
-
     public void setCanMove(boolean canMove) { this.canMove = canMove; }
 
     public Point getNextMove() { return nextMove; }
 
     public void setNextMove(Point nextMove) { this.nextMove = nextMove; }
 
-    public ScorePane getScorePane() {
-        return scorePane;
+    public InfoPane getInfoPane() {
+        return infoPane;
     }
 
-    public void setScorePane(ScorePane scorePane) {
-        this.scorePane = scorePane;
+    public void setInfoPane(InfoPane infoPane) {
+        this.infoPane = infoPane;
     }
 
     public BoardPane getBoardPane() {

@@ -117,8 +117,10 @@ public class HumanVsHumanController implements Controller {
                     View.getInstance().updateBoard(model.getBoard());
                     hasWin();
                 }else{
+                    String infoString = "It's Whites turn to move!";
+                    String scoreString = "The scores are: Black - " + model.getScores()[0] + " White - " + model.getScores()[1];
                     View.getInstance().updateBoard(model.getBoard());
-                    View.getInstance().updateScores(model.getScores()[0], model.getScores()[1]);
+                    View.getInstance().updateInfoPane(infoString, scoreString);
                 }
                 return true;
             }else{
@@ -139,8 +141,10 @@ public class HumanVsHumanController implements Controller {
                     View.getInstance().updateBoard(model.getBoard());
                     hasWin();
                 }else{
+                    String infoString = "It's Black's turn to move!";
+                    String scoreString = "The scores are: Black - " + model.getScores()[0] + " White - " + model.getScores()[1];
                     View.getInstance().updateBoard(model.getBoard());
-                    View.getInstance().updateScores(model.getScores()[0], model.getScores()[1]);
+                    View.getInstance().updateInfoPane(infoString, scoreString);
                 }
                 return true;
             }else{
@@ -164,7 +168,11 @@ public class HumanVsHumanController implements Controller {
     @Override
     public void hasWin() {
         gameOver = true;
-        View.getInstance().showWinScreen(model.getBoardWinner(), model.getScores()[0], model.getScores()[1]);
+        Tile winner = model.getBoardWinner();
+        String winnerColor = (winner == Tile.BLACK) ? "Black" : (winner == Tile.WHITE) ? "White" : "Nobody";
+        String gameWinner = "The game has ended! The winner is " + winnerColor;
+        String gameScores = "The final scores are: Black - " + model.getScores()[0] + " White - " + model.getScores()[1];
+        View.getInstance().updateInfoPane(gameWinner, gameScores);
     }
 
     @Override

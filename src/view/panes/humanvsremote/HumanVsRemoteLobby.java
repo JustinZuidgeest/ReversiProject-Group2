@@ -35,8 +35,10 @@ public class HumanVsRemoteLobby extends HBox {
 
         leftPane = new VBox();
         leftPane.setAlignment(Pos.TOP_LEFT);
+        leftPane.setSpacing(5);
         rightPane = new VBox();
         rightPane.setAlignment(Pos.TOP_RIGHT);
+        rightPane.setSpacing(5);
 
         Model model;
 

@@ -18,12 +18,15 @@ import view.panes.MainMenu;
 import java.util.ArrayList;
 
 public class TournamentLobby extends VBox {
+    private VBox playerPane;
     private Controller controller;
 
     public TournamentLobby(Game game) {
-        this.setAlignment(Pos.CENTER);
         this.setSpacing(30);
 
+        playerPane = new VBox();
+        playerPane.setSpacing(3);
+        playerPane.setAlignment(Pos.CENTER);
         Model model;
 
         if(game == Game.TICTACTOE) model = new TictactoeMinimaxAlphaBetaAI(3, 1);
@@ -62,21 +65,21 @@ public class TournamentLobby extends VBox {
             e.printStackTrace();
         }
 
-        Platform.runLater(() ->{
-            View.getInstance().getController().getServer().getPlayerList();
-            fillPlayerList(game);
-        });
+        View.getInstance().getController().getServer().getPlayerList();
+        fillPlayerList(game);
+
+        this.getChildren().add(playerPane);
     }
 
     private void fillPlayerList(Game game){
-        this.getChildren().clear();
+        playerPane.getChildren().clear();
         ArrayList<String> namesList = View.getInstance().getController().getServer().controllerGetPlayerList();
         System.out.println(namesList);
         Label playerList = new Label("There are " + namesList.size() +" players connected to the lobby:");
-        this.getChildren().add(playerList);
+        playerPane.getChildren().add(playerList);
         for(String player : namesList){
             Label playerLabel = new Label(player);
-            this.getChildren().add(playerLabel);
+            playerPane.getChildren().add(playerLabel);
         }
     }
 }

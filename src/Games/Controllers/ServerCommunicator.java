@@ -101,6 +101,7 @@ public class ServerCommunicator implements Runnable {
             case "PLAYERLIST":
                 String players = trimLine(line.split("PLAYERLIST ")[1]);
                 String[] player = players.split(",");
+                playerList = new ArrayList<>();
                 for(String s: player){playerList.add(s);}
                 break;
             case "GAME":

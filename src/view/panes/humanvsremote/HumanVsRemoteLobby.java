@@ -35,8 +35,10 @@ public class HumanVsRemoteLobby extends HBox {
 
         leftPane = new VBox();
         leftPane.setAlignment(Pos.TOP_LEFT);
+        leftPane.setSpacing(5);
         rightPane = new VBox();
         rightPane.setAlignment(Pos.TOP_RIGHT);
+        rightPane.setSpacing(5);
 
         Model model;
 
@@ -56,6 +58,7 @@ public class HumanVsRemoteLobby extends HBox {
 
         refreshButton.setOnAction(e -> {
             Platform.runLater(() ->{
+                View.getInstance().getController().getServer().getPlayerList();
                 fillLeftPane(game);
                 fillRightPane(game);
             });
@@ -76,6 +79,7 @@ public class HumanVsRemoteLobby extends HBox {
             e.printStackTrace();
         }
 
+        View.getInstance().getController().getServer().getPlayerList();
         fillLeftPane(game);
         fillRightPane(game);
 

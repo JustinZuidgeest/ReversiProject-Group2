@@ -1,4 +1,4 @@
-package Games.controllers;
+package Games.Controllers;
 
 import Games.Controller;
 import Games.Tile;
@@ -29,7 +29,7 @@ public class ServerCommunicator implements Runnable {
         this.controller = controller;
 
         Properties properties = new Properties();
-        String fileName = "src/Games/controllers/settings.conf";
+        String fileName = "src/Games/Controllers/settings.conf";
         InputStream is = null;
         try {
             is = new FileInputStream(fileName);

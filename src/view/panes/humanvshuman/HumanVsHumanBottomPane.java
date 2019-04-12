@@ -3,7 +3,7 @@ package view.panes.humanvshuman;
 import Games.Controller;
 import Games.Model;
 import Games.Tile;
-import Games.controllers.HumanVsHumanController;
+import Games.Controllers.HumanVsHumanController;
 import Games.Reversi.ReversiModels.ReversiRandomAI;
 import Games.TicTacToe.TictactoeModels.TictactoeRandomAI;
 import javafx.geometry.Pos;

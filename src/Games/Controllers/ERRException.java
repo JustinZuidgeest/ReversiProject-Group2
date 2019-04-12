@@ -1,4 +1,4 @@
-package Games.controllers;
+package Games.Controllers;
 
 public class ERRException extends Exception{
     private String message;

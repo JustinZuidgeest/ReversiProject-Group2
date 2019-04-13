@@ -40,7 +40,6 @@ public abstract class AbstractReversiModel implements Model {
         Point[] tiles = new Point[]{new Point(3, 3), new Point(3, 4), new Point(4, 3), new Point(4, 4)};
         tilesOnBoard.addAll(Arrays.asList(tiles));
         boardWinner = null;
-        scores = new int[]{2, 2};
         updateScores();
         updateLegalMoves();
     }

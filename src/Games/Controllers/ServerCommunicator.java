@@ -179,16 +179,24 @@ public class ServerCommunicator implements Runnable {
                 HashMap<String, String> moveMap = (HashMap<String, String>) Arrays.asList(trimLine(moveInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 if(controller instanceof AiVsRemoteController) {
                     if (!moveMap.get("PLAYER").equals(name)) {
-                        int x = Integer.valueOf(moveMap.get("MOVE")) % controller.getBoardSize();
-                        int y = Math.floorDiv(Integer.valueOf(moveMap.get("MOVE")), controller.getBoardSize());
-                        controller.playerMove(x, y);
+                        try {
+                            int x = Integer.valueOf(moveMap.get("MOVE")) % controller.getBoardSize();
+                            int y = Math.floorDiv(Integer.valueOf(moveMap.get("MOVE")), controller.getBoardSize());
+                            controller.playerMove(x, y);
+                        }catch (NumberFormatException e){
+                            e.printStackTrace();
+                        }
                     }
                 }
                 else if (controller instanceof HumanVsRemoteController){
                     if (!moveMap.get("PLAYER").equals(name)) {
-                        int x = Integer.valueOf(moveMap.get("MOVE")) % controller.getBoardSize();
-                        int y = Math.floorDiv(Integer.valueOf(moveMap.get("MOVE")), controller.getBoardSize());
-                        controller.playerTwoMove(x, y);
+                        try {
+                            int x = Integer.valueOf(moveMap.get("MOVE")) % controller.getBoardSize();
+                            int y = Math.floorDiv(Integer.valueOf(moveMap.get("MOVE")), controller.getBoardSize());
+                            controller.playerTwoMove(x, y);
+                        }catch (NumberFormatException e){
+                            e.printStackTrace();
+                        }
                     }
                 }
                 break;
@@ -217,7 +225,7 @@ public class ServerCommunicator implements Runnable {
                 //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
                 HashMap<String, String> drawMap = (HashMap<String, String>) Arrays.asList(trimLine(drawInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 //TODO link to GUI display draw message
-                controller.displayGameResult("DRAW", drawMap.get("COMMENT"));
+                controller.displayGameResult("DRAW", "");
                 Platform.runLater(()-> {
                     humanVsRemoteBottomPane.getChildren().remove(1);
                 });
@@ -261,7 +269,7 @@ public class ServerCommunicator implements Runnable {
         lineToTrim = lineToTrim.replace("{", "");
         lineToTrim = lineToTrim.replace("}", "");
         lineToTrim = lineToTrim.replace(" ", "");
-        lineToTrim = lineToTrim.replace("\"\"", "empty");
+        lineToTrim = lineToTrim.replace("\"\"", " ");
         lineToTrim = lineToTrim.replace("\"", "");
         lineToTrim = lineToTrim.replace("[", "");
         lineToTrim = lineToTrim.replace("]", "");

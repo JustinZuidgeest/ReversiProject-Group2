@@ -27,7 +27,6 @@ public class View extends Application {
     private Model model;
     private Controller controller;
     private BorderPane primaryPane;
-    private Scene primaryScene;
     private boolean canMove;
     private Point nextMove;
 
@@ -36,7 +35,7 @@ public class View extends Application {
         instance = this;
         this.primaryStage = primaryStage;
         primaryPane = new BorderPane();
-        primaryScene = new Scene(primaryPane);
+        Scene primaryScene = new Scene(primaryPane);
 
         // Start the application at the Main Menu
         setCenter(new MainMenu());
@@ -50,14 +49,6 @@ public class View extends Application {
 
     public void setCenter(Node node){
         Platform.runLater(() -> primaryPane.setCenter(node));
-    }
-
-    public void setRight(Node node){
-        Platform.runLater(() -> primaryPane.setRight(node));
-    }
-
-    public void setLeft(Node node){
-        Platform.runLater(() -> primaryPane.setLeft(node));
     }
 
     public void setTop(Node node){
@@ -105,16 +96,8 @@ public class View extends Application {
 
     public void setNextMove(Point nextMove) { this.nextMove = nextMove; }
 
-    public InfoPane getInfoPane() {
-        return infoPane;
-    }
-
     public void setInfoPane(InfoPane infoPane) {
         this.infoPane = infoPane;
-    }
-
-    public BoardPane getBoardPane() {
-        return boardPane;
     }
 
     public void setBoardPane(BoardPane boardPane) {

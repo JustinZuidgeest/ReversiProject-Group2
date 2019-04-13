@@ -11,7 +11,8 @@ public abstract class AbstractReversiModel implements Model {
     private Tile[][] board;
     private int boardSize;
     private Tile boardWinner = null;
-    private int[] scores;
+    private int whiteScore;
+    private int blackScore;
     private ArrayList<Point> tilesOnBoard;
     private ArrayList<Point> whiteLegalMoves;
     private ArrayList<Point> blackLegalMoves;
@@ -21,7 +22,6 @@ public abstract class AbstractReversiModel implements Model {
         this.boardSize = boardSize;
         board = new Tile[boardSize][boardSize];
         tilesOnBoard = new ArrayList<>();
-        scores = new int[2];
         whiteLegalMoves = blackLegalMoves = new ArrayList<>();
         // Make an array with the coordinates for every direction from this tile
         // Up, down, left, right, upper right, lower right, lower left, upper left
@@ -160,11 +160,11 @@ public abstract class AbstractReversiModel implements Model {
     @Override
     public Tile checkWin(int x, int y, Tile[][] board) {
         if(getLegalMoves(Tile.WHITE).size() == 0 && getLegalMoves(Tile.BLACK).size() == 0){
-            if(scores[0] > scores[1]){
+            if(whiteScore > blackScore){
                 return Tile.WHITE;
-            }else if(scores[0] < scores[1]){
+            }else if(whiteScore < blackScore){
                 return Tile.BLACK;
-            }else if (scores[0] == scores[1]){
+            }else if (blackScore == whiteScore){
                 return Tile.EMPTY;
             }
         }
@@ -173,16 +173,17 @@ public abstract class AbstractReversiModel implements Model {
 
     @Override
     public void updateScores() {
-        int blackScore = 0;
-        int whiteScore = 0;
+        int tempblackScore = 0;
+        int tempwhiteScore = 0;
         for(Point tile:tilesOnBoard){
             if(board[tile.y][tile.x] == Tile.BLACK){
-                blackScore++;
+                tempblackScore++;
             }else if(board[tile.y][tile.x] == Tile.WHITE){
-                whiteScore++;
+                tempwhiteScore++;
             }
         }
-        scores = new int[]{blackScore, whiteScore};
+        whiteScore = tempwhiteScore;
+        blackScore = tempblackScore;
     }
 
     @Override
@@ -220,7 +221,7 @@ public abstract class AbstractReversiModel implements Model {
     }
 
     @Override
-    public int[] getScores() { return scores; }
+    public int[] getScores() { return new int[]{blackScore, whiteScore}; }
 
     @Override
     public ArrayList<Point> getLegalMoves(Tile player) {

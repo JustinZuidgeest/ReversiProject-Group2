@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import view.Game;
 import view.GameType;
@@ -15,26 +16,47 @@ import view.panes.tournament.TournamentLobby;
 import java.io.*;
 import java.util.Properties;
 
-public class LoginPane extends HBox {
+public class LoginPane extends VBox {
 
-    private TextField textField;
+    private TextField nameField;
+    private TextField hostField;
+    private TextField portField;
     private Properties properties;
     private Text usernameText;
+    private Text hostText;
+    private Text portText;
     private FileOutputStream os = null;
     String fileName = "src/Games/Controllers/settings.conf";
-    private String host;
-    private String port;
-    private String name;
 
     public LoginPane(GameType gameType, Game game) {
         this.setAlignment(Pos.CENTER);
         this.setSpacing(30);
 
-        usernameText = new Text("Enter your username:");
-        textField = new TextField();
-        Button setName = new Button("Login");
+        HBox usernameBox = new HBox();
+        usernameBox.setAlignment(Pos.CENTER);
+        usernameBox.setSpacing(30);
+        HBox hostBox = new HBox();
+        hostBox.setAlignment(Pos.CENTER);
+        hostBox.setSpacing(30);
+        HBox portBox = new HBox();
+        portBox.setAlignment(Pos.CENTER);
+        portBox.setSpacing(30);
 
-        setName.setOnAction(e -> loginClicked(gameType, game));
+        usernameText = new Text("Enter your username:");
+        hostText = new Text("Enter the host ip:");
+        portText = new Text("Enter the host port:");
+
+        nameField = new TextField();
+        hostField = new TextField();
+        portField = new TextField();
+
+        usernameBox.getChildren().addAll(usernameText, nameField);
+        hostBox.getChildren().addAll(hostText, hostField);
+        portBox.getChildren().addAll(portText, portField);
+
+        Button loginButton = new Button("Login");
+
+        loginButton.setOnAction(e -> loginClicked(gameType, game));
 
         properties = new Properties();
         InputStream is = null;
@@ -49,9 +71,9 @@ public class LoginPane extends HBox {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        host = properties.getProperty("host");
-        port = properties.getProperty("port");
-        name = properties.getProperty("name");
+        String host = properties.getProperty("host");
+        String port = properties.getProperty("port");
+        String name = properties.getProperty("name");
 
         try {
             is.close();
@@ -59,46 +81,58 @@ public class LoginPane extends HBox {
             e.printStackTrace();
         }
 
-        textField.setText(name);
+        nameField.setText(name);
+        hostField.setText(host);
+        portField.setText(port);
 
-        this.getChildren().addAll(usernameText, textField, setName);
+        this.getChildren().addAll(usernameBox, hostBox, portBox, loginButton);
     }
 
     private void loginClicked(GameType gameType, Game game){
-        String fieldString = textField.getText();
-        if (!fieldString.isEmpty()) {
-            try {
-                os = new FileOutputStream(fileName);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            System.out.println("Setting name to " + fieldString);
-            properties.setProperty("name", fieldString);
-            properties.setProperty("host", host);
-            properties.setProperty("port", port);
+        String nameString = nameField.getText();
+        String hostString = hostField.getText();
+        String portString = portField.getText();
 
-            try {
-                properties.store(os, null);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (!nameString.isEmpty()) {
+            if(!hostString.isEmpty()){
+                if(!portString.isEmpty()){
+                    try {
+                        os = new FileOutputStream(fileName);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
 
-            try {
-                os.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            if(gameType == GameType.REMOTE){
-                HumanVsRemoteLobby humanVsRemoteLobby = new HumanVsRemoteLobby(game, fieldString);
-                View.getInstance().setCenter(humanVsRemoteLobby);
-            }else if(gameType == GameType.TOURNAMENT){
-                TournamentLobby tournamentLobby = new TournamentLobby(game);
-                View.getInstance().setCenter(tournamentLobby);
-            }
-            else throw new IllegalArgumentException();
+                    properties.setProperty("name", nameString);
+                    properties.setProperty("host", hostString);
+                    properties.setProperty("port", portString);
 
+                    try {
+                        properties.store(os, null);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        os.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if(gameType == GameType.REMOTE){
+                        HumanVsRemoteLobby humanVsRemoteLobby = new HumanVsRemoteLobby(game, nameString);
+                        View.getInstance().setCenter(humanVsRemoteLobby);
+                    }else if(gameType == GameType.TOURNAMENT){
+                        TournamentLobby tournamentLobby = new TournamentLobby(game);
+                        View.getInstance().setCenter(tournamentLobby);
+                    }
+                    else throw new IllegalArgumentException();
+                } else {
+                    Platform.runLater(() -> portText.setText("Port field can't be empty"));
+                }
+            } else {
+                Platform.runLater(() -> hostText.setText("Host field can't be empty"));
+            }
         } else {
-            Platform.runLater(() -> usernameText.setText("Username can't be empty"));
+            Platform.runLater(() -> usernameText.setText("Username field can't be empty"));
         }
     }
 }

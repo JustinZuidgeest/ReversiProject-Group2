@@ -6,7 +6,6 @@ import Games.Tile;
 import view.View;
 
 import java.awt.Point;
-import java.util.ArrayList;
 
 public class HumanVsRemoteController implements Controller {
 
@@ -70,6 +69,8 @@ public class HumanVsRemoteController implements Controller {
                 e.printStackTrace();
             }
 
+            System.out.println("Player to move: " + playerToMove + ". Move clicked: " + playerMove);
+
             // If the first player is the next to move and has clicked a move
             if (playerToMove == humanPlayer && playerMove != null) {
                 // Check if the player clicked a correct move, allow him to click another move if it wasn't
@@ -101,7 +102,6 @@ public class HumanVsRemoteController implements Controller {
      */
     @Override
     public void newGame() {
-        View.getInstance().setCanMove(false);
         model.resetBoard();
         try {
             Thread.sleep(10);

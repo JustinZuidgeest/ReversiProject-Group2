@@ -50,6 +50,7 @@ public class HumanVsRemoteBottomPane extends HBox {
             }
             String name = properties.getProperty("name");
             View.getInstance().getController().getServer().logout();
+            View.getInstance().killController();
             View.getInstance().setTop(null);
             HumanVsRemoteLobby humanVsRemoteLobby = new HumanVsRemoteLobby(game, name);
             View.getInstance().setCenter(humanVsRemoteLobby);

@@ -8,12 +8,15 @@ import java.util.ArrayList;
 
 public class TictactoeMinimaxAlphaBetaAI extends AbstractTictactoeModel {
 
-    private int initialDepth = 9;
+    private int initialDepth;
     private int evaluatedPossibilities;
     private Tile computerPlayer;
     private Tile opponentPlayer;
 
-    public TictactoeMinimaxAlphaBetaAI(int boardSize) { super(boardSize); }
+    public TictactoeMinimaxAlphaBetaAI(int boardSize, int initialDepth) {
+        super(boardSize);
+        this.initialDepth = initialDepth;
+    }
 
     @Override
     public Point nextMove(Tile tile) {
@@ -21,8 +24,8 @@ public class TictactoeMinimaxAlphaBetaAI extends AbstractTictactoeModel {
         computerPlayer = tile;
         opponentPlayer = (computerPlayer == Tile.BLACK) ? Tile.WHITE : Tile.BLACK;
         int[] result = miniMax(initialDepth, computerPlayer, Integer.MIN_VALUE,Integer.MAX_VALUE);
-        System.out.println("Minimax AI with depth " + initialDepth + " with Alpha-beta pruning wants to move to x:" + result[1] + ", y: " + result[2]);
-        System.out.println("AI evaluated " + evaluatedPossibilities + " possibilities to reach this conclusion");
+        //System.out.println("Minimax AI with depth " + initialDepth + " with Alpha-beta pruning wants to move to x:" + result[1] + ", y: " + result[2]);
+        //System.out.println("AI evaluated " + evaluatedPossibilities + " possibilities to reach this conclusion");
         return new Point(result[1], result[2]);
     }
 

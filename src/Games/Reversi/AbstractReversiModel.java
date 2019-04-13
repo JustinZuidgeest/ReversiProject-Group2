@@ -183,8 +183,7 @@ public abstract class AbstractReversiModel implements Model {
                 whiteScore++;
             }
         }
-        scores[0] = whiteScore;
-        scores[1] = blackScore;
+        scores = new int[]{blackScore, whiteScore};
     }
 
     @Override

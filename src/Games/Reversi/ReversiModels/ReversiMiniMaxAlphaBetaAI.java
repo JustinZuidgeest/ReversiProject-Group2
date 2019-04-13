@@ -6,9 +6,9 @@ import Games.Tile;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class ReversiMinimaxAlphaBetaAI extends AbstractReversiModel {
+public class ReversiMiniMaxAlphaBetaAI extends AbstractReversiModel {
 
-    private int initialDepth = 9;
+    private int initialDepth;
     private int evaluatedPossibilities;
     private Tile computerPlayer;
     private Tile opponentPlayer;
@@ -26,7 +26,10 @@ public class ReversiMinimaxAlphaBetaAI extends AbstractReversiModel {
             {99,  -8,  8,  6,  6,  8,  -8, 99},
     };
 
-    public ReversiMinimaxAlphaBetaAI(int boardSize) { super(boardSize); }
+    public ReversiMiniMaxAlphaBetaAI(int boardSize, int initialDepth) {
+        super(boardSize);
+        this.initialDepth = initialDepth;
+    }
 
     @Override
     public Point nextMove(Tile player) {

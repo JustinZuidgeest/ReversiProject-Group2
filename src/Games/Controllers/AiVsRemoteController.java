@@ -3,17 +3,14 @@ package Games.Controllers;
 import Games.Controller;
 import Games.Model;
 import Games.Tile;
-import Games.View;
+import view.View;
 
 import java.awt.Point;
 
 public class AiVsRemoteController implements Controller {
 
-    private View view;
     private Model model;
 
-    private boolean gameOver;
-    private Tile playerToMove;
     private ServerCommunicator server;
     // The human player
     private Tile AIPlayer;
@@ -21,24 +18,26 @@ public class AiVsRemoteController implements Controller {
     private Tile remotePlayer;
     private int boardSize;
 
-    public AiVsRemoteController(View view, Model model) {
-        this.view = view;
+    public AiVsRemoteController(Model model) {
         this.model = model;
         this.server = new ServerCommunicator(this);
 
         this.boardSize = model.getBoardSize();
 
         server.connectToServer();
-        new Thread(server).start();
+        Thread thread = new Thread(server);
+        thread.setDaemon(true);
+        thread.start();
         server.login();
-        server.getGameList();
 
-        server.subscribe(model.getGameName());
+        server.getGameList();
+        server.getPlayerList();
+
         newGame();
     }
 
     @Override
-    public void start(){
+    public void run(){
         //null
     }
 
@@ -47,10 +46,14 @@ public class AiVsRemoteController implements Controller {
      */
     @Override
     public void newGame() {
+        View.getInstance().setCanMove(false);
         model.resetBoard();
-        AIPlayer = null;
-        remotePlayer = null;
-        view.updateBoard(model.getBoard());
+        try {
+            Thread.sleep(10);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        View.getInstance().updateBoard(model.getBoard());
     }
 
     @Override
@@ -69,15 +72,18 @@ public class AiVsRemoteController implements Controller {
     @Override
     public boolean playerMove(int x, int y) {
         try {
-            if(model.checkLegalMove(x, y, AIPlayer)){
+            System.out.println("Remote playermove x: " + x + ", y: " + y);
+            if(model.checkLegalMove(x, y, remotePlayer)){
                 // Execute the move, and execute hasWin() function if this was a winning move
-                model.move(x, y, AIPlayer);
+                model.move(x, y, remotePlayer);
                 if(model.hasWinner()){
-                    view.updateBoard(model.getBoard());
+                    View.getInstance().updateBoard(model.getBoard());
                     hasWin();
                 }else{
-                    view.updateBoard(model.getBoard());
-                    System.out.println("The scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
+                    View.getInstance().updateBoard(model.getBoard());
+                    String infoString = "It's our turn to move!";
+                    String scoreString = "The scores are: Black - " + model.getScores()[0] + " White - " + model.getScores()[1];
+                    View.getInstance().updateInfoPane(infoString, scoreString);
                 }
                 return true;
             }else{
@@ -89,6 +95,12 @@ public class AiVsRemoteController implements Controller {
         }
     }
 
+    @Override
+    public boolean playerTwoMove(int x, int y){
+        //No playerTwoMove in controller
+        return false;
+    }
+
     /**
      * Makes a move for the computer player. Generates a computer move based on the current AI initialized in the model
      * and executes the move. Checks if this move was a winning move, and ends the game if it was.
@@ -96,17 +108,21 @@ public class AiVsRemoteController implements Controller {
     @Override
     public void aiMove() {
         // Generate a move made by the computer
-        Point aiMove = model.computerMove(remotePlayer);
+        Point aiMove = model.computerMove(AIPlayer);
+        System.out.println("Our AI moves x: " + aiMove.x + ", y: " + aiMove.y);
         // Execute the move, and execute hasWin() function if this was a winning move
         server.sendMove((aiMove.y * boardSize) + aiMove.x);
-        model.move(aiMove.x, aiMove.y, remotePlayer);
+        model.move(aiMove.x, aiMove.y, AIPlayer);
         if(model.hasWinner()){
-            view.updateBoard(model.getBoard());
+            View.getInstance().updateBoard(model.getBoard());
             hasWin();
         }else{
-            view.updateBoard(model.getBoard());
+            View.getInstance().updateBoard(model.getBoard());
             System.out.println("The scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
         }
+        String infoString = "It's the remote player's turn to move!";
+        String scoreString = "The scores are: Black - " + model.getScores()[0] + " White - " + model.getScores()[1];
+        View.getInstance().updateInfoPane(infoString, scoreString);
     }
 
     @Override
@@ -119,8 +135,23 @@ public class AiVsRemoteController implements Controller {
      */
     @Override
     public void hasWin() {
-        view.printWinner(model.getBoardWinner());
+        //view.printWinner(model.getBoardWinner());
         System.out.println("The final scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
-        gameOver = true;
+    }
+
+    @Override
+    public void killThread(){}
+
+    @Override
+    public ServerCommunicator getServer() {
+        return server;
+    }
+
+    @Override
+    public void displayGameResult(String result, String details) {
+        String infoString = (result.equals("WIN")) ? "You Have won" : (result.equals("LOSS")) ? "You have lost" : "It's a draw";
+        infoString = infoString + " " + details;
+        String scoreString = "The scores are: Black - " + model.getScores()[0] + " White - " + model.getScores()[1];
+        View.getInstance().updateInfoPane(infoString, scoreString);
     }
 }

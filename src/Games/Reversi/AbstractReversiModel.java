@@ -13,7 +13,6 @@ public abstract class AbstractReversiModel implements Model {
     private Tile boardWinner = null;
     private int whiteScore;
     private int blackScore;
-    private ArrayList<Point> tilesOnBoard;
     private ArrayList<Point> whiteLegalMoves;
     private ArrayList<Point> blackLegalMoves;
     private int[][] allDirections;
@@ -21,7 +20,6 @@ public abstract class AbstractReversiModel implements Model {
     public AbstractReversiModel(int boardSize) {
         this.boardSize = boardSize;
         board = new Tile[boardSize][boardSize];
-        tilesOnBoard = new ArrayList<>();
         whiteLegalMoves = blackLegalMoves = new ArrayList<>();
         // Make an array with the coordinates for every direction from this tile
         // Up, down, left, right, upper right, lower right, lower left, upper left
@@ -38,7 +36,6 @@ public abstract class AbstractReversiModel implements Model {
         board[3][3] = board[4][4] = Tile.WHITE;
         board[3][4] = board[4][3] = Tile.BLACK;
         Point[] tiles = new Point[]{new Point(3, 3), new Point(3, 4), new Point(4, 3), new Point(4, 4)};
-        tilesOnBoard.addAll(Arrays.asList(tiles));
         boardWinner = null;
         updateScores();
         updateLegalMoves();
@@ -48,8 +45,6 @@ public abstract class AbstractReversiModel implements Model {
     public void move(int x, int y, Tile player) {
         // Set the tile to the player color
         board[y][x] = player;
-        // Add this tile to the list of tiles on the board
-        tilesOnBoard.add(new Point(x, y));
         // Flip all tiles
         flipTiles(x, y, player, board);
         // Update the legal moves for both players
@@ -173,17 +168,17 @@ public abstract class AbstractReversiModel implements Model {
 
     @Override
     public void updateScores() {
-        int tempblackScore = 0;
-        int tempwhiteScore = 0;
-        for(Point tile:tilesOnBoard){
-            if(board[tile.y][tile.x] == Tile.BLACK){
-                tempblackScore++;
-            }else if(board[tile.y][tile.x] == Tile.WHITE){
-                tempwhiteScore++;
+        this.whiteScore = 0;
+        this.blackScore = 0;
+        for(int i=0;i<boardSize;i++){
+            for(int j=0;j<boardSize;j++){
+                if(board[i][j] == Tile.BLACK){
+                    this.blackScore++;
+                }else if(board[i][j] == Tile.WHITE){
+                    this.whiteScore++;
+                }
             }
         }
-        whiteScore = tempwhiteScore;
-        blackScore = tempblackScore;
     }
 
     @Override

@@ -33,7 +33,7 @@ public class TournamentLobby extends VBox {
             model = new TictactoeMinimaxAlphaBetaAI(3, 10);
             System.out.println("Tictactoe");
         }
-        else if(game == Game.REVERSI) model = new ReversiMiniMaxAlphaBetaAI(8, 8);
+        else if(game == Game.REVERSI) model = new ReversiMiniMaxAlphaBetaAI(8, 7);
         else throw new IllegalArgumentException();
 
         controller = new AiVsRemoteController(model);

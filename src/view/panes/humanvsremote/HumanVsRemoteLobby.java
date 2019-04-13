@@ -108,7 +108,6 @@ public class HumanVsRemoteLobby extends HBox {
         Label playersOnline = new Label("Invite Players:");
         leftPane.getChildren().add(playersOnline);
         ArrayList<String> namesList = View.getInstance().getController().getServer().controllerGetPlayerList();
-        System.out.println(namesList);
         for(String player : namesList){
             if(!player.equals(ownName)){
                 Button button = new Button("Invite " + player);

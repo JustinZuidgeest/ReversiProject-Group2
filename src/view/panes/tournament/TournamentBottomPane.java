@@ -1,4 +1,4 @@
-package view.panes.humanvsremote;
+package view.panes.tournament;
 
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -8,17 +8,11 @@ import view.Game;
 import view.View;
 import view.panes.MainMenu;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
-public class HumanVsRemoteBottomPane extends HBox {
+public class TournamentBottomPane extends HBox {
 
     private Button lobbyButton;
 
-    public HumanVsRemoteBottomPane(Game game) {
+    public TournamentBottomPane(Game game) {
         this.setAlignment(Pos.CENTER);
         this.setSpacing(30);
 
@@ -35,24 +29,10 @@ public class HumanVsRemoteBottomPane extends HBox {
         });
 
         lobbyButton.setOnAction(e -> {
-            Properties properties = new Properties();
-            InputStream is = null;
-            try {
-                is = new FileInputStream("src/Games/Controllers/settings.conf");
-
-            } catch (FileNotFoundException err) {
-                err.printStackTrace();
-            }
-            try {
-                properties.load(is);
-            } catch (IOException err) {
-                err.printStackTrace();
-            }
-            String name = properties.getProperty("name");
             View.getInstance().getController().getServer().logout();
             View.getInstance().setTop(null);
-            HumanVsRemoteLobby humanVsRemoteLobby = new HumanVsRemoteLobby(game, name);
-            View.getInstance().setCenter(humanVsRemoteLobby);
+            TournamentLobby tournamentLobby = new TournamentLobby(game);
+            View.getInstance().setCenter(tournamentLobby);
         });
 
         forfeitButton.setOnAction(e -> {

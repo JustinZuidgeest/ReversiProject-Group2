@@ -49,7 +49,7 @@ public class AiVsRemoteController implements Controller {
         View.getInstance().setCanMove(false);
         model.resetBoard();
         try {
-            Thread.sleep(50);
+            Thread.sleep(10);
         }catch (InterruptedException e){
             e.printStackTrace();
         }

@@ -16,7 +16,7 @@ import view.panes.humanvshuman.HumanVsHumanBottomPane;
 
 public class GameLauncher {
 
-    public void startGame(Game game, GameType gameType, Tile player, int difficulty){
+    public void startGame(Game game, GameType gameType, Tile player, int difficulty, int timeout){
         View.getInstance().setNextMove(null);
         BoardPane boardPane;
         Model model;
@@ -47,9 +47,9 @@ public class GameLauncher {
             stringTwo = "You are playing locally against another player";
         }
         else if(gameType == GameType.VSAI){
-            HumanVsAiBottomPane humanVsAiBottomPane = new HumanVsAiBottomPane(game, difficulty, player);
+            HumanVsAiBottomPane humanVsAiBottomPane = new HumanVsAiBottomPane(game, difficulty, player, timeout);
             View.getInstance().setBottom(humanVsAiBottomPane);
-            if(game == Game.REVERSI) model = new ReversiMiniMaxAlphaBetaAI(8, difficulty);
+            if(game == Game.REVERSI) model = new ReversiMiniMaxAlphaBetaAI(8, difficulty, timeout);
             else if(game == Game.TICTACTOE) model = new TictactoeMinimaxAlphaBetaAI(3, difficulty);
             else throw new IllegalArgumentException();
             controller = new HumanVsAiController(model);

@@ -24,6 +24,6 @@ public class HumanVsHumanBottomPane extends HBox {
 
     private void newGame(Game game){
         GameLauncher gameLauncher = new GameLauncher();
-        gameLauncher.startGame(game, GameType.LOCAL, Tile.BLACK, 1);
+        gameLauncher.startGame(game, GameType.LOCAL, Tile.BLACK, 1, 9000);
     }
 }

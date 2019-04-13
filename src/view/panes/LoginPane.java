@@ -26,7 +26,8 @@ public class LoginPane extends VBox {
     private Text hostText;
     private Text portText;
     private FileOutputStream os = null;
-    String fileName = "src/Games/Controllers/settings.conf";
+    private String fileName = "src/Games/Controllers/settings.conf";
+    private String timeout;
 
     public LoginPane(GameType gameType, Game game) {
         this.setAlignment(Pos.CENTER);
@@ -71,9 +72,11 @@ public class LoginPane extends VBox {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         String host = properties.getProperty("host");
         String port = properties.getProperty("port");
         String name = properties.getProperty("name");
+        timeout = properties.getProperty("timeout");
 
         try {
             is.close();
@@ -105,6 +108,7 @@ public class LoginPane extends VBox {
                     properties.setProperty("name", nameString);
                     properties.setProperty("host", hostString);
                     properties.setProperty("port", portString);
+                    properties.setProperty("timeout", timeout);
 
                     try {
                         properties.store(os, null);

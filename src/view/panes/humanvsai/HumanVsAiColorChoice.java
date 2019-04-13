@@ -11,7 +11,7 @@ import view.GameType;
 import view.panes.BackToMainButton;
 
 public class HumanVsAiColorChoice extends VBox {
-    public HumanVsAiColorChoice(Game game, int difficulty) {
+    public HumanVsAiColorChoice(Game game, int difficulty, int timeout) {
         this.setAlignment(Pos.CENTER);
         this.setSpacing(30);
 
@@ -19,14 +19,14 @@ public class HumanVsAiColorChoice extends VBox {
         Button whiteColor = new Button("Play as White");
         Button backButton = new BackToMainButton();
 
-        blackColor.setOnAction(e -> playGame(game, difficulty, Tile.BLACK));
-        whiteColor.setOnAction(e -> playGame(game, difficulty, Tile.WHITE));
+        blackColor.setOnAction(e -> playGame(game, difficulty, Tile.BLACK, timeout));
+        whiteColor.setOnAction(e -> playGame(game, difficulty, Tile.WHITE, timeout));
 
         this.getChildren().addAll(blackColor, whiteColor, backButton);
     }
 
-    private void playGame(Game game, int difficulty, Tile player){
+    private void playGame(Game game, int difficulty, Tile player, int timeout){
         GameLauncher gameLauncher = new GameLauncher();
-        gameLauncher.startGame(game, GameType.VSAI, player, difficulty);
+        gameLauncher.startGame(game, GameType.VSAI, player, difficulty, timeout);
     }
 }

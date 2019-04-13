@@ -31,7 +31,7 @@ public class GameTypeChoice extends VBox {
 
     private void vsHuman(Game game){
         GameLauncher gameLauncher = new GameLauncher();
-        gameLauncher.startGame(game, GameType.LOCAL, Tile.BLACK, 1);
+        gameLauncher.startGame(game, GameType.LOCAL, Tile.BLACK, 1, 9000);
     }
 
     private void vsAI(Game game){

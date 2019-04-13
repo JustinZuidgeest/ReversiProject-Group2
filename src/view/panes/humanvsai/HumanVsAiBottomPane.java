@@ -11,7 +11,7 @@ import view.View;
 import view.panes.BackToMainButton;
 
 public class HumanVsAiBottomPane extends HBox {
-    public HumanVsAiBottomPane(Game game, int difficulty, Tile player) {
+    public HumanVsAiBottomPane(Game game, int difficulty, Tile player, int timeout) {
         this.setAlignment(Pos.CENTER);
         this.setSpacing(30);
 
@@ -21,8 +21,8 @@ public class HumanVsAiBottomPane extends HBox {
         Button mainMenuButton = new BackToMainButton();
 
         newDifficultyButton.setOnAction(e -> newGameDifficulty(game));
-        newColorButton.setOnAction(e -> newGameColor(game, difficulty));
-        newGameButton.setOnAction(e -> newGame(game, difficulty, player));
+        newColorButton.setOnAction(e -> newGameColor(game, difficulty, timeout));
+        newGameButton.setOnAction(e -> newGame(game, difficulty, player, timeout));
 
         this.getChildren().addAll(mainMenuButton, newDifficultyButton, newColorButton, newGameButton);
     }
@@ -35,16 +35,16 @@ public class HumanVsAiBottomPane extends HBox {
         View.getInstance().setCenter(difficultyChoice);
     }
 
-    private void newGameColor(Game game, int difficulty){
-        HumanVsAiColorChoice humanVsAiColorChoice = new HumanVsAiColorChoice(game, difficulty);
+    private void newGameColor(Game game, int difficulty, int timeout){
+        HumanVsAiColorChoice humanVsAiColorChoice = new HumanVsAiColorChoice(game, difficulty, timeout);
         View.getInstance().setNextMove(null);
         View.getInstance().killController();
         View.getInstance().clearStage();
         View.getInstance().setCenter(humanVsAiColorChoice);
     }
 
-    private void newGame(Game game, int difficulty, Tile player){
+    private void newGame(Game game, int difficulty, Tile player, int timeout){
         GameLauncher gameLauncher = new GameLauncher();
-        gameLauncher.startGame(game, GameType.VSAI, player, difficulty);
+        gameLauncher.startGame(game, GameType.VSAI, player, difficulty, timeout);
     }
 }

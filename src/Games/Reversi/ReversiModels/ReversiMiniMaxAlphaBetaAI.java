@@ -12,10 +12,10 @@ public class ReversiMiniMaxAlphaBetaAI extends AbstractReversiModel {
     private int evaluatedPossibilities;
     private Tile computerPlayer;
     private Tile opponentPlayer;
-    private long maxTime = 9000;
+    private long maxTime;
     private Long startTime;
 
-    int[][] scoreRubric = new int[][]{
+    final int[][] scoreRubric = new int[][]{
             {100, -25, 10,  5,  5, 10, -25, 100},
             {-25, -50, -4, -5, -5, -4, -50, -25},
             {8,    -4,  2,  1,  1,  2,  -4,   8},
@@ -26,9 +26,10 @@ public class ReversiMiniMaxAlphaBetaAI extends AbstractReversiModel {
             {100, -25, 10,  5,  5, 10, -25, 100},
     };
 
-    public ReversiMiniMaxAlphaBetaAI(int boardSize, int initialDepth) {
+    public ReversiMiniMaxAlphaBetaAI(int boardSize, int initialDepth, int maxTime) {
         super(boardSize);
         this.initialDepth = initialDepth;
+        this.maxTime = maxTime;
     }
 
     @Override

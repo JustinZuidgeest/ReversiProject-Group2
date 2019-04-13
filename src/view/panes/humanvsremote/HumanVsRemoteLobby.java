@@ -44,8 +44,8 @@ public class HumanVsRemoteLobby extends HBox {
 
         Model model;
 
-        if(game == Game.TICTACTOE) model = new TictactoeMinimaxAlphaBetaAI(3, 1);
-        else if(game == Game.REVERSI) model = new ReversiMiniMaxAlphaBetaAI(8, 1);
+        if(game == Game.TICTACTOE) model = new TictactoeRandomAI(3);
+        else if(game == Game.REVERSI) model = new ReversiRandomAI(8);
         else throw new IllegalArgumentException();
 
         controller = new HumanVsRemoteController(model);

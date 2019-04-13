@@ -29,7 +29,10 @@ public class TournamentLobby extends VBox {
         playerPane.setAlignment(Pos.CENTER);
         Model model;
 
-        if(game == Game.TICTACTOE) model = new TictactoeMinimaxAlphaBetaAI(3, 10);
+        if(game == Game.TICTACTOE) {
+            model = new TictactoeMinimaxAlphaBetaAI(3, 10);
+            System.out.println("Tictactoe");
+        }
         else if(game == Game.REVERSI) model = new ReversiMiniMaxAlphaBetaAI(8, 7);
         else throw new IllegalArgumentException();
 

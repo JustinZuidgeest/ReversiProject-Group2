@@ -48,6 +48,11 @@ public class AiVsRemoteController implements Controller {
     public void newGame() {
         View.getInstance().setCanMove(false);
         model.resetBoard();
+        try {
+            Thread.sleep(50);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
         View.getInstance().updateBoard(model.getBoard());
     }
 

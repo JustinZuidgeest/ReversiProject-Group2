@@ -101,7 +101,13 @@ public class HumanVsRemoteController implements Controller {
      */
     @Override
     public void newGame() {
+        View.getInstance().setCanMove(false);
         model.resetBoard();
+        try {
+            Thread.sleep(10);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
         View.getInstance().updateBoard(model.getBoard());
     }
 

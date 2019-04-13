@@ -153,11 +153,13 @@ public class ServerCommunicator implements Runnable {
                     controller.setPlayerOne(Tile.BLACK);
                     startGame(matchMap.get("GAMETYPE"));
                     View.getInstance().startController();
+                    View.getInstance().updateInfoPane("Opponent is " + matchMap.get("OPPONENT"), "");
                 }
                 else{
                     controller.setPlayerOne(Tile.WHITE);
                     startGame(matchMap.get("GAMETYPE"));
                     View.getInstance().startController();
+                    View.getInstance().updateInfoPane("Opponent is " + matchMap.get("OPPONENT"), "");
                 }
                 break;
             case "YOURTURN":
@@ -193,7 +195,6 @@ public class ServerCommunicator implements Runnable {
                 HashMap<String, String> winMap = (HashMap<String, String>) Arrays.asList(trimLine(winInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 //TODO link to GUI display win message
                 controller.displayGameResult("WIN", winMap.get("COMMENT"));
-                controller.newGame();
                 break;
             case "LOSS":
                 String lossInfo = line.split("LOSS ")[1];
@@ -201,7 +202,6 @@ public class ServerCommunicator implements Runnable {
                 HashMap<String, String> lossMap = (HashMap<String, String>) Arrays.asList(trimLine(lossInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 //TODO link to GUI display loss message
                 controller.displayGameResult("LOSS", lossMap.get("COMMENT"));
-                controller.newGame();
                 break;
             case "DRAW":
                 String drawInfo = line.split("DRAW ")[1];
@@ -209,7 +209,6 @@ public class ServerCommunicator implements Runnable {
                 HashMap<String, String> drawMap = (HashMap<String, String>) Arrays.asList(trimLine(drawInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 //TODO link to GUI display draw message
                 controller.displayGameResult("DRAW", drawMap.get("COMMENT"));
-                controller.newGame();
                 break;
             case "CHALLENGE":
                 handleCHALLENGEMessage(line);

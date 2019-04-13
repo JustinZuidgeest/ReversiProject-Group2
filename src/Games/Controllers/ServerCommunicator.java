@@ -192,6 +192,7 @@ public class ServerCommunicator implements Runnable {
                 //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
                 HashMap<String, String> winMap = (HashMap<String, String>) Arrays.asList(trimLine(winInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 //TODO link to GUI display win message
+                controller.displayGameResult("WIN", winMap.get("COMMENT"));
                 controller.newGame();
                 break;
             case "LOSS":
@@ -199,6 +200,7 @@ public class ServerCommunicator implements Runnable {
                 //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
                 HashMap<String, String> lossMap = (HashMap<String, String>) Arrays.asList(trimLine(lossInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 //TODO link to GUI display loss message
+                controller.displayGameResult("LOSS", lossMap.get("COMMENT"));
                 controller.newGame();
                 break;
             case "DRAW":
@@ -206,6 +208,7 @@ public class ServerCommunicator implements Runnable {
                 //Code by Jeremy Bidet -> https://stackoverflow.com/questions/10514473/string-to-hashmap-java
                 HashMap<String, String> drawMap = (HashMap<String, String>) Arrays.asList(trimLine(drawInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 //TODO link to GUI display draw message
+                controller.displayGameResult("DRAW", drawMap.get("COMMENT"));
                 controller.newGame();
                 break;
             case "CHALLENGE":

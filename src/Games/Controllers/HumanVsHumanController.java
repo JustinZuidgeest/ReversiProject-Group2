@@ -187,4 +187,9 @@ public class HumanVsHumanController implements Controller {
     public ServerCommunicator getServer() {
         return null;
     }
+
+    @Override
+    public void displayGameResult(String result, String details) {
+        //Controller has no server
+    }
 }

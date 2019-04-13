@@ -141,4 +141,12 @@ public class AiVsRemoteController implements Controller {
     public ServerCommunicator getServer() {
         return server;
     }
+
+    @Override
+    public void displayGameResult(String result, String details) {
+        String infoString = (result.equals("WIN")) ? "You Have won" : (result.equals("LOSS")) ? "You have lost" : "It's a draw";
+        infoString = infoString + " " + details;
+        String scoreString = "The scores are: Black - " + model.getScores()[0] + " White - " + model.getScores()[1];
+        View.getInstance().updateInfoPane(infoString, scoreString);
+    }
 }

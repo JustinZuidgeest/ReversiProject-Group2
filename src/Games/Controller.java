@@ -13,4 +13,5 @@ public interface Controller extends Runnable{
     int getBoardSize();
     void killThread();
     ServerCommunicator getServer();
+    void displayGameResult(String result, String details);
 }

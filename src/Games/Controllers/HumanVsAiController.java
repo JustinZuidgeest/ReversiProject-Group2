@@ -176,4 +176,9 @@ public class HumanVsAiController implements Controller {
     public ServerCommunicator getServer() {
         return null;
     }
+
+    @Override
+    public void displayGameResult(String result, String details) {
+        //Controller has no server
+    }
 }

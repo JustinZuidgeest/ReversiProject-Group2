@@ -72,7 +72,6 @@ public class AiVsRemoteController implements Controller {
     @Override
     public boolean playerMove(int x, int y) {
         try {
-            System.out.println("Remote playermove x: " + x + ", y: " + y);
             if(model.checkLegalMove(x, y, remotePlayer)){
                 // Execute the move, and execute hasWin() function if this was a winning move
                 model.move(x, y, remotePlayer);
@@ -109,7 +108,6 @@ public class AiVsRemoteController implements Controller {
     public void aiMove() {
         // Generate a move made by the computer
         Point aiMove = model.computerMove(AIPlayer);
-        System.out.println("Our AI moves x: " + aiMove.x + ", y: " + aiMove.y);
         // Execute the move, and execute hasWin() function if this was a winning move
         server.sendMove((aiMove.y * boardSize) + aiMove.x);
         model.move(aiMove.x, aiMove.y, AIPlayer);
@@ -118,7 +116,6 @@ public class AiVsRemoteController implements Controller {
             hasWin();
         }else{
             View.getInstance().updateBoard(model.getBoard());
-            System.out.println("The scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
         }
         String infoString = "It's the remote player's turn to move!";
         String scoreString = "The scores are: Black - " + model.getScores()[0] + " White - " + model.getScores()[1];

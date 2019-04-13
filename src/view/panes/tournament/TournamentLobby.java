@@ -21,7 +21,7 @@ public class TournamentLobby extends VBox {
     private VBox playerPane;
     private Controller controller;
 
-    public TournamentLobby(Game game) {
+    public TournamentLobby(Game game, int timeout) {
         this.setSpacing(30);
 
         playerPane = new VBox();
@@ -33,7 +33,7 @@ public class TournamentLobby extends VBox {
             model = new TictactoeMinimaxAlphaBetaAI(3, 10);
             System.out.println("Tictactoe");
         }
-        else if(game == Game.REVERSI) model = new ReversiMiniMaxAlphaBetaAI(8, 7, 9000);
+        else if(game == Game.REVERSI) model = new ReversiMiniMaxAlphaBetaAI(8, 8, timeout);
         else throw new IllegalArgumentException();
 
         controller = new AiVsRemoteController(model);

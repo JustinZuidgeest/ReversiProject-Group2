@@ -32,7 +32,7 @@ public class TournamentBottomPane extends HBox {
             View.getInstance().getController().getServer().logout();
             View.getInstance().killController();
             View.getInstance().setTop(null);
-            TournamentLobby tournamentLobby = new TournamentLobby(game);
+            TournamentLobby tournamentLobby = new TournamentLobby(game, 9000);
             View.getInstance().setCenter(tournamentLobby);
         });
 

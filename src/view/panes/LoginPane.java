@@ -21,13 +21,14 @@ public class LoginPane extends VBox {
     private TextField nameField;
     private TextField hostField;
     private TextField portField;
+    private TextField timeoutField;
     private Properties properties;
     private Text usernameText;
     private Text hostText;
     private Text portText;
+    private Text timeoutText;
     private FileOutputStream os = null;
-    private String fileName = "src/Games/Controllers/settings.conf";
-    private String timeout;
+    private String fileName = "src/Games/Controllers/settings.conf";;
 
     public LoginPane(GameType gameType, Game game) {
         this.setAlignment(Pos.CENTER);
@@ -36,24 +37,33 @@ public class LoginPane extends VBox {
         HBox usernameBox = new HBox();
         usernameBox.setAlignment(Pos.CENTER);
         usernameBox.setSpacing(30);
+
         HBox hostBox = new HBox();
         hostBox.setAlignment(Pos.CENTER);
         hostBox.setSpacing(30);
+
         HBox portBox = new HBox();
         portBox.setAlignment(Pos.CENTER);
         portBox.setSpacing(30);
 
+        HBox timeoutBox = new HBox();
+        timeoutBox.setAlignment(Pos.CENTER);
+        timeoutBox.setSpacing(30);
+
         usernameText = new Text("Enter your username:");
         hostText = new Text("Enter the host ip:");
         portText = new Text("Enter the host port:");
+        timeoutText = new Text("Enter maximum AI timeout (ms):");
 
         nameField = new TextField();
         hostField = new TextField();
         portField = new TextField();
+        timeoutField = new TextField();
 
         usernameBox.getChildren().addAll(usernameText, nameField);
         hostBox.getChildren().addAll(hostText, hostField);
         portBox.getChildren().addAll(portText, portField);
+        timeoutBox.getChildren().addAll(timeoutText, timeoutField);
 
         Button loginButton = new Button("Login");
 
@@ -76,7 +86,7 @@ public class LoginPane extends VBox {
         String host = properties.getProperty("host");
         String port = properties.getProperty("port");
         String name = properties.getProperty("name");
-        timeout = properties.getProperty("timeout");
+        String timeout = properties.getProperty("timeout");
 
         try {
             is.close();
@@ -87,48 +97,54 @@ public class LoginPane extends VBox {
         nameField.setText(name);
         hostField.setText(host);
         portField.setText(port);
+        timeoutField.setText(timeout);
 
-        this.getChildren().addAll(usernameBox, hostBox, portBox, loginButton);
+        this.getChildren().addAll(usernameBox, hostBox, portBox, timeoutBox, loginButton);
     }
 
     private void loginClicked(GameType gameType, Game game){
         String nameString = nameField.getText();
         String hostString = hostField.getText();
         String portString = portField.getText();
+        String timeoutString = timeoutField.getText();
 
         if (!nameString.isEmpty()) {
             if(!hostString.isEmpty()){
                 if(!portString.isEmpty()){
-                    try {
-                        os = new FileOutputStream(fileName);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
+                    if(checkInput(timeoutString)){
+                        try {
+                            os = new FileOutputStream(fileName);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
 
-                    properties.setProperty("name", nameString);
-                    properties.setProperty("host", hostString);
-                    properties.setProperty("port", portString);
-                    properties.setProperty("timeout", timeout);
+                        properties.setProperty("name", nameString);
+                        properties.setProperty("host", hostString);
+                        properties.setProperty("port", portString);
+                        properties.setProperty("timeout", timeoutString);
 
-                    try {
-                        properties.store(os, null);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                        try {
+                            properties.store(os, null);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
-                    try {
-                        os.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        try {
+                            os.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        if(gameType == GameType.REMOTE){
+                            HumanVsRemoteLobby humanVsRemoteLobby = new HumanVsRemoteLobby(game, nameString);
+                            View.getInstance().setCenter(humanVsRemoteLobby);
+                        }else if(gameType == GameType.TOURNAMENT){
+                            TournamentLobby tournamentLobby = new TournamentLobby(game, Integer.parseInt(timeoutString));
+                            View.getInstance().setCenter(tournamentLobby);
+                        }
+                        else throw new IllegalArgumentException();
+                    } else {
+                        Platform.runLater(() -> timeoutText.setText("Value has to be a number between 0 and 99999!"));
                     }
-                    if(gameType == GameType.REMOTE){
-                        HumanVsRemoteLobby humanVsRemoteLobby = new HumanVsRemoteLobby(game, nameString);
-                        View.getInstance().setCenter(humanVsRemoteLobby);
-                    }else if(gameType == GameType.TOURNAMENT){
-                        TournamentLobby tournamentLobby = new TournamentLobby(game);
-                        View.getInstance().setCenter(tournamentLobby);
-                    }
-                    else throw new IllegalArgumentException();
                 } else {
                     Platform.runLater(() -> portText.setText("Port field can't be empty"));
                 }
@@ -138,5 +154,16 @@ public class LoginPane extends VBox {
         } else {
             Platform.runLater(() -> usernameText.setText("Username field can't be empty"));
         }
+    }
+
+    private boolean checkInput(String input){
+        int intInput;
+        try {
+            intInput = Integer.parseInt(input);
+            return (intInput > 0 && intInput < 99999);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid timeout entered");
+        }
+        return false;
     }
 }

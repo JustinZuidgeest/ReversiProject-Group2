@@ -143,9 +143,6 @@ public class ServerCommunicator implements Runnable {
         View.getInstance().setInfoPane(infoPane);
         View.getInstance().setTop(infoPane);
 
-        //humanVsRemoteBottomPane = new HumanVsRemoteBottomPane(thisGame);
-        //View.getInstance().setBottom(humanVsRemoteBottomPane);
-
         if(controller instanceof HumanVsRemoteController){
             System.out.println("Human vs remote bottompane made");
             humanVsRemoteBottomPane = new HumanVsRemoteBottomPane(thisGame);

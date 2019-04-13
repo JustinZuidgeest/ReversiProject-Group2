@@ -2,6 +2,7 @@ package Games.Controllers;
 
 import Games.Controller;
 import Games.Tile;
+import javafx.application.Platform;
 import view.Game;
 import view.View;
 import view.panes.BoardPane;
@@ -25,6 +26,8 @@ public class ServerCommunicator implements Runnable {
     private Socket socket;
 
     private boolean shouldRun;
+
+    private HumanVsRemoteBottomPane humanVsRemoteBottomPane;
 
     private ArrayList<String> gameList = new ArrayList<>();
     private ArrayList<String> playerList = new ArrayList<>();
@@ -135,7 +138,7 @@ public class ServerCommunicator implements Runnable {
         View.getInstance().setInfoPane(infoPane);
         View.getInstance().setTop(infoPane);
 
-        HumanVsRemoteBottomPane humanVsRemoteBottomPane = new HumanVsRemoteBottomPane();
+        humanVsRemoteBottomPane = new HumanVsRemoteBottomPane();
         View.getInstance().setBottom(humanVsRemoteBottomPane);
 
         View.getInstance().getController().newGame();
@@ -195,6 +198,9 @@ public class ServerCommunicator implements Runnable {
                 HashMap<String, String> winMap = (HashMap<String, String>) Arrays.asList(trimLine(winInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 //TODO link to GUI display win message
                 controller.displayGameResult("WIN", winMap.get("COMMENT"));
+                Platform.runLater(()-> {
+                    humanVsRemoteBottomPane.getChildren().remove(1);
+                });
                 break;
             case "LOSS":
                 String lossInfo = line.split("LOSS ")[1];
@@ -202,6 +208,9 @@ public class ServerCommunicator implements Runnable {
                 HashMap<String, String> lossMap = (HashMap<String, String>) Arrays.asList(trimLine(lossInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 //TODO link to GUI display loss message
                 controller.displayGameResult("LOSS", lossMap.get("COMMENT"));
+                Platform.runLater(()-> {
+                    humanVsRemoteBottomPane.getChildren().remove(1);
+                });
                 break;
             case "DRAW":
                 String drawInfo = line.split("DRAW ")[1];
@@ -209,6 +218,9 @@ public class ServerCommunicator implements Runnable {
                 HashMap<String, String> drawMap = (HashMap<String, String>) Arrays.asList(trimLine(drawInfo).split(",")).stream().map(s -> s.split(":")).collect(Collectors.toMap(e -> e[0], e -> e[1]));
                 //TODO link to GUI display draw message
                 controller.displayGameResult("DRAW", drawMap.get("COMMENT"));
+                Platform.runLater(()-> {
+                    humanVsRemoteBottomPane.getChildren().remove(1);
+                });
                 break;
             case "CHALLENGE":
                 handleCHALLENGEMessage(line);

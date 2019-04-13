@@ -19,6 +19,7 @@ public class HumanVsRemoteBottomPane extends HBox {
             View.getInstance().clearStage();
             View.getInstance().setCenter(mainMenu);
         });
+
         forfeitButton.setOnAction(e -> {
             View.getInstance().getController().getServer().forfeit();
             View.getInstance().killController();

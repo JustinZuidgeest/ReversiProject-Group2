@@ -36,6 +36,7 @@ public class View extends Application {
         this.primaryStage = primaryStage;
         primaryPane = new BorderPane();
         Scene primaryScene = new Scene(primaryPane);
+        primaryScene.getStylesheets().add("/view/styling.css");
 
         // Start the application at the Main Menu
         setCenter(new MainMenu());

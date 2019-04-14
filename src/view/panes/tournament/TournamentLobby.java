@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import view.Game;
 import view.View;
@@ -43,6 +44,7 @@ public class TournamentLobby extends VBox {
         View.getInstance().setController(controller);
 
         playerListText = new Text();
+        playerListText.setFill(Color.WHITE);
         playerList = new TextArea();
         playerList.setWrapText(true);
         playerList.setEditable(false);
@@ -72,6 +74,13 @@ public class TournamentLobby extends VBox {
         View.getInstance().setBottom(hBox);
 
         View.getInstance().getController().getServer().getPlayerList();
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         fillPlayerList(game);
 
         this.getChildren().addAll(playerListText, playerList);

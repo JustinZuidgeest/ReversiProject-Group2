@@ -79,7 +79,6 @@ public class View extends Application {
     }
 
     public void moveMade(int x, int y){
-        System.out.println("Can move: " + canMove);
         if(canMove){
             nextMove = new Point(x, y);
         }

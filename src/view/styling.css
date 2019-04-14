@@ -1,7 +1,7 @@
 .root{
--fx-background-color: linear-gradient(black, green, lime, lightgreen, lime, green, black);
+-fx-background-color: linear-gradient(black, green, lime, green, black);
 -fx-opacity: 0.8;
-
+-fx-font-weight: bold;
 }
 .text-field{
 
@@ -29,6 +29,7 @@
     -fx-font-weight: bold;
     -fx-background-radius: 10;
     -fx-border-radius: 10;
+    -fx-font-weight: bold;
 }
 
 .button:hover{
@@ -36,8 +37,3 @@
 -fx-border-color: white;
 }
 
-.tile{
-    -fx-background-color: green;
-    -fx-color: green;
-    -fx-opacity: 0.8;
-}

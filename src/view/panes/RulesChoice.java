@@ -13,8 +13,11 @@ public class RulesChoice extends VBox {
         this.setSpacing(30);
 
         Button tictactoeRules = new Button("TicTacToe Rules");
+        tictactoeRules.setPrefSize(200, 30);
         Button reversiRules = new Button("Reversi Rules");
+        reversiRules.setPrefSize(200, 30);
         Button backButton = new BackToMainButton();
+        backButton.setPrefSize(200, 30);
 
         tictactoeRules.setOnAction(e -> tictactoeRules());
         reversiRules.setOnAction(e -> reversiRules());

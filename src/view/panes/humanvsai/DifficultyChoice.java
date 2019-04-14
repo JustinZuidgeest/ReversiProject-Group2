@@ -27,8 +27,11 @@ public class DifficultyChoice extends VBox {
         this.setSpacing(30);
 
         Button easyButton = new Button("Play Easy Difficulty");
+        easyButton.setPrefSize(200, 30);
         Button mediumButton = new Button("Play Medium Difficulty");
+        mediumButton.setPrefSize(200, 30);
         Button hardButton = new Button("Play Hard Difficulty");
+        hardButton.setPrefSize(200, 30);
 
         timeoutText = new Text("AI timeout (ms):");
         timeoutField = new TextField();
@@ -39,6 +42,7 @@ public class DifficultyChoice extends VBox {
         timeoutBox.getChildren().addAll(timeoutText, timeoutField);
 
         Button backButton = new BackToMainButton();
+        backButton.setPrefSize(200, 30);
 
         easyButton.setOnAction(e -> initColorChoice(game, 1));
         mediumButton.setOnAction(e -> initColorChoice(game, 3));

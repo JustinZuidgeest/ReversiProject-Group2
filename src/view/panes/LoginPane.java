@@ -34,36 +34,26 @@ public class LoginPane extends VBox {
         this.setAlignment(Pos.CENTER);
         this.setSpacing(30);
 
-        HBox usernameBox = new HBox();
-        usernameBox.setAlignment(Pos.CENTER);
-        usernameBox.setSpacing(30);
-
-        HBox hostBox = new HBox();
-        hostBox.setAlignment(Pos.CENTER);
-        hostBox.setSpacing(30);
-
-        HBox portBox = new HBox();
-        portBox.setAlignment(Pos.CENTER);
-        portBox.setSpacing(30);
-
-        HBox timeoutBox = new HBox();
-        timeoutBox.setAlignment(Pos.CENTER);
-        timeoutBox.setSpacing(30);
+        HBox combiBox = new HBox(50);
+        combiBox.setAlignment(Pos.CENTER);
+        VBox textBox = new VBox(15);
+        VBox fieldBox = new VBox(5);
 
         usernameText = new Text("Enter your username:");
         hostText = new Text("Enter the host ip:");
         portText = new Text("Enter the host port:");
         timeoutText = new Text("Enter maximum AI timeout (ms):");
 
+        textBox.getChildren().addAll(usernameText, hostText, portText, timeoutText);
+
         nameField = new TextField();
         hostField = new TextField();
         portField = new TextField();
         timeoutField = new TextField();
 
-        usernameBox.getChildren().addAll(usernameText, nameField);
-        hostBox.getChildren().addAll(hostText, hostField);
-        portBox.getChildren().addAll(portText, portField);
-        timeoutBox.getChildren().addAll(timeoutText, timeoutField);
+        fieldBox.getChildren().addAll(nameField, hostField, portField, timeoutField);
+
+        combiBox.getChildren().addAll(textBox, fieldBox);
 
         Button loginButton = new Button("Login");
 
@@ -99,7 +89,7 @@ public class LoginPane extends VBox {
         portField.setText(port);
         timeoutField.setText(timeout);
 
-        this.getChildren().addAll(usernameBox, hostBox, portBox, timeoutBox, loginButton);
+        this.getChildren().addAll(combiBox, loginButton);
     }
 
     private void loginClicked(GameType gameType, Game game){
@@ -110,7 +100,7 @@ public class LoginPane extends VBox {
 
         if (!nameString.isEmpty()) {
             if(!hostString.isEmpty()){
-                if(!portString.isEmpty()){
+                if(checkInput(portString)){
                     if(checkInput(timeoutString)){
                         try {
                             os = new FileOutputStream(fileName);
@@ -146,7 +136,7 @@ public class LoginPane extends VBox {
                         Platform.runLater(() -> timeoutText.setText("Value has to be a number between 0 and 99999!"));
                     }
                 } else {
-                    Platform.runLater(() -> portText.setText("Port field can't be empty"));
+                    Platform.runLater(() -> portText.setText("Port field has to be a number!"));
                 }
             } else {
                 Platform.runLater(() -> hostText.setText("Host field can't be empty"));

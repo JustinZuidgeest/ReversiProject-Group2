@@ -6,11 +6,13 @@ import Games.Model;
 import Games.Reversi.ReversiModels.ReversiMiniMaxAlphaBetaAI;
 import Games.TicTacToe.TictactoeModels.*;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import view.Game;
 import view.View;
 import view.panes.MainMenu;
@@ -18,26 +20,33 @@ import view.panes.MainMenu;
 import java.util.ArrayList;
 
 public class TournamentLobby extends VBox {
-    private VBox playerPane;
     private Controller controller;
+    private Text playerListText;
+    private TextArea playerList;
+    private int playerCount;
 
     public TournamentLobby(Game game, int timeout) {
+        this.setAlignment(Pos.CENTER);
         this.setSpacing(30);
+        this.setPadding(new Insets(50));
 
-        playerPane = new VBox();
-        playerPane.setSpacing(3);
-        playerPane.setAlignment(Pos.CENTER);
         Model model;
 
         if(game == Game.TICTACTOE) {
             model = new TictactoeMinimaxAlphaBetaAI(3, 10);
             System.out.println("Tictactoe");
         }
-        else if(game == Game.REVERSI) model = new ReversiMiniMaxAlphaBetaAI(8, 8, timeout);
+        else if(game == Game.REVERSI) model = new ReversiMiniMaxAlphaBetaAI(8, 7, timeout);
         else throw new IllegalArgumentException();
 
         controller = new AiVsRemoteController(model);
         View.getInstance().setController(controller);
+
+        playerListText = new Text();
+        playerList = new TextArea();
+        playerList.setWrapText(true);
+        playerList.setEditable(false);
+        playerList.setPrefRowCount(30);
 
         Button backAndLogout = new Button("Back to Main Menu");
         Button refreshButton = new Button("Refresh");
@@ -62,26 +71,24 @@ public class TournamentLobby extends VBox {
 
         View.getInstance().setBottom(hBox);
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         View.getInstance().getController().getServer().getPlayerList();
         fillPlayerList(game);
 
-        this.getChildren().add(playerPane);
+        this.getChildren().addAll(playerListText, playerList);
     }
 
     private void fillPlayerList(Game game){
-        playerPane.getChildren().clear();
+        StringBuilder stringBuilder = new StringBuilder();
+        playerCount = 0;
         ArrayList<String> namesList = View.getInstance().getController().getServer().controllerGetPlayerList();
-        Label playerList = new Label("There are " + namesList.size() +" players connected to the lobby:");
-        playerPane.getChildren().add(playerList);
         for(String player : namesList){
-            Label playerLabel = new Label(player);
-            playerPane.getChildren().add(playerLabel);
+            stringBuilder.append(player);
+            stringBuilder.append("\n");
+            playerCount++;
         }
+        Platform.runLater(() -> {
+            playerListText.setText("There are " + playerCount +" players connected to the lobby:");
+            playerList.setText(stringBuilder.toString());
+        });
     }
 }

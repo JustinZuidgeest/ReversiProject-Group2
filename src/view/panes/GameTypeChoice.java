@@ -16,10 +16,15 @@ public class GameTypeChoice extends VBox {
         this.setSpacing(30);
 
         Button vsHumanButton = new Button("Play Local Multiplayer");
+        vsHumanButton.setPrefSize(200, 30);
         Button vsAIButton = new Button("Play Against AI");
+        vsAIButton.setPrefSize(200, 30);
         Button vsRemoteButton = new Button("Play vs Remote Opponent");
+        vsRemoteButton.setPrefSize(200, 30);
         Button tournamentButton = new Button("Participate in a tournament");
+        tournamentButton.setPrefSize(200, 30);
         Button backButton = new BackToMainButton();
+        backButton.setPrefSize(200, 30);
 
         vsHumanButton.setOnAction(e -> vsHuman(game));
         vsAIButton.setOnAction(e -> vsAI(game));

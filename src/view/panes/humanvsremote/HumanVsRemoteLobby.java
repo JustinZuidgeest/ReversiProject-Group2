@@ -3,21 +3,18 @@ package view.panes.humanvsremote;
 import Games.Controller;
 import Games.Controllers.HumanVsRemoteController;
 import Games.Model;
-import Games.Reversi.ReversiModels.ReversiMiniMaxAlphaBetaAI;
 import Games.Reversi.ReversiModels.ReversiRandomAI;
-import Games.TicTacToe.TictactoeModels.TictactoeMinimaxAlphaBetaAI;
 import Games.TicTacToe.TictactoeModels.TictactoeRandomAI;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import view.Game;
-import view.GameType;
 import view.View;
-import view.panes.BoardPane;
-import view.panes.InfoPane;
 import view.panes.MainMenu;
 
 import java.util.ArrayList;
@@ -27,6 +24,9 @@ public class HumanVsRemoteLobby extends HBox {
 
     private VBox leftPane;
     private VBox rightPane;
+    private VBox players;
+    private VBox inviteButtons;
+    private HBox playerRow;
     private Controller controller;
     private String ownName;
 
@@ -34,13 +34,17 @@ public class HumanVsRemoteLobby extends HBox {
         this.ownName = ownName;
         this.setAlignment(Pos.CENTER);
         this.setSpacing(30);
+        this.setPadding(new Insets(30));
 
-        leftPane = new VBox();
+        leftPane = new VBox(30);
         leftPane.setAlignment(Pos.TOP_LEFT);
-        leftPane.setSpacing(5);
         rightPane = new VBox();
         rightPane.setAlignment(Pos.TOP_RIGHT);
         rightPane.setSpacing(5);
+
+        players = new VBox(15);
+        inviteButtons = new VBox(5);
+        playerRow = new HBox(5);
 
         Model model;
 
@@ -75,12 +79,6 @@ public class HumanVsRemoteLobby extends HBox {
 
         View.getInstance().setBottom(hBox);
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         View.getInstance().getController().getServer().getPlayerList();
         fillLeftPane(game);
         fillRightPane(game);
@@ -105,16 +103,23 @@ public class HumanVsRemoteLobby extends HBox {
 
     private void fillLeftPane(Game game){
         leftPane.getChildren().clear();
+        players.getChildren().clear();
+        inviteButtons.getChildren().clear();
+        playerRow.getChildren().clear();
         Label playersOnline = new Label("Invite Players:");
         leftPane.getChildren().add(playersOnline);
         ArrayList<String> namesList = View.getInstance().getController().getServer().controllerGetPlayerList();
         for(String player : namesList){
             if(!player.equals(ownName)){
-                Button button = new Button("Invite " + player);
+                Text playerName = new Text(player);
+                players.getChildren().add(playerName);
+                Button button = new Button("Invite ");
+                inviteButtons.getChildren().add(button);
                 button.setOnMouseClicked(e -> invitePlayer(player, game));
-                leftPane.getChildren().add(button);
             }
         }
+        playerRow.getChildren().addAll(players, inviteButtons);
+        leftPane.getChildren().add(playerRow);
     }
 
     private void invitePlayer(String player, Game game){

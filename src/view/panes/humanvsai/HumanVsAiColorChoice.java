@@ -16,8 +16,11 @@ public class HumanVsAiColorChoice extends VBox {
         this.setSpacing(30);
 
         Button blackColor = new Button("Play as Black");
+        blackColor.setPrefSize(200, 30);
         Button whiteColor = new Button("Play as White");
+        whiteColor.setPrefSize(200, 30);
         Button backButton = new BackToMainButton();
+        backButton.setPrefSize(200, 30);
 
         blackColor.setOnAction(e -> playGame(game, difficulty, Tile.BLACK, timeout));
         whiteColor.setOnAction(e -> playGame(game, difficulty, Tile.WHITE, timeout));

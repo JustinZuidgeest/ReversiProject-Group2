@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import view.Game;
 import view.View;
@@ -80,6 +81,13 @@ public class HumanVsRemoteLobby extends HBox {
         View.getInstance().setBottom(hBox);
 
         View.getInstance().getController().getServer().getPlayerList();
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         fillLeftPane(game);
         fillRightPane(game);
 
@@ -88,7 +96,8 @@ public class HumanVsRemoteLobby extends HBox {
 
     private void fillRightPane(Game game){
         rightPane.getChildren().clear();
-        Label acceptChallenges = new Label("Accept Challenges:");
+        Text acceptChallenges = new Text("Accept Challenges:");
+        acceptChallenges.setFill(Color.WHITE);
         rightPane.getChildren().add(acceptChallenges);
         ArrayList<Map> challengeList = View.getInstance().getController().getServer().controllerGetChallengeList();
         for(Map map : challengeList){
@@ -106,12 +115,14 @@ public class HumanVsRemoteLobby extends HBox {
         players.getChildren().clear();
         inviteButtons.getChildren().clear();
         playerRow.getChildren().clear();
-        Label playersOnline = new Label("Invite Players:");
+        Text playersOnline = new Text("Invite Players:");
+        playersOnline.setFill(Color.WHITE);
         leftPane.getChildren().add(playersOnline);
         ArrayList<String> namesList = View.getInstance().getController().getServer().controllerGetPlayerList();
         for(String player : namesList){
             if(!player.equals(ownName)){
                 Text playerName = new Text(player);
+                playerName.setFill(Color.WHITE);
                 players.getChildren().add(playerName);
                 Button button = new Button("Invite ");
                 inviteButtons.getChildren().add(button);

@@ -10,6 +10,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -21,7 +23,7 @@ import view.panes.MainMenu;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class HumanVsRemoteLobby extends HBox {
+public class HumanVsRemoteLobby extends VBox {
 
     private VBox leftPane;
     private VBox rightPane;
@@ -33,9 +35,15 @@ public class HumanVsRemoteLobby extends HBox {
 
     public HumanVsRemoteLobby(Game game, String ownName) {
         this.ownName = ownName;
-        this.setAlignment(Pos.CENTER);
+        this.setAlignment(Pos.TOP_CENTER);
         this.setSpacing(30);
         this.setPadding(new Insets(30));
+
+        Image remoteImage = new Image("assets/remote.png");
+        ImageView remoteImageView = new ImageView(remoteImage);
+
+        HBox combiBox = new HBox(30);
+        combiBox.setAlignment(Pos.CENTER);
 
         leftPane = new VBox(30);
         leftPane.setAlignment(Pos.TOP_LEFT);
@@ -91,7 +99,8 @@ public class HumanVsRemoteLobby extends HBox {
         fillLeftPane(game);
         fillRightPane(game);
 
-        this.getChildren().addAll(leftPane, rightPane);
+        combiBox.getChildren().addAll(leftPane, rightPane);
+        this.getChildren().addAll(remoteImageView, combiBox);
     }
 
     private void fillRightPane(Game game){

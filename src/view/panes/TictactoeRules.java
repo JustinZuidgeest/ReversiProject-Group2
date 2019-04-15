@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import view.View;
 
@@ -12,6 +13,9 @@ public class TictactoeRules extends VBox {
     public TictactoeRules() {
         this.setAlignment(Pos.CENTER);
         this.setSpacing(30);
+
+        Image tictactoeRulesImage = new Image("assets/tictactoerules.png");
+        ImageView tictactoeRulesImageView = new ImageView(tictactoeRulesImage);
 
         Text text = new Text();
         String textMessage = "\n\t De Tic Tac toe regels:\n\n" +
@@ -27,6 +31,6 @@ public class TictactoeRules extends VBox {
 
         Button backButton = new BackToMainButton();
 
-        this.getChildren().addAll(textBox, backButton);
+        this.getChildren().addAll(tictactoeRulesImageView, textBox, backButton);
     }
 }

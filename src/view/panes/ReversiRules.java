@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import view.View;
 
@@ -12,6 +13,9 @@ public class ReversiRules extends VBox {
     public ReversiRules() {
         this.setAlignment(Pos.CENTER);
         this.setSpacing(30);
+
+        Image reversiRulesImage = new Image("assets/reversirules.png");
+        ImageView reversiRulesImageView = new ImageView(reversiRulesImage);
 
         Text text2 = new Text();
         String textMessage2 = "\n\t Dit zijn de regels van Reversi: \n\n" +
@@ -37,6 +41,6 @@ public class ReversiRules extends VBox {
 
         Button backButton = new BackToMainButton();
 
-        this.getChildren().addAll(text2, backButton);
+        this.getChildren().addAll(reversiRulesImageView, text2, backButton);
     }
 }

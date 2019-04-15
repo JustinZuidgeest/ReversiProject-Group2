@@ -4,6 +4,8 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -25,6 +27,9 @@ public class DifficultyChoice extends VBox {
     public DifficultyChoice(Game game) {
         this.setAlignment(Pos.CENTER);
         this.setSpacing(30);
+
+        Image difficultyImage = new Image("assets/difficulty.png");
+        ImageView difficultyImageView = new ImageView(difficultyImage);
 
         Button easyButton = new Button("Play Easy Difficulty");
         easyButton.setPrefSize(200, 30);
@@ -65,7 +70,7 @@ public class DifficultyChoice extends VBox {
         timeout = properties.getProperty("timeout");
         timeoutField.setText(timeout);
 
-        this.getChildren().addAll(timeoutBox, easyButton, mediumButton, hardButton ,backButton);
+        this.getChildren().addAll(difficultyImageView, timeoutBox, easyButton, mediumButton, hardButton ,backButton);
     }
 
     private void initColorChoice(Game game, int difficulty) {

@@ -2,6 +2,8 @@ package view.panes;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import view.Game;
 import view.View;
@@ -11,6 +13,9 @@ public class MainMenu extends VBox {
     public MainMenu() {
         this.setAlignment(Pos.CENTER);
         this.setSpacing(30);
+
+        Image title = new Image("assets/title.png");
+        ImageView titleView = new ImageView(title);
 
         Button tictactoeButton = new Button("Play TicTacToe");
         tictactoeButton.setPrefSize(200, 30);
@@ -26,7 +31,7 @@ public class MainMenu extends VBox {
         rulesButton.setOnAction(e -> rulesMenu());
         quitButton.setOnAction(e -> quitApplication());
 
-        this.getChildren().addAll(tictactoeButton, reversiButton, rulesButton, quitButton);
+        this.getChildren().addAll(titleView, tictactoeButton, reversiButton, rulesButton, quitButton);
     }
 
     private void tictactoeGametypeMenu(){

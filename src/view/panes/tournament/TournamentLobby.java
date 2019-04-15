@@ -10,6 +10,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -30,6 +32,9 @@ public class TournamentLobby extends VBox {
         this.setAlignment(Pos.CENTER);
         this.setSpacing(30);
         this.setPadding(new Insets(50));
+
+        Image tournamentLobbyImage = new Image("assets/tournament.png");
+        ImageView tournamentLobbyImageView = new ImageView(tournamentLobbyImage);
 
         Model model;
 
@@ -83,7 +88,7 @@ public class TournamentLobby extends VBox {
 
         fillPlayerList(game);
 
-        this.getChildren().addAll(playerListText, playerList);
+        this.getChildren().addAll(tournamentLobbyImageView, playerListText, playerList);
     }
 
     private void fillPlayerList(Game game){

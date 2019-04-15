@@ -4,6 +4,8 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -33,6 +35,9 @@ public class LoginPane extends VBox {
     public LoginPane(GameType gameType, Game game) {
         this.setAlignment(Pos.CENTER);
         this.setSpacing(30);
+
+        Image settingsImage = new Image("assets/settings.png");
+        ImageView settingsImageView = new ImageView(settingsImage);
 
         HBox combiBox = new HBox(50);
         combiBox.setAlignment(Pos.CENTER);
@@ -89,7 +94,7 @@ public class LoginPane extends VBox {
         portField.setText(port);
         timeoutField.setText(timeout);
 
-        this.getChildren().addAll(combiBox, loginButton);
+        this.getChildren().addAll(settingsImageView, combiBox, loginButton);
     }
 
     private void loginClicked(GameType gameType, Game game){

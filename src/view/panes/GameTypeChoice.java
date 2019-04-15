@@ -3,6 +3,8 @@ package view.panes;
 import Games.Tile;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import view.Game;
 import view.GameLauncher;
@@ -14,6 +16,9 @@ public class GameTypeChoice extends VBox {
     public GameTypeChoice(Game game) {
         this.setAlignment(Pos.CENTER);
         this.setSpacing(30);
+
+        Image gameTypeImage = new Image("assets/gametype.png");
+        ImageView gameTypeImageView = new ImageView(gameTypeImage);
 
         Button vsHumanButton = new Button("Play Local Multiplayer");
         vsHumanButton.setPrefSize(200, 30);
@@ -31,7 +36,7 @@ public class GameTypeChoice extends VBox {
         vsRemoteButton.setOnAction(e -> vsRemote(game));
         tournamentButton.setOnAction(e -> tournament(game));
 
-        this.getChildren().addAll(vsHumanButton, vsAIButton, vsRemoteButton, tournamentButton, backButton);
+        this.getChildren().addAll(gameTypeImageView, vsHumanButton, vsAIButton, vsRemoteButton, tournamentButton, backButton);
     }
 
     private void vsHuman(Game game){

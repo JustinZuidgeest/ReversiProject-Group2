@@ -4,6 +4,8 @@ package view.panes.humanvsai;
 import Games.Tile;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import view.Game;
 import view.GameLauncher;
@@ -15,6 +17,9 @@ public class HumanVsAiColorChoice extends VBox {
         this.setAlignment(Pos.CENTER);
         this.setSpacing(30);
 
+        Image colorImage = new Image("assets/color.png");
+        ImageView colorImageView = new ImageView(colorImage);
+
         Button blackColor = new Button("Play as Black");
         blackColor.setPrefSize(200, 30);
         Button whiteColor = new Button("Play as White");
@@ -25,7 +30,7 @@ public class HumanVsAiColorChoice extends VBox {
         blackColor.setOnAction(e -> playGame(game, difficulty, Tile.BLACK, timeout));
         whiteColor.setOnAction(e -> playGame(game, difficulty, Tile.WHITE, timeout));
 
-        this.getChildren().addAll(blackColor, whiteColor, backButton);
+        this.getChildren().addAll(colorImageView, blackColor, whiteColor, backButton);
     }
 
     private void playGame(Game game, int difficulty, Tile player, int timeout){

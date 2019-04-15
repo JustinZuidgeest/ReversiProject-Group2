@@ -254,12 +254,6 @@ public abstract class AbstractReversiModel implements Model {
     }
 
     /**
-     * @return A string value representing the game this model implements
-     */
-    @Override
-    public String getGameName() { return "Reversi"; }
-
-    /**
      * @return int variable representing boardsize (width and height)
      */
     @Override

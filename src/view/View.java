@@ -30,8 +30,14 @@ public class View extends Application {
     private boolean canMove;
     private Point nextMove;
 
+    /**
+     * The method that is called at application start by JavaFX. Starts a new JavaFX thread and initializes all variables
+     * needed to display an application on the screen.
+     * @param primaryStage A Stage object used by JavaFX as the main screen of the application. Automatically generated
+     *                     by JavaFX at startup.
+     */
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage){
         instance = this;
         this.primaryStage = primaryStage;
         primaryPane = new BorderPane();

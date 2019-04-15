@@ -14,8 +14,19 @@ import view.panes.InfoPane;
 import view.panes.humanvsai.HumanVsAiBottomPane;
 import view.panes.humanvshuman.HumanVsHumanBottomPane;
 
+/**
+ * Class used to launch new games of both Reversi and TicTacToe with the given settings
+ */
 public class GameLauncher {
 
+    /**
+     * Method used to start a game based on the settings for the game passed in as variables
+     * @param game The game (TicTacToe or Reversi) that should be started represented by a Game enum object
+     * @param gameType The game type (local, remote, vs Ai etc.) represented by a GameType enum object
+     * @param player The player color (black or white) that the person starting the game will be
+     * @param difficulty The AI difficulty (as an int value indication minimax depth) of the game
+     * @param timeout The maximum time the AI can compute before coming up with a move
+     */
     public void startGame(Game game, GameType gameType, Tile player, int difficulty, int timeout){
         View.getInstance().setNextMove(null);
         BoardPane boardPane;
@@ -23,12 +34,14 @@ public class GameLauncher {
         Controller controller;
         String stringOne, stringTwo = "";
 
+        //Sets the board pane for a tictactoe game
         if (game == Game.TICTACTOE){
             boardPane = new BoardPane(3);
             View.getInstance().setBoardPane(boardPane);
             View.getInstance().setCenter(boardPane);
             stringOne = "Welcome to a new game of TicTacToe!";
         }
+        //Sets the board pane for a reversi game
         else if(game == Game.REVERSI){
             boardPane = new BoardPane(8);
             View.getInstance().setBoardPane(boardPane);
@@ -37,6 +50,7 @@ public class GameLauncher {
         }
         else throw new IllegalArgumentException();
 
+        //Sets the game model for a Local game vs another human
         if(gameType == GameType.LOCAL){
             HumanVsHumanBottomPane humanVsHumanBottomPane = new HumanVsHumanBottomPane(game);
             View.getInstance().setBottom(humanVsHumanBottomPane);
@@ -46,6 +60,7 @@ public class GameLauncher {
             controller = new HumanVsHumanController(model);
             stringTwo = "You are playing locally against another player";
         }
+        //Sets the game model for a local game vs the computer
         else if(gameType == GameType.VSAI){
             HumanVsAiBottomPane humanVsAiBottomPane = new HumanVsAiBottomPane(game, difficulty, player, timeout);
             View.getInstance().setBottom(humanVsAiBottomPane);

@@ -162,14 +162,6 @@ public abstract class AbstractTictactoeModel implements Model {
     }
 
     /**
-     * @return A string value representing the game this model implements
-     */
-    @Override
-    public String getGameName() {
-        return "Tic-tac-toe";
-    }
-
-    /**
      * @return int variable representing boardsize (width and height)
      */
     @Override

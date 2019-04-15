@@ -4,7 +4,6 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public interface Model {
-    String getGameName();
     void resetBoard();
     boolean checkLegalMove(int x, int y, Tile player);
     void updateLegalMoves();

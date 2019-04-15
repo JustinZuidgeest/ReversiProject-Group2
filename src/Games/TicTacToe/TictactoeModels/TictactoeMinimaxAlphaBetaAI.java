@@ -9,28 +9,44 @@ import java.util.ArrayList;
 public class TictactoeMinimaxAlphaBetaAI extends AbstractTictactoeModel {
 
     private int initialDepth;
-    private int evaluatedPossibilities;
     private Tile computerPlayer;
     private Tile opponentPlayer;
 
+    /**
+     * Constructor called at object creation. Initializes the AI for a given boardsize and restrictions for maximum
+     * depth.
+     * @param boardSize The size of the board that will be played on
+     * @param initialDepth The depth that minimax will search before retuning a result
+     */
     public TictactoeMinimaxAlphaBetaAI(int boardSize, int initialDepth) {
         super(boardSize);
         this.initialDepth = initialDepth;
     }
 
+    /**
+     * Calls upon the concrete implementation of the AI algorithm to calculate the next move the computer will make
+     * @param player The player that will make the move (black or white)
+     * @return A point object representing the coordinate (x and y) of the next move the computer will make
+     */
     @Override
-    public Point nextMove(Tile tile) {
-        evaluatedPossibilities = 0;
-        computerPlayer = tile;
+    public Point nextMove(Tile player) {
+        computerPlayer = player;
         opponentPlayer = (computerPlayer == Tile.BLACK) ? Tile.WHITE : Tile.BLACK;
         int[] result = miniMax(initialDepth, computerPlayer, Integer.MIN_VALUE,Integer.MAX_VALUE);
-        //System.out.println("Minimax AI with depth " + initialDepth + " with Alpha-beta pruning wants to move to x:" + result[1] + ", y: " + result[2]);
-        //System.out.println("AI evaluated " + evaluatedPossibilities + " possibilities to reach this conclusion");
+        System.out.println("Minimax AI with depth " + initialDepth + " with Alpha-beta pruning wants to move to x:" + result[1] + ", y: " + result[2]);
         return new Point(result[1], result[2]);
     }
 
+    /**
+     * The heart of the computer AI. Minimax recursive algorithm that explores a game tree, trying every possible move and
+     * calculating a score for each move.
+     * @param depth The depth at which the minimax algorithm will stop calling searching the game tree
+     * @param player The player (black or white) that will make the eventual move
+     * @param alpha Alpha score at the start of the current recursion
+     * @param beta Beta score at the start of the current recursion
+     * @return An integer array with the score for the current move, the row (y) and column (x) for the current move
+     */
     private int[] miniMax(int depth, Tile player, int alpha, int beta){
-        evaluatedPossibilities++;
         // A list of all the possible moves for the current game board
         updateLegalMoves();
         ArrayList<Point> legalMoves = getLegalMoves(player);
@@ -80,6 +96,10 @@ public class TictactoeMinimaxAlphaBetaAI extends AbstractTictactoeModel {
         return new int[]{(player == computerPlayer) ? alpha : beta, bestCol, bestRow};
     }
 
+    /**
+     * Calculates the score of the current game state
+     * @return The score of the current game state as an int
+     */
     private int evaluateScore(){
         Tile winner = getBoardWinner();
         if(winner == computerPlayer) return 10;

@@ -13,6 +13,11 @@ public class TictactoeRandomAI extends AbstractTictactoeModel {
         super(boardSize);
     }
 
+    /**
+     * Makes a random (legal) move for a given player
+     * @param player The player that will make the move
+     * @return The move chosen at random for the given player as a Point object
+     */
     @Override
     public Point nextMove(Tile player) {
         Random random = new Random();

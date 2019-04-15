@@ -13,6 +13,10 @@ public abstract class AbstractTictactoeModel implements Model {
     private int[] scores;
     private ArrayList<Point> legalMoves;
 
+    /**
+     * Constructor called at object creation. Initializes the variables that represent the board, the lists of legal moves.
+     * @param boardSize The size of a board size (a board is always square, so size dictates both width and height)
+     */
     public AbstractTictactoeModel(int boardSize) {
         this.boardSize = boardSize;
         board = new Tile[boardSize][boardSize];
@@ -77,6 +81,11 @@ public abstract class AbstractTictactoeModel implements Model {
         legalMoves = generateLegalMoves(board);
     }
 
+    /**
+     * Generates new legal moves for the given state of the board
+     * @param board The current state of the board (represented by a 2D array of tiles)
+     * @return An Arraylist of Point coordinates that this player can move to for the given board
+     */
     public ArrayList<Point> generateLegalMoves(Tile[][] board){
         ArrayList<Point> tempLegalMoves = new ArrayList<>();
         for(int i=0;i<boardSize;i++){
@@ -131,11 +140,6 @@ public abstract class AbstractTictactoeModel implements Model {
         return null;
     }
 
-    @Override
-    public void updateScores() {
-        // Empty method since unlike Chess, Checkers or Reversi, TicTacToe does not keep track of score based on moves
-    }
-
     /**
      * Generates a move using the AI in the concrete model and calculates how long it took to generate this move
      * @return The move that the AI has generated as a Point (x, y) coordinates
@@ -149,38 +153,73 @@ public abstract class AbstractTictactoeModel implements Model {
         return computerMove;
     }
 
+    /**
+     * Updates the scores of both players during the game
+     */
+    @Override
+    public void updateScores() {
+        // Empty method since unlike Chess, Checkers or Reversi, TicTacToe does not keep track of score based on moves
+    }
+
+    /**
+     * @return A string value representing the game this model implements
+     */
     @Override
     public String getGameName() {
         return "Tic-tac-toe";
     }
 
+    /**
+     * @return int variable representing boardsize (width and height)
+     */
     @Override
     public int getBoardSize(){
         return boardSize;
     }
 
+    /**
+     * @return The current playing board represented as a 2D object of tiles
+     */
     @Override
     public Tile[][] getBoard() {
         return board;
     }
 
+    /**
+     * @return True if this board has a winner, false if it does not
+     */
     @Override
     public boolean hasWinner() {
         return boardWinner != null;
     }
 
+    /**
+     * @return The winner of this board
+     */
     @Override
     public Tile getBoardWinner() { return boardWinner; }
 
+    /**
+     * @return An int array of the scores of both players
+     */
     @Override
     public int[] getScores() { return scores; }
 
+    /**
+     * Returns the legal moves for a given player
+     * @param player The player (black or white)
+     * @return An ArrayList of Point objects with all the moves this player can make
+     */
     @Override
     public ArrayList<Point> getLegalMoves(Tile player) {
         return legalMoves;
     }
 
-    // Abstract function that has to be implemented by a concrete AI
+    /**
+     * Abstract method that is to be implemented by a concrete AI to calculate the next computer move
+     * @param player The player that will make the move
+     * @return A Point object representing the x and y coordinate of the move the computer has calculated
+     */
     @Override
     abstract public Point nextMove(Tile player);
 }

@@ -9,12 +9,12 @@ import java.util.ArrayList;
 public class ReversiMiniMaxAlphaBetaAI extends AbstractReversiModel {
 
     private int initialDepth;
-    private int evaluatedPossibilities;
     private Tile computerPlayer;
     private Tile opponentPlayer;
     private long maxTime;
     private Long startTime;
 
+    //The weight model used by the AI to calculate the value of each tile and an eventual score based on these weights
     final int[][] scoreRubric = new int[][]{
             {100, -25, 10,  5,  5, 10, -25, 100},
             {-25, -50, -4, -5, -5, -4, -50, -25},
@@ -26,27 +26,45 @@ public class ReversiMiniMaxAlphaBetaAI extends AbstractReversiModel {
             {100, -25, 10,  5,  5, 10, -25, 100},
     };
 
-    public ReversiMiniMaxAlphaBetaAI(int boardSize, int initialDepth, int maxTime) {
+    /**
+     * Constructor called at object creation. Initializes the AI for a given boardsize and restrictions for maximum
+     * depth and calculation time.
+     * @param boardSize The size of the board that will be played on
+     * @param maxDepth The max depth the AI is allowed to search in the tree of possible moves
+     * @param maxTime The max time the AI is allowed to take to search the move tree
+     */
+    public ReversiMiniMaxAlphaBetaAI(int boardSize, int maxDepth, int maxTime) {
         super(boardSize);
-        this.initialDepth = initialDepth;
+        this.initialDepth = maxDepth;
         this.maxTime = maxTime;
     }
 
+    /**
+     * Calls upon the concrete implementation of the AI algorithm to calculate the next move the computer will make
+     * @param player The player that will make the move (black or white)
+     * @return A point object representing the coordinate (x and y) of the next move the computer will make
+     */
     @Override
     public Point nextMove(Tile player) {
         startTime = System.currentTimeMillis();
-        evaluatedPossibilities = 0;
         computerPlayer = player;
         opponentPlayer = (computerPlayer == Tile.BLACK) ? Tile.WHITE : Tile.BLACK;
         int[] result = miniMax(initialDepth, computerPlayer, Integer.MIN_VALUE, Integer.MAX_VALUE, getBoard());
         System.out.println("Minimax AI with Alpha-Beta pruning with depth " + initialDepth + " wants to move to x:" + result[1] + " y: " + result[2]);
-        //System.out.println("The score for this move: " + result[0]);
-        //System.out.println("AI evaluated " + evaluatedPossibilities + " possibilities to reach this conclusion");
         return new Point(result[1], result[2]);
     }
 
+    /**
+     * The heart of the computer AI. Minimax recursive algorithm that explores a game tree, trying every possible move and
+     * calculating a score for each move.
+     * @param depth The depth at which the minimax algorithm will stop calling searching the game tree
+     * @param player The player (black or white) that will make the eventual move
+     * @param alpha Alpha score at the start of the current recursion
+     * @param beta Beta score at the start of the current recursion
+     * @param board Playing board represented by a 2D array of Tile objects
+     * @return An integer array with the score for the current move, the row (y) and column (x) for the current move
+     */
     private int[] miniMax(int depth, Tile player, int alpha, int beta, Tile[][] board){
-        evaluatedPossibilities++;
         // Keep track of who the opponent is for this recursion
         Tile opponent = (player == Tile.BLACK) ? Tile.WHITE : Tile.BLACK;
         //A copy of the board the way it was passed to the function
@@ -110,6 +128,11 @@ public class ReversiMiniMaxAlphaBetaAI extends AbstractReversiModel {
         return new int[]{((player == computerPlayer) ? alpha : beta), bestCol, bestRow};
     }
 
+    /**
+     * Calculates a score based on a state of the playing board
+     * @param board The state of the board represented by a 2D array of Tiles
+     * @return An int for the score that this board gives the player
+     */
     private int evaluateScore(Tile[][] board){
         int blackScore = 0;
         int whiteScore = 0;
@@ -122,10 +145,21 @@ public class ReversiMiniMaxAlphaBetaAI extends AbstractReversiModel {
         return (computerPlayer == Tile.BLACK) ? (blackScore - whiteScore) : (whiteScore - blackScore);
     }
 
+    /**
+     * Helper function to check if a winner has occurred by checking if both players are out of moves
+     * @param player1Moves List of possible moves for player 1
+     * @param player2Moves List of possible moves for player 2
+     * @return True if a winner has occurred, false if no winner has occurred
+     */
     private boolean evluateWin(ArrayList<Point> player1Moves, ArrayList<Point> player2Moves){
         return (player1Moves.size() == 0 && player2Moves.size() == 0);
     }
 
+    /**
+     * Makes a deep copy of a playing board
+     * @param board The board that should be copied
+     * @return A copy of the board passed into the function
+     */
     private Tile[][] copyBoard(Tile[][] board){
         Tile[][] newBoard = new Tile[board.length][];
         for(int i=0;i < board.length;i++){

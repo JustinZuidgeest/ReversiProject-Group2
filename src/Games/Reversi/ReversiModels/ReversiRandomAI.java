@@ -10,6 +10,11 @@ public class ReversiRandomAI extends AbstractReversiModel {
 
     public ReversiRandomAI(int boardSize) { super(boardSize); }
 
+    /**
+     * Calculates the next move for Reversi based on a random choice
+     * @param player The player that will make the move
+     * @return The move chosen at random
+     */
     @Override
     public Point nextMove(Tile player) {
         Random random = new Random();

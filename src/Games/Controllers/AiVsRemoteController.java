@@ -132,8 +132,7 @@ public class AiVsRemoteController implements Controller {
      */
     @Override
     public void hasWin() {
-        //view.printWinner(model.getBoardWinner());
-        System.out.println("The final scores are White: " + model.getScores()[0] + ", Black: " + model.getScores()[1]);
+        //Controller has no hasWin
     }
 
     @Override
